@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">FirstGame</string>
-    <string name="welcome">Willkommen bei FirstGame !!!</string>
+    <string name="welcome">Crystal Creature</string>
     <string name="los">Los! Sammel die Herzen!</string>
     <string name="btnStart">Start</string>
     <string name="herz_description">Herz für Tiere</string>
