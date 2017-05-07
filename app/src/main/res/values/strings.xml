@@ -2,7 +2,8 @@
     <string name="app_name">FirstGame</string>
     <string name="welcome">Crystal Creature</string>
     <string name="los">Los! Sammel die Herzen!</string>
-    <string name="btnStart">Start</string>
+    <string name="btnStart">Start Game</string>
+    <string name="btnObj">Test Object</string>
     <string name="herz_description">Herz für Tiere</string>
     <string name="points">Punkte</string>
     <string name="round">Runde</string>
