@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">FirstGame</string>
+    <string name="welcome">Willkommen bei FirstGame !!!</string>
+    <string name="los">Los! Sammel die Herzen!</string>
+    <string name="btnStart">Start</string>
+    <string name="herz_description">Herz für Tiere</string>
+    <string name="points">Punkte</string>
+    <string name="round">Runde</string>
+    <string name="hits">Hits</string>
+    <string name="time">Zeit</string>
+    <string name="game_over">Game Over!</string>
+    <item name="geburtsdatum" type="id" />
+</resources>
