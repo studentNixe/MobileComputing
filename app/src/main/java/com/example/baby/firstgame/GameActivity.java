@@ -19,19 +19,19 @@ import java.util.Random;
  */
 
 public class GameActivity extends Activity implements View.OnClickListener, Runnable{
-    private boolean spielLaeuft;
-    private int runde;
-    private int punkte;
-    private int herzchen;
-    private int gesammelteHerzchen;
-    private int zeit;
+    private boolean isRunning;
+    private int round;
+    private int points;
+    private int hearts;
+    private int collectedHearts;
+    private int time;
 
-    private Random zufallsGenerator = new Random();
+    private Random randomGenerator = new Random();
     private Handler handler = new Handler();
-    private float massstab;
-    private ViewGroup spielbereich;
+    private float scale;
+    private ViewGroup gameView;
 
-    private static final long HOECHSTALTER_MS = 2000;
+    private static final long MAXAGE_MS = 2000;
     
 
 
@@ -40,84 +40,83 @@ public class GameActivity extends Activity implements View.OnClickListener, Runn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
 
-        spielbereich = (ViewGroup)findViewById(R.id.spielebereich);
-        spielStarten();
+        gameView = (ViewGroup)findViewById(R.id.GAMEVIEW);
+        startGame();
 
     }
 
 
-    private void spielStarten(){
-        spielLaeuft = true;
-        runde = 0;
-        punkte = 0;
-        starteRunde();
+    private void startGame(){
+        isRunning = true;
+        round = 0;
+        points = 0;
+        startRound();
     }
 
-    private void starteRunde() {
-        runde++;
-        herzchen = runde * 10;
-        gesammelteHerzchen = 0;
-        zeit = 60;
-        bildschirmAktualisieren();
-        //verzoegert in Warteschlange stellen
+    private void startRound() {
+        round++;
+        hearts = round * 10;
+        collectedHearts = 0;
+        time = 60;
+        reloadScreen();
         handler.postDelayed(this,1000);
     }
 
-    private void bildschirmAktualisieren() {
+    private void reloadScreen() {
         TextView tvPoints = (TextView) findViewById(R.id.points);
-        tvPoints.setText(Integer.toString(punkte));
+        tvPoints.setText(Integer.toString(points));
 
         TextView tvRound = (TextView) findViewById(R.id.round);
-        tvRound.setText(Integer.toString(runde));
+        tvRound.setText(Integer.toString(round));
 
         TextView tvHits = (TextView) findViewById(R.id.hits);
-        tvHits.setText(Integer.toString(gesammelteHerzchen));
+        tvHits.setText(Integer.toString(collectedHearts));
 
         TextView tvTime = (TextView) findViewById(R.id.time);
-        tvTime.setText(Integer.toString(zeit));
+        tvTime.setText(Integer.toString(time));
 
-        massstab = getResources().getDisplayMetrics().density;
+        scale = getResources().getDisplayMetrics().density;
     }
 
-    public void herunterzaehlen() {
-        zeit --;
-        float zufallsZahl = zufallsGenerator.nextFloat();
+    public void countDown() {
+        time--;
+        float ranomNumber = randomGenerator.nextFloat();
 
-        if (zufallsZahl < herzchen * 1.5f / 60) {
-            einHerzAnzeigen();
+        if (ranomNumber < hearts * 1.5f / 60) {
+            showHeart();
         }
 
-        double wahrscheinlichkeit = herzchen * 1.5;
-        if (wahrscheinlichkeit > 1){
-            einHerzAnzeigen();
-            if (zufallsZahl < wahrscheinlichkeit - 1){
-                einHerzAnzeigen();
+        double possibility = hearts * 1.5;
+        if (possibility > 1){
+            showHeart();
+            if (ranomNumber < possibility - 1){
+                showHeart();
             }
         }else{
-            if (zufallsZahl < wahrscheinlichkeit){
-                einHerzAnzeigen();
+            if (ranomNumber < possibility){
+                showHeart();
             }
         }
-        herzVerschwinden();
-        bildschirmAktualisieren();
-        if(!pruefeSpielEnde()){
-           if(!pruefeRundenEnde())
+        removeHeart();
+        reloadScreen();
+        if(!checkGameover()){
+           if(!checkRoundEnd())
                handler.postDelayed(this,1000);
         }
 
     }
 
-    private boolean pruefeRundenEnde() {
-        if( gesammelteHerzchen >= herzchen){
-            starteRunde();
+    private boolean checkRoundEnd() {
+        if( collectedHearts >= hearts){
+            startRound();
             return true;
         }
         return false;
     }
 
 
-    private boolean pruefeSpielEnde() {
-        if (zeit == 0 && gesammelteHerzchen < herzchen){
+    private boolean checkGameover() {
+        if (time == 0 && collectedHearts < hearts){
             gameOver();
             return true;
         }
@@ -128,19 +127,19 @@ public class GameActivity extends Activity implements View.OnClickListener, Runn
         Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         dialog.setContentView(R.layout.gameover);
         dialog.show();
-        spielLaeuft = false;
+        isRunning = false;
     }
 
 
-    private void herzVerschwinden() {
+    private void removeHeart() {
         int nummer = 0;
-        while (nummer < spielbereich.getChildCount() ){
-            ImageView herzView = (ImageView) spielbereich.getChildAt(nummer);
-            Date geburtsdatum = (Date) herzView.getTag(R.id.geburtsdatum);
-            long alter = (new Date()).getTime() - geburtsdatum.getTime();
+        while (nummer < gameView.getChildCount() ){
+            ImageView heartView = (ImageView) gameView.getChildAt(nummer);
+            Date creationTime = (Date) heartView.getTag(R.id.creationTime);
+            long age = (new Date()).getTime() - creationTime.getTime();
 
-            if (alter > HOECHSTALTER_MS){
-                spielbereich.removeView(herzView);
+            if (age > MAXAGE_MS){
+                gameView.removeView(heartView);
             }else{
                 nummer++;
             }
@@ -149,40 +148,40 @@ public class GameActivity extends Activity implements View.OnClickListener, Runn
 
     }
 
-    private void einHerzAnzeigen() {
-        int breite = spielbereich.getWidth();
-        int hoehe = spielbereich.getHeight();
+    private void showHeart() {
+        int width = gameView.getWidth();
+        int height = gameView.getHeight();
 
-        int herz_breite = (int)Math.round(massstab*50);
-        int herz_hoehe = (int)Math.round(massstab*50);
+        int heartWidth = (int)Math.round(scale *50);
+        int heartHeight = (int)Math.round(scale *50);
 
-        int links = zufallsGenerator.nextInt(breite - herz_breite);
-        int oben = zufallsGenerator.nextInt(hoehe - herz_hoehe);
+        int left = randomGenerator.nextInt(width - heartWidth);
+        int up = randomGenerator.nextInt(height - heartHeight);
 
-        ImageView herzView = new ImageView(this);
-        herzView.setImageResource(R.drawable.ic_herz);
-        herzView.setOnClickListener(this);
+        ImageView heartView = new ImageView(this);
+        heartView.setImageResource(R.drawable.ic_herz);
+        heartView.setOnClickListener(this);
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(herz_breite,herz_hoehe);
-        params.leftMargin = links;
-        params.topMargin = oben;
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(heartWidth,heartHeight);
+        params.leftMargin = left;
+        params.topMargin = up;
         params.gravity = Gravity.TOP + Gravity.LEFT;
-        spielbereich.addView(herzView,params);
+        gameView.addView(heartView,params);
 
-        herzView.setTag(R.id.geburtsdatum, new Date());
+        heartView.setTag(R.id.creationTime, new Date());
     }
 
     @Override
-    public void onClick(View herzView) {
-        gesammelteHerzchen++;
-        punkte += 100;
-        bildschirmAktualisieren();
-        spielbereich.removeView(herzView);
+    public void onClick(View heartView) {
+        collectedHearts++;
+        points += 100;
+        reloadScreen();
+        gameView.removeView(heartView);
 
     }
 
     @Override
     public void run() {
-        herunterzaehlen();
+        countDown();
     }
 }

@@ -9,5 +9,5 @@
     <string name="hits">Hits</string>
     <string name="time">Zeit</string>
     <string name="game_over">Game Over!</string>
-    <item name="geburtsdatum" type="id" />
+    <item name="creationTime" type="id" />
 </resources>
