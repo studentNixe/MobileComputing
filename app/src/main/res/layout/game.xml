@@ -52,7 +52,7 @@
         android:layout_marginBottom="8dp" />
 
     <FrameLayout
-        android:id="@+id/spielebereich"
+        android:id="@+id/GAMEVIEW"
         android:layout_width="338dp"
         android:layout_height="403dp"
         android:layout_marginBottom="8dp"
