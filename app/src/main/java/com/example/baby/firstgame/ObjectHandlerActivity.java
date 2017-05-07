@@ -3,6 +3,7 @@ package com.example.baby.firstgame;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -39,16 +40,17 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
         btnSave.setOnClickListener(this);
         Button btnLoad = (Button) findViewById(R.id.btnLoad);
         btnLoad.setOnClickListener(this);
-        EditText txtName = (EditText) findViewById(R.id.txtName);
+        txtName = (EditText) findViewById(R.id.txtName);
+
     }
 
     @Override
     public void onClick(View v) {
-        if(btnCreate.isPressed()){
+        if(v.getId() == R.id.btnCreate){
            createObject();
-        }else if(btnSave.isPressed()){
+        }else if(v.getId() == R.id.btnSave){
             loadObject();
-        }else if(btnLoad.isPressed()){
+        }else if(v.getId() == R.id.btnLoad){
             saveObject();
         }
 
@@ -67,6 +69,7 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
             fileOut.close();
             System.out.printf("Serialized data is saved.");
         }catch(IOException i) {
+            Log.e("Error: ","Error saving file.");
             i.printStackTrace();
         }
 
@@ -84,10 +87,11 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
 
             System.out.printf("Serialized data was loaded.");
             txtName.setText(creature.getName());
+            txtName .invalidate();
 
 
-    }catch(IOException i) {
-        i.printStackTrace();
+        }catch(IOException i) {
+        Log.e("Error: ","Error loading file.");
     }
 
     }
