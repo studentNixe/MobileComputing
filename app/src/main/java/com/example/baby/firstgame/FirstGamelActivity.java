@@ -7,26 +7,25 @@ import android.view.View;
 import android.widget.Button;
 
 public class FirstGamelActivity extends Activity implements View.OnClickListener{
-    public Button btn;
-    public Button btn2;
+    public Button btn, btn2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        Button btn = (Button) findViewById(R.id.button);
-        btn.setOnClickListener(this);
+        btn = (Button) findViewById(R.id.button);
+        btn2 = (Button) findViewById(R.id.button2);
 
-        Button btn2 = (Button) findViewById(R.id.button2);
+        btn.setOnClickListener(this);
         btn2.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if(btn.isPressed()){
-            startActivity(new Intent(this, GameActivity.class));
-        }else if(btn2.isPressed()){
+        if(v.getId() == R.id.button){
+            startActivity(new Intent(this, ChooseCreatureActivity.class));
+        }else if(v.getId() == R.id.button2){
             startActivity(new Intent(this, ObjectHandlerActivity.class));
         }
 

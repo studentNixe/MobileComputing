@@ -2,12 +2,17 @@
     <string name="app_name">FirstGame</string>
     <string name="welcome">Crystal Creature</string>
     <string name="los">Los! Sammel die Herzen!</string>
-    <string name="btnStart">Start</string>
+    <string name="btnStart">Start Game</string>
+    <string name="btnObj">Test Object</string>
     <string name="herz_description">Herz für Tiere</string>
     <string name="points">Punkte</string>
     <string name="round">Runde</string>
     <string name="hits">Hits</string>
     <string name="time">Zeit</string>
     <string name="game_over">Game Over!</string>
+    <string name="next_monster"><![CDATA[->]]></string>
+    <string name="next_creature"><![CDATA[->]]></string>
+    <string name="back_creatue"><![CDATA[<-]]></string>
+    <string name="selectbutton">Select Creature</string>
     <item name="creationTime" type="id" />
 </resources>
