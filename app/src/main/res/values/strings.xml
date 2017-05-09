@@ -10,5 +10,7 @@
     <string name="hits">Hits</string>
     <string name="time">Zeit</string>
     <string name="game_over">Game Over!</string>
+    <string name="menuBtn">MENU</string>
+    <string name="inventoryBtn">ITEMS</string>
     <item name="creationTime" type="id" />
 </resources>
