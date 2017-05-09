@@ -1,4 +1,4 @@
-package DataObjects;
+package com.example.baby.firstgame.data;
 
 /**
  * Created by Denise on 07.05.2017.
@@ -12,7 +12,7 @@ public class CreatureObject implements java.io.Serializable{
 
     //constructor
     public CreatureObject(String name){
-        name = this.name;
+        this.name = name;
         this.age = 0;
         this.hunger = 100;
         this.clean = 100;

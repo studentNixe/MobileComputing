@@ -1,31 +1,25 @@
 package com.example.baby.firstgame;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-import DataObjects.CreatureObject;
+import com.example.baby.firstgame.data.CreatureObject;
+import com.example.baby.firstgame.data.InternalStorage;
 
 /**
  * Created by Denise on 07.05.2017.
  */
 
 public class ObjectHandlerActivity extends Activity implements View.OnClickListener{
-    public Button btnCreate;
-    public Button btnSave;
-    public Button btnLoad;
+    public Button btnCreateAndSave, btnLoad;
     public EditText txtName;
     public CreatureObject creature;
 
@@ -34,65 +28,59 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.objects);
 
-        Button btnCreate = (Button) findViewById(R.id.btnCreate);
-        btnCreate.setOnClickListener(this);
-        Button btnSave = (Button) findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(this);
-        Button btnLoad = (Button) findViewById(R.id.btnLoad);
+        btnCreateAndSave = (Button) findViewById(R.id.btnCreateAndSave);
+        btnCreateAndSave.setOnClickListener(this);
+        btnLoad = (Button) findViewById(R.id.btnLoad);
         btnLoad.setOnClickListener(this);
         txtName = (EditText) findViewById(R.id.txtName);
-
     }
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btnCreate){
-           createObject();
-        }else if(v.getId() == R.id.btnSave){
-            loadObject();
+        if(v.getId() == R.id.btnCreateAndSave){
+           createAndSaveObject();
         }else if(v.getId() == R.id.btnLoad){
-            saveObject();
+            loadObject();
         }
 
     }
 
-    public void createObject(){
+    public void createAndSaveObject() {
         String name = txtName.getText().toString();
         creature = new CreatureObject(name);
-    }
-    public void saveObject(){
-        try {
-            FileOutputStream fileOut = new FileOutputStream("/saveData/creatureObject.xml");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(creature);
-            out.close();
-            fileOut.close();
-            System.out.printf("Serialized data is saved.");
-        }catch(IOException i) {
-            Log.e("Error: ","Error saving file.");
-            i.printStackTrace();
-        }
 
+        Log.d("DEBUG: ","Creature name is "+creature.getName() +" . \n and Age is "+ creature.getAge() + " \n and Health is " +creature.getClean()+ "\n and Hunger is " +creature.getHunger()+" .");
+        // The list that should be saved to internal storage.
+        List<CreatureObject> entries = new ArrayList<CreatureObject>();
+        entries.add(creature);
+        // Save the list of entries to internal storage
+        Log.d("DEBUG: ", "Created new Creature.");
+        try {
+            InternalStorage.writeObject(this, "CreatureObject.xml", entries);
+        } catch (IOException e) {
+            Log.e("ERROR: ", "No Data could be saved.");
+        }
     }
     public void loadObject(){
         try{
-            FileInputStream fileIn = new FileInputStream("/saveData/creatureObject.xml");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            try {
-                Object obj = in.readObject();
-                creature = (CreatureObject) obj;
-            } catch (ClassNotFoundException e) {
-                System.out.println("No such File exists.");
+           // Retrieve the list from internal storage
+            List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(this, "CreatureObject.xml");
+
+            // Display the items from the list retrieved.
+            for (CreatureObject creature : cachedEntries) {
+                if(creature.getName() == null){
+                    Log.d("DEBUG: " , "Name is null-");
+                }else {
+                    Log.d("DEBUG: ", creature.getName());
+                }
             }
-
-            System.out.printf("Serialized data was loaded.");
             txtName.setText(creature.getName());
-            txtName .invalidate();
 
-
-        }catch(IOException i) {
-        Log.e("Error: ","Error loading file.");
-    }
+        } catch (IOException e) {
+            Log.e("ERROR: ", "Could not load data.");
+        } catch (ClassNotFoundException e) {
+            Log.e("ERROR: ", "Class was not found.");
+        }
 
     }
 }
