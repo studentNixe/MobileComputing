@@ -24,10 +24,10 @@ public class FirstGamelActivity extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.button){
-            startActivity(new Intent(this, GameActivity.class));
+            startActivity(new Intent(this, ChooseCreatureActivity.class));
         }else if(v.getId() == R.id.button2){
             startActivity(new Intent(this, ObjectHandlerActivity.class));
         }
-
     }
+
 }

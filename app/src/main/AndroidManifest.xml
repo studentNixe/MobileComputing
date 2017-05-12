@@ -20,6 +20,7 @@
         <activity android:name=".GameActivity" />
         <activity android:name=".ObjectHandlerActivity" />
         <activity android:name=".MonsterHomeActivity" />
+        <activity android:name=".ChooseCreatureActivity"/>
     </application>
 
 </manifest>

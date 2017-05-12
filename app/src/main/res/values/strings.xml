@@ -12,5 +12,9 @@
     <string name="game_over">Game Over!</string>
     <string name="menu_btn">MENU</string>
     <string name="inventory_btn">ITEMS</string>
+    <string name="next_monster"><![CDATA[->]]></string>
+    <string name="next_creature"><![CDATA[->]]></string>
+    <string name="back_creatue"><![CDATA[<-]]></string>
+    <string name="selectbutton">Select Creature</string>
     <item name="creationTime" type="id" />
 </resources>
