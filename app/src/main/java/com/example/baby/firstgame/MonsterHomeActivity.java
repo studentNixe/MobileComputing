@@ -21,9 +21,9 @@ public class MonsterHomeActivity extends Activity implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        int v = view.getId();
-        switch(v){
+        switch(view.getId()){
             case R.id.inventory:
+                System.out.println("Inventory opened!");
                 LinearLayout linearLayout = (LinearLayout) findViewById(R.id.itemList);
                 linearLayout.setVisibility(View.VISIBLE);
                 break;
@@ -39,7 +39,6 @@ public class MonsterHomeActivity extends Activity implements View.OnClickListene
                     }
                 });*/
                 popup.show();
-
                 break;
             default: System.out.println("Nothing happened!");
         }
