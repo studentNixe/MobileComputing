@@ -22,7 +22,7 @@ public class FirstGamelActivity extends Activity implements View.OnClickListener
     }
 
     @Override
-    protected void onClick(View v) {
+    public void onClick(View v) {
         if(v.getId() == R.id.button){
             startActivity(new Intent(this, ChooseCreatureActivity.class));
         }else if(v.getId() == R.id.button2){

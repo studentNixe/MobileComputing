@@ -10,6 +10,8 @@
     <string name="hits">Hits</string>
     <string name="time">Zeit</string>
     <string name="game_over">Game Over!</string>
+    <string name="menu_btn">MENU</string>
+    <string name="inventory_btn">ITEMS</string>
     <string name="next_monster"><![CDATA[->]]></string>
     <string name="next_creature"><![CDATA[->]]></string>
     <string name="back_creatue"><![CDATA[<-]]></string>

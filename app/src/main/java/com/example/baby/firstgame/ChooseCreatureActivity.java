@@ -19,7 +19,7 @@ public class ChooseCreatureActivity extends Activity
     private ImageSwitcher creSwitcher;
 
     Integer[] creatures = {R.drawable.denise_creature,
-        R.drawable.nicole_creature, R.drawable.pawan_creature};
+            R.drawable.pawan_creature, R.drawable.nicole_creature};
     int iterate = 0;
 
     @Override
@@ -36,7 +36,7 @@ public class ChooseCreatureActivity extends Activity
             public View makeView() {
                 ImageView imageView = new ImageView(getApplicationContext());
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-           //     imageView.setLayoutParams(
+                //     imageView.setLayoutParams(
 //                        new ImageSwitcher.LayoutParams(
 //                                ViewGroup.LayoutParams.MATCH_PARENT,
 //                                ViewGroup.LayoutParams.MATCH_PARENT));
@@ -49,7 +49,7 @@ public class ChooseCreatureActivity extends Activity
         btnPre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iterate = (iterate+1) % creatures.length;
+                iterate = (iterate + 1) % creatures.length;
                 creSwitcher.setImageResource(creatures[iterate]);
             }
         });
@@ -61,12 +61,12 @@ public class ChooseCreatureActivity extends Activity
                 creSwitcher.setImageResource(creatures[iterate]);
             }
         });
-//        btnSelect.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
 
+        btnSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MonsterHomeActivity.class));
+            }
+        });
     }
 }
