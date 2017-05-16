@@ -9,14 +9,15 @@ import java.util.List;
 
 public class CreatureObject implements java.io.Serializable{
     private String name;
+    private String species;
     private int age;
     private int hunger;
     private int clean;
     private List<ItemObject> inventory;
 
     //constructor
-    public CreatureObject(String name){
-
+    public CreatureObject(String name, String species){
+        this.species = species;
         this.name = name;
         this.age = 0;
         this.hunger = 100;
@@ -65,5 +66,11 @@ public class CreatureObject implements java.io.Serializable{
         this.inventory = inventory;
     }
 
+    public String getSpecies() {
+        return species;
+    }
 
+    public void setSpecies(String species) {
+        this.species = species;
+    }
 }

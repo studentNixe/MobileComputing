@@ -11,6 +11,12 @@ import android.widget.PopupMenu;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.baby.firstgame.data.CreatureObject;
+import com.example.baby.firstgame.data.InternalStorage;
+
+import java.io.IOException;
+import java.util.List;
+
 import static com.example.baby.firstgame.R.id.help;
 import static com.example.baby.firstgame.R.id.profile;
 import static com.example.baby.firstgame.R.id.settings;
@@ -24,6 +30,7 @@ public class MonsterHomeActivity extends Activity{
     private Button btnItems;
     private Button btnMenu;
     private LinearLayout linearLayout;
+    private CreatureObject creature;
 
     private boolean visible = false;
 
@@ -39,6 +46,10 @@ public class MonsterHomeActivity extends Activity{
 
         setBtnItems();
         setBtnMenu();
+        ObjectHandlerActivity handler = new ObjectHandlerActivity();
+        handler.loadObject();
+        loadCreatureObject();
+
     }
 
     public void setBtnItems(){
@@ -89,6 +100,33 @@ public class MonsterHomeActivity extends Activity{
                 popup.show();
             }
         });
+    }
+
+    public void loadCreatureObject(){
+        try{
+            // Retrieve the list from internal storage
+            List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(this, "CreatureObject.xml");
+
+            // Display the items from the list retrieved.
+            for (CreatureObject creature : cachedEntries) {
+                if(creature.getName() != null){
+                    this.creature = creature;
+                    Log.d("DEBUG: ", creature.getName());
+                }else {
+                    Log.d("DEBUG: " , "Name is null-");
+                }
+            }
+            try {
+                // INPUT DATA THAT SHOULD BE GIVEN TO THE UI HERE !!!!!!!!!!!!!!!!!!!!!
+            }catch(NullPointerException ex){
+                Log.e("ERROR: ", "Data was not found and returned empty.");
+            }
+        } catch (IOException e) {
+            Log.e("ERROR: ", "Could not load data.");
+        } catch (ClassNotFoundException e) {
+            Log.e("ERROR: ", "Class was not found.");
+        }
+
     }
 
 }
