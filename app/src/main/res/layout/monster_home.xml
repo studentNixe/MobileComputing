@@ -65,13 +65,13 @@
         android:layout_marginTop="8dp"
         android:contentDescription=""
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintHorizontal_bias="0.247"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.532"
-        app:srcCompat="@drawable/ic_monnpl2"
-        tools:ignore="ContentDescription"
+        app:layout_constraintVertical_bias="0.498"
+        android:src="@drawable/ic_monnpl2"
+        tools:ignore="ContentDescription,VectorDrawableCompat"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />
 
@@ -80,18 +80,20 @@
         android:layout_width="81dp"
         android:layout_height="356dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="2dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/inventory"
         android:orientation="vertical"
+        android:theme="@style/Base.Widget.AppCompat.ActionButton"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/inventory"
-        app:layout_constraintHorizontal_bias="0.202"
-        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.972"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.955"
-        tools:layout_editor_absoluteY="26dp">
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="RtlHardcoded">
 
         <ImageButton
             android:id="@+id/play"
@@ -99,8 +101,8 @@
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            app:srcCompat="@drawable/sponge"
-            tools:ignore="ContentDescription"
+            android:src="@drawable/ic_herz"
+            tools:ignore="ContentDescription,VectorDrawableCompat"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
 
@@ -110,8 +112,8 @@
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            app:srcCompat="@drawable/sponge"
-            tools:ignore="ContentDescription"
+            android:src="@drawable/ic_herz"
+            tools:ignore="ContentDescription,VectorDrawableCompat"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
 
@@ -121,8 +123,8 @@
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            app:srcCompat="@drawable/sponge"
-            tools:ignore="ContentDescription"
+            android:src="@drawable/ic_herz"
+            tools:ignore="ContentDescription,VectorDrawableCompat"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
 
@@ -132,8 +134,8 @@
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            app:srcCompat="@drawable/sponge"
-            tools:ignore="ContentDescription"
+            android:src="@drawable/ic_herz"
+            tools:ignore="ContentDescription,VectorDrawableCompat"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
 

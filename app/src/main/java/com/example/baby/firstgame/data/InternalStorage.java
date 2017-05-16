@@ -2,6 +2,7 @@ package com.example.baby.firstgame.data;
 
 import android.content.Context;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,6 +26,8 @@ public final class InternalStorage{
         FileInputStream fis = context.openFileInput(key);
         ObjectInputStream ois = new ObjectInputStream(fis);
         Object object = ois.readObject();
+        fis.close();
+        ois.close();
         return object;
     }
 }
