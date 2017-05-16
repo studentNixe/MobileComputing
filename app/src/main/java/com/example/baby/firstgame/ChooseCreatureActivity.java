@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
@@ -17,11 +16,10 @@ import android.widget.ViewSwitcher;
 
 public class ChooseCreatureActivity extends Activity
 {
-    //private Button btnSelect;
     private ImageSwitcher creSwitcher;
 
     Integer[] creatures = {R.drawable.denise_creature,
-        R.drawable.nicole_creature, R.drawable.pawan_creature};
+            R.drawable.pawan_creature, R.drawable.nicole_creature};
     int iterate = 0;
 
     @Override
@@ -33,8 +31,6 @@ public class ChooseCreatureActivity extends Activity
         Button btnPre = (Button) findViewById(R.id.previous);
         Button btnSelect = (Button) findViewById(R.id.select);
         creSwitcher = (ImageSwitcher) findViewById(R.id.creatureSwitcher);
-        //btnSelect = (Button) findViewById(R.id.select);
-
         creSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
@@ -55,17 +51,13 @@ public class ChooseCreatureActivity extends Activity
             public void onClick(View v) {
                 iterate = (iterate + 1) % creatures.length;
                 creSwitcher.setImageResource(creatures[iterate]);
-
             }
         });
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (iterate < creatures.length - 1)
-                    //iterate = 0;
-                    //else
-                    iterate++;
+                iterate = (iterate+1) % creatures.length;
                 creSwitcher.setImageResource(creatures[iterate]);
             }
         });
@@ -75,8 +67,6 @@ public class ChooseCreatureActivity extends Activity
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), MonsterHomeActivity.class));
             }
-
-            ;
         });
     }
 }
