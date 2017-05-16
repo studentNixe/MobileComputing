@@ -65,7 +65,9 @@ public class ChooseCreatureActivity extends Activity
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MonsterHomeActivity.class));
+                Intent intent = new Intent(getApplicationContext(), NameCreatureActivity.class);
+                intent.putExtra("creatureSelect", iterate);
+                startActivity(intent);
             }
         });
     }
