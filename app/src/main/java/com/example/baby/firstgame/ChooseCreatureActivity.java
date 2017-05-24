@@ -10,6 +10,8 @@ import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.ViewSwitcher;
 
+import com.example.baby.firstgame.data.CreatureHandler;
+
 /**
  * Created by Pawan on 5/8/2017.
  */
@@ -18,8 +20,8 @@ public class ChooseCreatureActivity extends Activity
 {
     private ImageSwitcher creSwitcher;
 
-    Integer[] creatures = {R.drawable.denise_creature,
-            R.drawable.pawan_creature, R.drawable.nicole_creature};
+    Integer[] creatures = {R.drawable.denise1,
+            R.drawable.pawan1, R.drawable.nicole1};
     int iterate = 0;
 
     @Override
@@ -30,6 +32,12 @@ public class ChooseCreatureActivity extends Activity
         Button btnNext = (Button) findViewById(R.id.next);
         Button btnPre = (Button) findViewById(R.id.previous);
         Button btnSelect = (Button) findViewById(R.id.select);
+
+        //------------- will be deleted ----------
+        CreatureHandler handler = new CreatureHandler(this);
+        handler.setCreature("dragon","denise");
+        //----------------------------------------
+
         creSwitcher = (ImageSwitcher) findViewById(R.id.creatureSwitcher);
         creSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override

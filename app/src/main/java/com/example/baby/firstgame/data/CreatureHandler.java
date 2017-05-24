@@ -15,6 +15,7 @@ import java.util.List;
  */
 
 public class CreatureHandler {
+
     private CreatureObject creature;
     private Context context;
 
@@ -24,7 +25,7 @@ public class CreatureHandler {
 
     public void createObject(String name, String species) {
         CreatureObject creature = new CreatureObject(name, species);
-        creature.getInventory().add(0,new SpongeObject("Schwamm","star_icon.png",1));
+        //creature.getInventory().add(0,new SpongeObject("Schwamm","star_icon.png",1));
         Log.d("DEBUG: ","Creature name is "+creature.getName() +" . \n and Age is "+ creature.getAge() + " \n and Health is " +creature.getClean()+ "\n and Hunger is " +creature.getHunger()+" .");
         // The list that should be saved to internal storage.
         List<CreatureObject> entries = new ArrayList<CreatureObject>();
@@ -74,6 +75,7 @@ public class CreatureHandler {
         }
 
     }
+
     public void saveObject() {
         List<CreatureObject> entries = new ArrayList<CreatureObject>();
         entries.add(creature);
@@ -84,5 +86,13 @@ public class CreatureHandler {
         } catch (IOException e) {
             Log.e("ERROR: ", "No Data could be saved.");
         }
+    }
+
+    public CreatureObject getCreature() {
+        return creature;
+    }
+
+    public void setCreature(String name, String species) {
+        createObject(name,species);
     }
 }

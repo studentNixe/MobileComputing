@@ -8,6 +8,12 @@ import java.util.List;
  */
 
 public class CreatureObject implements java.io.Serializable{
+    //class attributes
+    private String[] speciesList = {"denise","pawan","nicole"};
+    private int ageMin = 0;
+    private int ageMax = 3;
+
+    //object attributes
     private String name;
     private String species;
     private int age;
@@ -19,7 +25,7 @@ public class CreatureObject implements java.io.Serializable{
     public CreatureObject(String name, String species){
         this.species = species;
         this.name = name;
-        this.age = 0;
+        this.age = 1;
         this.hunger = 100;
         this.clean = 100;
         this.inventory = new ArrayList<ItemObject>();

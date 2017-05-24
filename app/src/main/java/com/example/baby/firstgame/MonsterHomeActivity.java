@@ -2,19 +2,24 @@ package com.example.baby.firstgame;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.baby.firstgame.data.CreatureHandler;
 import com.example.baby.firstgame.data.CreatureObject;
 import com.example.baby.firstgame.data.InternalStorage;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 
 import static com.example.baby.firstgame.R.id.help;
@@ -46,10 +51,11 @@ public class MonsterHomeActivity extends Activity{
 
         setBtnItems();
         setBtnMenu();
-        ObjectHandlerActivity handler = new ObjectHandlerActivity();
-        handler.loadObject();
-        loadCreatureObject();
 
+        CreatureHandler handler = new CreatureHandler(this);
+        handler.loadObject();
+        this.creature = handler.getCreature();
+        setCreatureImg(creature);
     }
 
     public void setBtnItems(){
@@ -102,31 +108,13 @@ public class MonsterHomeActivity extends Activity{
         });
     }
 
-    public void loadCreatureObject(){
-        try{
-            // Retrieve the list from internal storage
-            List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(this, "CreatureObject.xml");
+    public void setCreatureImg(CreatureObject creature){
+        ImageView creatureImg = (ImageView) findViewById(R.id.creatureImg);
 
-            // Display the items from the list retrieved.
-            for (CreatureObject creature : cachedEntries) {
-                if(creature.getName() != null){
-                    this.creature = creature;
-                    Log.d("DEBUG: ", creature.getName());
-                }else {
-                    Log.d("DEBUG: " , "Name is null-");
-                }
-            }
-            try {
-                // INPUT DATA THAT SHOULD BE GIVEN TO THE UI HERE !!!!!!!!!!!!!!!!!!!!!
-            }catch(NullPointerException ex){
-                Log.e("ERROR: ", "Data was not found and returned empty.");
-            }
-        } catch (IOException e) {
-            Log.e("ERROR: ", "Could not load data.");
-        } catch (ClassNotFoundException e) {
-            Log.e("ERROR: ", "Class was not found.");
-        }
-
+        String fileName = creature.getSpecies() + creature.getAge();
+        int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
+        creatureImg.setImageDrawable(getResources().getDrawable(id));
     }
+
 
 }

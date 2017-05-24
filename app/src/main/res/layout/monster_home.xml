@@ -56,24 +56,24 @@
     </Button>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/creatureImg"
         android:layout_width="170dp"
         android:layout_height="176dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription=""
+        android:src="@drawable/ic_monnpl2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.247"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498"
-        android:src="@drawable/ic_monnpl2"
-        tools:ignore="ContentDescription,VectorDrawableCompat"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        app:layout_constraintVertical_bias="0.492"
+        tools:ignore="ContentDescription,VectorDrawableCompat" />
 
     <LinearLayout
         android:id="@+id/itemList"
@@ -95,7 +95,7 @@
         app:layout_constraintVertical_bias="1.0"
         tools:ignore="RtlHardcoded">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/play"
             android:layout_width="match_parent"
             android:layout_height="53dp"
@@ -106,7 +106,7 @@
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/eat"
             android:layout_width="match_parent"
             android:layout_height="53dp"
@@ -117,7 +117,7 @@
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/clean"
             android:layout_width="match_parent"
             android:layout_height="53dp"
@@ -128,7 +128,7 @@
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/pet"
             android:layout_width="match_parent"
             android:layout_height="53dp"
