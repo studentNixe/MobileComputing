@@ -66,7 +66,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription=""
-        android:src="@drawable/ic_monnpl2"
+        android:src="@drawable/nicole2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.247"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -112,7 +112,7 @@
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            android:src="@drawable/ic_herz"
+            android:src="@drawable/star_icon"
             tools:ignore="ContentDescription,VectorDrawableCompat"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />

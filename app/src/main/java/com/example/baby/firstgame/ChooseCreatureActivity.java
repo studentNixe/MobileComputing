@@ -21,7 +21,7 @@ public class ChooseCreatureActivity extends Activity
     private ImageSwitcher creSwitcher;
 
     Integer[] creatures = {R.drawable.denise1,
-            R.drawable.pawan1, R.drawable.nicole1};
+            R.drawable.pawan1, R.drawable.nicole2};
     int iterate = 0;
 
     @Override
@@ -35,7 +35,7 @@ public class ChooseCreatureActivity extends Activity
 
         //------------- will be deleted ----------
         CreatureHandler handler = new CreatureHandler(this);
-        handler.setCreature("dragon","denise");
+        handler.setCreature("dragon","nicole");
         //----------------------------------------
 
         creSwitcher = (ImageSwitcher) findViewById(R.id.creatureSwitcher);

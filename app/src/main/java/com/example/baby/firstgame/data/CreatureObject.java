@@ -11,7 +11,7 @@ public class CreatureObject implements java.io.Serializable{
     //class attributes
     private String[] speciesList = {"denise","pawan","nicole"};
     private int ageMin = 0;
-    private int ageMax = 3;
+    private int ageMax = 4;
 
     //object attributes
     private String name;
@@ -19,6 +19,7 @@ public class CreatureObject implements java.io.Serializable{
     private int age;
     private int hunger;
     private int clean;
+    private int gametime;
     private List<ItemObject> inventory;
 
     //constructor
@@ -28,6 +29,7 @@ public class CreatureObject implements java.io.Serializable{
         this.age = 1;
         this.hunger = 100;
         this.clean = 100;
+        this.gametime = 100;
         this.inventory = new ArrayList<ItemObject>();
     }
 
@@ -62,6 +64,14 @@ public class CreatureObject implements java.io.Serializable{
 
     public void setClean(int clean) {
         this.clean = clean;
+    }
+
+    public int getGametime() {
+        return gametime;
+    }
+
+    public void setGametime(int gametime) {
+        this.gametime = gametime;
     }
 
     public List<ItemObject> getInventory() {
