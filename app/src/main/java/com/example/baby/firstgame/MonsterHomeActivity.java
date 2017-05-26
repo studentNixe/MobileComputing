@@ -3,19 +3,20 @@ package com.example.baby.firstgame;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.util.Log;
+
 import android.widget.Toast;
 
+import com.example.baby.firstgame.data.CreatureHandler;
 import com.example.baby.firstgame.data.CreatureObject;
-import com.example.baby.firstgame.data.InternalStorage;
 
-import java.io.IOException;
-import java.util.List;
+import java.io.Console;
 
 import static com.example.baby.firstgame.R.id.help;
 import static com.example.baby.firstgame.R.id.profile;
@@ -26,11 +27,15 @@ import static com.example.baby.firstgame.R.id.settings;
  * Created by baby on 09.05.17.
  */
 
-public class MonsterHomeActivity extends Activity{
+public class MonsterHomeActivity extends Activity implements Runnable{
     private Button btnItems;
     private Button btnMenu;
+
     private LinearLayout linearLayout;
     private CreatureObject creature;
+
+    CreatureHandler handler = new CreatureHandler(this);
+    Handler gamehandler = new Handler();
 
     private boolean visible = false;
 
@@ -46,13 +51,19 @@ public class MonsterHomeActivity extends Activity{
 
         setBtnItems();
         setBtnMenu();
-        ObjectHandlerActivity handler = new ObjectHandlerActivity();
-        handler.loadObject();
-        loadCreatureObject();
 
+
+        handler.loadObject();
+        this.creature = handler.getCreature();
+        setCreatureImg(creature);
+        setItems();
+        countdown();
     }
 
-    public void setBtnItems(){
+    /**
+     * Sets the visibility of the inventory
+     */
+    protected void setBtnItems(){
         btnItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +77,25 @@ public class MonsterHomeActivity extends Activity{
         });
     }
 
-    public void setBtnMenu(){
+    /**
+     * Sets the items
+     */
+    protected void setItems(){
+        ImageView itemEat = (ImageView) findViewById(R.id.eat);
+        itemEat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                creature.setHunger(creature.getHunger()+20);
+                String message = "Hunger: " + Integer.toString(creature.getHunger());
+                Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /**
+     * Creates the Menu and sets actions when clicking
+     */
+    protected void setBtnMenu(){
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,31 +131,61 @@ public class MonsterHomeActivity extends Activity{
         });
     }
 
-    public void loadCreatureObject(){
-        try{
-            // Retrieve the list from internal storage
-            List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(this, "CreatureObject.xml");
+    /**
+     * Sets or reloads the image of the creature
+     */
+    public void setCreatureImg(CreatureObject creature){
+        ImageView creatureImg = (ImageView) findViewById(R.id.creatureImg);
 
-            // Display the items from the list retrieved.
-            for (CreatureObject creature : cachedEntries) {
-                if(creature.getName() != null){
-                    this.creature = creature;
-                    Log.d("DEBUG: ", creature.getName());
-                }else {
-                    Log.d("DEBUG: " , "Name is null-");
-                }
-            }
-            try {
-                // INPUT DATA THAT SHOULD BE GIVEN TO THE UI HERE !!!!!!!!!!!!!!!!!!!!!
-            }catch(NullPointerException ex){
-                Log.e("ERROR: ", "Data was not found and returned empty.");
-            }
-        } catch (IOException e) {
-            Log.e("ERROR: ", "Could not load data.");
-        } catch (ClassNotFoundException e) {
-            Log.e("ERROR: ", "Class was not found.");
-        }
-
+        String fileName = creature.getSpecies() + creature.getAge();
+        int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
+        creatureImg.setImageDrawable(getResources().getDrawable(id));
     }
 
+
+    //--------------Game Engine-----------------------
+    /**
+     * Counts down the creatures' attributes
+     */
+    public void countdown(){
+        if(creature.getGametime() == 0 && creature.getHunger() > 100){
+//            String message = "Hunger: " + Integer.toString(creature.getHunger());
+//            Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+            creature.setAge(creature.getAge()+1);
+            if(creature.getAge() < 5) {
+                creature.setGametime(100);
+                setCreatureImg(creature);
+            }
+        }else {
+            creature.setHunger(creature.getHunger() - 5);
+            creature.setClean(creature.getClean() - 5);
+            creature.setGametime(creature.getGametime() - 20);
+        }
+        if(!checkGameover()) {
+            String message = "Hunger: " + Integer.toString(creature.getHunger());
+            Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+
+            gamehandler.postDelayed(this, 30000);
+        }
+    }
+
+    private boolean checkGameover() {
+        if (creature.getHunger() == 0){
+            gameOver();
+            return true;
+        }
+        return false;
+    }
+
+    private void gameOver() {
+        Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        dialog.setContentView(R.layout.gameover);
+        dialog.show();
+    }
+
+
+    @Override
+    public void run() {
+        countdown();
+    }
 }
