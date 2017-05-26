@@ -15,6 +15,9 @@ public abstract class ItemObject {
         this.quanity = quanity;
     }
 
+    public void behaviour(){
+
+    }
     //getter & Setter
     public String getImage() { return image;    }
     public String getId() {  return id; }

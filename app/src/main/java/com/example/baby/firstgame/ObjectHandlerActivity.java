@@ -37,7 +37,7 @@ import com.example.baby.firstgame.data.InternalStorage;
  * Created by Denise on 07.05.2017.
  */
 
-public class ObjectHandlerActivity extends Activity implements View.OnClickListener{
+public class ObjectHandlerActivity extends Activity implements View.OnClickListener {
     public Button btnCreateAndSave, btnLoad;
     public EditText txtName;
     public ImageView imageDrag;
@@ -60,9 +60,9 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 int action = MotionEventCompat.getActionMasked(event);
-                switch(action) {
-                    case (MotionEvent.ACTION_DOWN) :
-                        Log.d("Debug: ","Action was DOWN");
+                switch (action) {
+                    case (MotionEvent.ACTION_DOWN):
+                        Log.d("Debug: ", "Action was DOWN");
                         ClipData data = ClipData.newPlainText("", "");
                         View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
                                 view);
@@ -73,20 +73,20 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
                         }
                         view.setVisibility(View.INVISIBLE);
                         return true;
-                    case (MotionEvent.ACTION_MOVE) :
-                        Log.d("Debug: ","Action was MOVE");
+                    case (MotionEvent.ACTION_MOVE):
+                        Log.d("Debug: ", "Action was MOVE");
                         return true;
-                    case (MotionEvent.ACTION_UP) :
-                        Log.d("Debug: ","Action was UP");
+                    case (MotionEvent.ACTION_UP):
+                        Log.d("Debug: ", "Action was UP");
                         return true;
-                    case (MotionEvent.ACTION_CANCEL) :
-                        Log.d("Debug: ","Action was CANCEL");
+                    case (MotionEvent.ACTION_CANCEL):
+                        Log.d("Debug: ", "Action was CANCEL");
                         return true;
-                    case (MotionEvent.ACTION_OUTSIDE) :
-                        Log.d("Debug: ","Movement occurred outside bounds " +
+                    case (MotionEvent.ACTION_OUTSIDE):
+                        Log.d("Debug: ", "Movement occurred outside bounds " +
                                 "of current screen element");
                         return true;
-                    default :
+                    default:
                         return false;
                 }
             }
@@ -96,8 +96,8 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
             @Override
             public boolean onDrag(View v, DragEvent event) {
                 int action = event.getAction();
-                float posX= imageDrag.getX();
-                float posY= imageDrag.getY();
+                float posX = imageDrag.getX();
+                float posY = imageDrag.getY();
                 switch (event.getAction()) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
@@ -108,9 +108,9 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
                     case DragEvent.ACTION_DRAG_EXITED:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
                         break;
-                    case DragEvent.ACTION_DRAG_LOCATION  :
+                    case DragEvent.ACTION_DRAG_LOCATION:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
-                                +event.getX()+", "+event.getY());
+                                + event.getX() + ", " + event.getY());
                         break;
                     case DragEvent.ACTION_DROP:
                         Log.d("Drag Info: ", "ACTION_DROP event");
@@ -133,59 +133,13 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
 
         });
     }
+
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btnCreateAndSave){
+      /*  if(v.getId() == R.id.btnCreateAndSave){
            createAndSaveObject();
         }else if(v.getId() == R.id.btnLoad){
-            loadObject();
-        }
-    }
-
-    public void createAndSaveObject() {
-        String name = txtName.getText().toString();
-        creature = new CreatureObject(name);
-
-        Log.d("DEBUG: ","Creature name is "+creature.getName() +" . \n and Age is "+ creature.getAge() + " \n and Health is " +creature.getClean()+ "\n and Hunger is " +creature.getHunger()+" .");
-        // The list that should be saved to internal storage.
-        List<CreatureObject> entries = new ArrayList<CreatureObject>();
-        entries.add(creature);
-        // Save the list of entries to internal storage
-        Log.d("DEBUG: ", "Created new Creature.");
-        Toast.makeText(getBaseContext(), "File saved successfully!",
-                Toast.LENGTH_SHORT).show();
-
-        try {
-            InternalStorage.writeObject(this, "CreatureObject.xml", entries);
-        } catch (IOException e) {
-            Log.e("ERROR: ", "No Data could be saved.");
-        }
-    }
-    public void loadObject(){
-        try{
-           // Retrieve the list from internal storage
-            List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(this, "CreatureObject.xml");
-
-            // Display the items from the list retrieved.
-            for (CreatureObject creature : cachedEntries) {
-                if(creature.getName() != null){
-                    this.creature = creature;
-                    Log.d("DEBUG: ", creature.getName());
-                }else {
-                    Log.d("DEBUG: " , "Name is null-");
-                }
-            }
-            try {
-                txtName.setText(creature.getName());
-            }catch(NullPointerException ex){
-                Log.e("ERROR: ", "Data was not found and returned empty.");
-            }
-
-        } catch (IOException e) {
-            Log.e("ERROR: ", "Could not load data.");
-        } catch (ClassNotFoundException e) {
-            Log.e("ERROR: ", "Class was not found.");
-        }
-
+        loadObject();
+        */
     }
 }
