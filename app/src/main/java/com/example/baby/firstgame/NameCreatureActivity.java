@@ -33,5 +33,6 @@ public class NameCreatureActivity extends Activity
             }
         });
         eggSwitcher.setImageResource(eggs[creatureEgg]);
+
     }
 }
