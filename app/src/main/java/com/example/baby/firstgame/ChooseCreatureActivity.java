@@ -4,6 +4,10 @@ package com.example.baby.firstgame;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageSwitcher;
@@ -16,9 +20,11 @@ import com.example.baby.firstgame.data.CreatureHandler;
  * Created by Pawan on 5/8/2017.
  */
 
-public class ChooseCreatureActivity extends Activity
+public class ChooseCreatureActivity extends Activity implements GestureDetector.OnGestureListener
 {
     private ImageSwitcher creSwitcher;
+    private static final String DEBUG_TAG = "Gestures";
+    private GestureDetectorCompat mDetector;
 
     Integer[] creatures = {R.drawable.denise1,
             R.drawable.pawan1, R.drawable.nicole2};
@@ -32,6 +38,7 @@ public class ChooseCreatureActivity extends Activity
         Button btnNext = (Button) findViewById(R.id.next);
         Button btnPre = (Button) findViewById(R.id.previous);
         Button btnSelect = (Button) findViewById(R.id.select);
+        mDetector = new GestureDetectorCompat(this,this);
 
         //------------- will be deleted ----------
         CreatureHandler handler = new CreatureHandler(this);
@@ -76,5 +83,57 @@ public class ChooseCreatureActivity extends Activity
                 startActivity(new Intent(getApplicationContext(), MonsterHomeActivity.class));
             }
         });
+    }
+
+    public boolean onTouchEvent(MotionEvent event){
+        this.mDetector.onTouchEvent(event);
+     // Be sure to call the superclass implementation
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        Log.d(DEBUG_TAG,"onDown: " + e.toString());
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+        Log.d(DEBUG_TAG, "onShowPress: " + e.toString());
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        Log.d(DEBUG_TAG, "onSingleTapUp: " + e.toString());
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        Log.d(DEBUG_TAG, "onScroll: " + e1.toString()+e2.toString());
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        Log.d(DEBUG_TAG, "onLongPress: " + e.toString());
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        Log.d(DEBUG_TAG, "onFling: " + e1.toString()+e2.toString());
+        float distance = e1.getX() - e2.getX();
+        if(distance < -200){
+            Log.d(DEBUG_TAG,"Fling was to the right.");
+            iterate = (iterate + 1) % creatures.length;
+            creSwitcher.setImageResource(creatures[iterate]);
+        }else if(distance > 200){
+            Log.d(DEBUG_TAG,"Fling was to the left.");
+            iterate = (iterate+1) % creatures.length;
+            creSwitcher.setImageResource(creatures[iterate]);
+        }else{
+            Log.d(DEBUG_TAG,"No left or right fling occured.");
+        }
+        return true;
     }
 }
