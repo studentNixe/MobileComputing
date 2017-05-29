@@ -151,7 +151,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         if(creature.getGametime() == 0 && creature.getHunger() > 100){
 //            String message = "Hunger: " + Integer.toString(creature.getHunger());
 //            Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
-            creature.setAge(creature.getAge()+1);
+            handler.getCreature().setAge(creature.getAge()+1);
             if(creature.getAge() < 5) {
                 creature.setGametime(100);
                 setCreatureImg(creature);
@@ -164,7 +164,6 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         if(!checkGameover()) {
             String message = "Hunger: " + Integer.toString(creature.getHunger());
             Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
-
             gamehandler.postDelayed(this, 30000);
         }
     }
