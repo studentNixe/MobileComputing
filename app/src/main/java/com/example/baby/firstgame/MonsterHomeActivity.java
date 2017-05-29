@@ -14,7 +14,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.baby.firstgame.data.CreatureHandler;
+import com.example.baby.firstgame.handler.CreatureHandler;
 import com.example.baby.firstgame.data.CreatureObject;
 
 import java.io.Console;
@@ -36,7 +36,6 @@ public class MonsterHomeActivity extends Activity implements Runnable{
     private LinearLayout linearLayout;
     private CreatureObject creature;
 
-    CreatureHandler handler = new CreatureHandler(this);
     Handler gamehandler = new Handler();
 
     private boolean visible = false;
@@ -55,8 +54,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         setBtnItems();
         setBtnMenu();
 
-        handler.loadObject();
-        this.creature = handler.getCreature();
+        this.creature = CreatureHandler.loadObject(this);
 
         setCreatureImg(creature);
         setItems();
@@ -157,7 +155,8 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         if(creature.getGametime() == 0 && creature.getHunger() > 100){
 //            String message = "Hunger: " + Integer.toString(creature.getHunger());
 //            Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
-            handler.getCreature().setAge(creature.getAge()+1);
+            //handler.getCreature().setAge(creature.getAge()+1);
+            creature.setAge(creature.getAge()+1);
             if(creature.getAge() < 5) {
                 creature.setGametime(100);
                 setCreatureImg(creature);
@@ -170,6 +169,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         if(!checkGameover()) {
             String message = "Hunger: " + Integer.toString(creature.getHunger());
             Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+            CreatureHandler.saveObject(creature,this);
             gamehandler.postDelayed(this, 30000);
         }
     }

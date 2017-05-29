@@ -10,7 +10,7 @@ import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.ViewSwitcher;
 
-import com.example.baby.firstgame.data.CreatureHandler;
+import com.example.baby.firstgame.handler.CreatureHandler;
 
 /**
  * Created by Pawan on 5/8/2017.
@@ -34,8 +34,7 @@ public class ChooseCreatureActivity extends Activity
         Button btnSelect = (Button) findViewById(R.id.select);
 
         //------------- will be deleted ----------
-        CreatureHandler handler = new CreatureHandler(this);
-        handler.setCreature("dragon","nicole");
+        CreatureHandler.createObject("dragon","nicole",this);
         //----------------------------------------
 
         creSwitcher = (ImageSwitcher) findViewById(R.id.creatureSwitcher);
