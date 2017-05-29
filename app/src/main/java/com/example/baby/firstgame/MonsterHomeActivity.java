@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.baby.firstgame.data.CreatureHandler;
@@ -30,6 +31,7 @@ import static com.example.baby.firstgame.R.id.settings;
 public class MonsterHomeActivity extends Activity implements Runnable{
     private Button btnItems;
     private Button btnMenu;
+    private TextView nameLabel;
 
     private LinearLayout linearLayout;
     private CreatureObject creature;
@@ -48,17 +50,21 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         btnItems = (Button) findViewById(R.id.inventory);
         btnMenu = (Button) findViewById(R.id.menu);
         linearLayout = (LinearLayout) findViewById(R.id.itemList);
+        nameLabel = (TextView) findViewById(R.id.name);
 
         setBtnItems();
         setBtnMenu();
 
-
         handler.loadObject();
         this.creature = handler.getCreature();
+
         setCreatureImg(creature);
         setItems();
+        nameLabel.setText(creature.getName());
+
         countdown();
     }
+
 
     /**
      * Sets the visibility of the inventory
