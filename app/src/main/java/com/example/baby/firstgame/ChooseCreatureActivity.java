@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ViewSwitcher;
 
 import com.example.baby.firstgame.data.CreatureHandler;
+import com.example.baby.firstgame.data.CreatureObject;
 
 /**
  * Created by Pawan on 5/8/2017.
@@ -42,7 +43,8 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
 
         //------------- will be deleted ----------
         CreatureHandler handler = new CreatureHandler(this);
-        handler.setCreature("dragon","nicole");
+        CreatureObject newCreature = new CreatureObject("dragon","nicole");
+        handler.createObject(newCreature);
         //----------------------------------------
 
         creSwitcher = (ImageSwitcher) findViewById(R.id.creatureSwitcher);

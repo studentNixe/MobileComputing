@@ -53,8 +53,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         setBtnMenu();
 
 
-        handler.loadObject();
-        this.creature = handler.getCreature();
+        this.creature = handler.loadObject();
         setCreatureImg(creature);
         setItems();
         countdown();
