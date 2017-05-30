@@ -8,10 +8,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.example.baby.firstgame.data.CreatureObject;
+import com.example.baby.firstgame.data.CreatureHandler;
 
 /**
  * Created by Pawan on 5/12/2017.
@@ -23,14 +23,14 @@ public class NameCreatureActivity extends Activity
     Integer[] eggs = {R.drawable.denis_egg,
             R.drawable.pawan_egg, R.drawable.nicole_eggs};
     private String[] speciesList = {"denise","pawan","nicole"};
-
-    private Button btnenter = (Button) findViewById(R.id.Enter);
-    EditText edtname = (EditText) findViewById(R.id.nameEntered);
+    private EditText edtname;
 
     @Override
     public void onCreate(Bundle savedInstaceState){
         super.onCreate(savedInstaceState);
         setContentView(R.layout.namecreature);
+        Button btnenter = (Button) findViewById(R.id.Enter);
+        edtname = (EditText) findViewById(R.id.nameEntered);
 
         int creatureEgg = getIntent().getIntExtra("creatureSelect", 0);
         eggSwitcher = (ImageSwitcher) findViewById(R.id.eggSwitch);
@@ -43,16 +43,19 @@ public class NameCreatureActivity extends Activity
             }
         });
         eggSwitcher.setImageResource(eggs[creatureEgg]);
-        String species = speciesList[creatureEgg];
+        final String species = speciesList[creatureEgg];
 
-        //creates creature here with the give name and species
-       CreatureObject creature = new CreatureObject(edtname.getText().toString(), species);
 
         btnenter.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
+                String name = edtname.getText().toString();
+                //creates creature here with the give name and species
+                CreatureObject creature = new CreatureObject(name, species);
+                CreatureHandler creatueCreated = new CreatureHandler(getApplicationContext());
+                creatueCreated.createObject(creature);
                 Intent intent = new Intent(getApplicationContext(), MonsterHomeActivity.class);
                 startActivity(intent);
             }

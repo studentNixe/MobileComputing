@@ -43,7 +43,7 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
 
 
         //------------- will be deleted ----------
-        CreatureHandler.createObject("dragon","nicole",this);
+       // CreatureHandler.createObject("dragon","nicole",this);
         //----------------------------------------
 
         creSwitcher = (ImageSwitcher) findViewById(R.id.creatureSwitcher);
@@ -134,4 +134,4 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
             return true;
         }
     }
-}
+
