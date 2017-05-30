@@ -46,7 +46,7 @@ public class NameCreatureActivity extends Activity
         String species = speciesList[creatureEgg];
 
         //creates creature here with the give name and species
-      //  CreatureObject creature = new CreatureObject(edtname.getText().toString(), species);
+       CreatureObject creature = new CreatureObject(edtname.getText().toString(), species);
 
         btnenter.setOnClickListener(new View.OnClickListener()
         {

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.GestureDetectorCompat;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,29 +20,27 @@ import com.example.baby.firstgame.handler.CreatureHandler;
  * Created by Pawan on 5/8/2017.
  */
 
-public class ChooseCreatureActivity extends Activity
-        implements GestureDetector.OnGestureListener
+public class ChooseCreatureActivity extends Activity implements GestureDetector.OnGestureListener
 {
-    private Button btnNext, btnPre, btnSelect;
     private ImageSwitcher creSwitcher;
-    private GestureDetectorCompat gestureDetector;
 
-    private int swipeMinDistance = 130;
-    private int swipeVelocity = 200;
+    private static final String DEBUG_TAG = "Gestures";
+    private GestureDetectorCompat mDetector;
 
     Integer[] creatures = {R.drawable.denise1,
             R.drawable.pawan1, R.drawable.nicole2};
     int iterate = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choosecreature);
-        btnNext = (Button) findViewById(R.id.next);
-        btnPre = (Button) findViewById(R.id.previous);
-        btnSelect = (Button) findViewById(R.id.select);
-        this.gestureDetector = new GestureDetectorCompat(this, this);
+
+        Button btnNext = (Button) findViewById(R.id.next);
+        Button btnPre = (Button) findViewById(R.id.previous);
+        Button btnSelect = (Button) findViewById(R.id.select);
+        mDetector = new GestureDetectorCompat(this,this);
+
 
         //------------- will be deleted ----------
         CreatureHandler.createObject("dragon","nicole",this);
@@ -86,50 +85,53 @@ public class ChooseCreatureActivity extends Activity
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent event){
+        this.mDetector.onTouchEvent(event);
+     // Be sure to call the superclass implementation
+        return super.onTouchEvent(event);
+    }
+
+    @Override
     public boolean onDown(MotionEvent e) {
+        Log.d(DEBUG_TAG,"onDown: " + e.toString());
         return false;
     }
 
     @Override
     public void onShowPress(MotionEvent e) {
-
+        Log.d(DEBUG_TAG, "onShowPress: " + e.toString());
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
+        Log.d(DEBUG_TAG, "onSingleTapUp: " + e.toString());
         return false;
     }
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        Log.d(DEBUG_TAG, "onScroll: " + e1.toString()+e2.toString());
         return false;
     }
 
     @Override
     public void onLongPress(MotionEvent e) {
-
+        Log.d(DEBUG_TAG, "onLongPress: " + e.toString());
     }
 
     @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if(e1.getX() - e2.getX() > swipeMinDistance && Math.abs(velocityX) > swipeVelocity)
-        {
-            iterate = (iterate+1) % creatures.length;
-            creSwitcher.setImageResource(creatures[iterate]);
+    public boolean onFling(MotionEvent event1, MotionEvent event2,
+                           float velocityX, float velocityY) {
+            Log.d(DEBUG_TAG, "onFling: " + event1.toString()+event2.toString());
+            float distance = event1.getX() - event2.getX();
+            if(distance < -200){
+                    Log.d(DEBUG_TAG,"Fling was to the right.");
+                }else if(distance > 200){
+                    Log.d(DEBUG_TAG,"Fling was to the left.");
+                }else{
+                    Log.d(DEBUG_TAG,"No left or right fling occured.");
+                }
             return true;
         }
-        else if (e2.getX() - e1.getX() > swipeMinDistance && Math.abs(velocityX) > swipeVelocity)
-        {
-            iterate = (iterate+1) % creatures.length;
-            creSwitcher.setImageResource(creatures[iterate]);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        gestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
     }
 }
