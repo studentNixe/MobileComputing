@@ -2,15 +2,22 @@ package com.example.baby.firstgame;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.baby.firstgame.data.CreatureHandler;
@@ -30,6 +37,10 @@ import static com.example.baby.firstgame.R.id.settings;
 public class MonsterHomeActivity extends Activity implements Runnable{
     private Button btnItems;
     private Button btnMenu;
+    private TextView nameLabel;
+
+    private ImageView itemEat;
+    private View dragView;
 
     private LinearLayout linearLayout;
     private CreatureObject creature;
@@ -48,6 +59,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         btnItems = (Button) findViewById(R.id.inventory);
         btnMenu = (Button) findViewById(R.id.menu);
         linearLayout = (LinearLayout) findViewById(R.id.itemList);
+        nameLabel = (TextView) findViewById(R.id.name);
 
         setBtnItems();
         setBtnMenu();
@@ -56,6 +68,10 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         this.creature = handler.loadObject();
         setCreatureImg(creature);
         setItems();
+        nameLabel.setText(creature.getName());
+
+//        Thread t = new Thread(this);
+//        t.run();
         countdown();
     }
 
@@ -80,13 +96,83 @@ public class MonsterHomeActivity extends Activity implements Runnable{
      * Sets the items
      */
     protected void setItems(){
-        ImageView itemEat = (ImageView) findViewById(R.id.eat);
-        itemEat.setOnClickListener(new View.OnClickListener() {
+        itemEat = (ImageView) findViewById(R.id.eat);
+        itemEat.setTag("DraggableImage");
+        itemEat.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                creature.setHunger(creature.getHunger()+20);
-                String message = "Hunger: " + Integer.toString(creature.getHunger());
-                Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+            public boolean onTouch(View view, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                switch (action) {
+                    case (MotionEvent.ACTION_DOWN):
+                        Log.d("Debug: ", "Action was DOWN");
+                        ClipData data = ClipData.newPlainText("", "");
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                                view);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            view.startDragAndDrop(data, shadowBuilder, view, 0);
+                        } else {
+                            view.startDrag(data, shadowBuilder, view, 0);
+                        }
+                        view.setVisibility(View.INVISIBLE);
+                        return true;
+                    case (MotionEvent.ACTION_MOVE):
+                        Log.d("Debug: ", "Action was MOVE");
+                        return true;
+                    case (MotionEvent.ACTION_UP):
+                        Log.d("Debug: ", "Action was UP");
+                        return true;
+                    case (MotionEvent.ACTION_CANCEL):
+                        Log.d("Debug: ", "Action was CANCEL");
+                        return true;
+                    case (MotionEvent.ACTION_OUTSIDE):
+                        Log.d("Debug: ", "Movement occurred outside bounds " +
+                                "of current screen element");
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        dragView = findViewById(R.id.creatureImg);
+        dragView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                float posX = itemEat.getX();
+                float posY = itemEat.getY();
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENTERED");
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
+                        break;
+                    case DragEvent.ACTION_DRAG_LOCATION:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
+                                + event.getX() + ", " + event.getY());
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        Log.d("Drag Info: ", "ACTION_DROP event");
+                        //drag onto location
+                        //imageDrag.setX(event.getX()-imageDrag.getHeight()/2);
+                        //imageDrag.setY(event.getY()-imageDrag.getWidth()/2);
+                        itemEat.setVisibility(v.VISIBLE);
+                        // reset position after drag
+                        itemEat.setX(posX);
+                        itemEat.setX(posY);
+                        //
+                        creature.setHunger(creature.getHunger()+20);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
+                        v.setVisibility(View.VISIBLE);
+                    default:
+                        break;
+                }
+                return true;
             }
         });
     }
@@ -163,6 +249,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         if(!checkGameover()) {
             String message = "Hunger: " + Integer.toString(creature.getHunger());
             Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+            handler.saveObject(creature);
 
             gamehandler.postDelayed(this, 30000);
         }
