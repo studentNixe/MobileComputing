@@ -41,11 +41,6 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
         Button btnSelect = (Button) findViewById(R.id.select);
         mDetector = new GestureDetectorCompat(this,this);
 
-
-        //------------- will be deleted ----------
-       // CreatureHandler.createObject("dragon","nicole",this);
-        //----------------------------------------
-
         creSwitcher = (ImageSwitcher) findViewById(R.id.creatureSwitcher);
         creSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -126,8 +121,12 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
             float distance = event1.getX() - event2.getX();
             if(distance < -200){
                     Log.d(DEBUG_TAG,"Fling was to the right.");
+                    iterate = (iterate + 1) % creatures.length;
+                    creSwitcher.setImageResource(creatures[iterate]);
                 }else if(distance > 200){
                     Log.d(DEBUG_TAG,"Fling was to the left.");
+                    iterate = (iterate+1) % creatures.length;
+                    creSwitcher.setImageResource(creatures[iterate]);
                 }else{
                     Log.d(DEBUG_TAG,"No left or right fling occured.");
                 }
