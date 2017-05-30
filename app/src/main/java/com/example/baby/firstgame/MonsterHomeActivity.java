@@ -11,9 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.baby.firstgame.data.CreatureHandler;
+import com.example.baby.firstgame.handler.CreatureHandler;
 import com.example.baby.firstgame.data.CreatureObject;
 
 import java.io.Console;
@@ -30,11 +31,11 @@ import static com.example.baby.firstgame.R.id.settings;
 public class MonsterHomeActivity extends Activity implements Runnable{
     private Button btnItems;
     private Button btnMenu;
+    private TextView nameLabel;
 
     private LinearLayout linearLayout;
     private CreatureObject creature;
 
-    CreatureHandler handler = new CreatureHandler(this);
     Handler gamehandler = new Handler();
 
     private boolean visible = false;
@@ -48,17 +49,20 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         btnItems = (Button) findViewById(R.id.inventory);
         btnMenu = (Button) findViewById(R.id.menu);
         linearLayout = (LinearLayout) findViewById(R.id.itemList);
+        nameLabel = (TextView) findViewById(R.id.name);
 
         setBtnItems();
         setBtnMenu();
 
+        this.creature = CreatureHandler.loadObject(this);
 
-        handler.loadObject();
-        this.creature = handler.getCreature();
         setCreatureImg(creature);
         setItems();
+        nameLabel.setText(creature.getName());
+
         countdown();
     }
+
 
     /**
      * Sets the visibility of the inventory
@@ -151,6 +155,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         if(creature.getGametime() == 0 && creature.getHunger() > 100){
 //            String message = "Hunger: " + Integer.toString(creature.getHunger());
 //            Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+            //handler.getCreature().setAge(creature.getAge()+1);
             creature.setAge(creature.getAge()+1);
             if(creature.getAge() < 5) {
                 creature.setGametime(100);
@@ -164,7 +169,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         if(!checkGameover()) {
             String message = "Hunger: " + Integer.toString(creature.getHunger());
             Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
-
+            CreatureHandler.saveObject(creature,this);
             gamehandler.postDelayed(this, 30000);
         }
     }
