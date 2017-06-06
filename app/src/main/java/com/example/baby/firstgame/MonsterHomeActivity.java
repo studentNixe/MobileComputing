@@ -133,7 +133,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
                 }
             }
         });
-        dragView = findViewById(R.id.creatureImg);
+        dragView = findViewById(R.id.creatureImg); //creatureImg
         dragView.setOnDragListener(new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
@@ -157,12 +157,15 @@ public class MonsterHomeActivity extends Activity implements Runnable{
                     case DragEvent.ACTION_DROP:
                         Log.d("Drag Info: ", "ACTION_DROP event");
                         //drag onto location
-                        //imageDrag.setX(event.getX()-imageDrag.getHeight()/2);
-                        //imageDrag.setY(event.getY()-imageDrag.getWidth()/2);
+                        itemEat.setX(event.getX()-itemEat.getHeight()/2);
+                        itemEat.setY(event.getY()-itemEat.getWidth()/2);
                         itemEat.setVisibility(v.VISIBLE);
                         // reset position after drag
-                        itemEat.setX(posX);
-                        itemEat.setX(posY);
+                       // itemEat.setX(posX);
+                        //itemEat.setX(posY);
+                        Log.d("Drag Info: ", "X is: "+posX);
+                        Log.d("Drag Info: ", "Y is: "+posY);
+
                         //
                         creature.setHunger(creature.getHunger()+20);
                         break;
