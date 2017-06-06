@@ -2,15 +2,9 @@ package com.example.baby.firstgame;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ClipData;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.view.MotionEventCompat;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,8 +16,7 @@ import android.widget.Toast;
 
 import com.example.baby.firstgame.data.CreatureHandler;
 import com.example.baby.firstgame.data.CreatureObject;
-
-import java.io.Console;
+import com.example.baby.firstgame.game.GameEngine;
 
 import static com.example.baby.firstgame.R.id.help;
 import static com.example.baby.firstgame.R.id.profile;
@@ -34,19 +27,17 @@ import static com.example.baby.firstgame.R.id.settings;
  * Created by baby on 09.05.17.
  */
 
-public class MonsterHomeActivity extends Activity implements Runnable{
+public class MonsterHomeActivity extends Activity {
     private Button btnItems;
     private Button btnMenu;
     private TextView nameLabel;
-
-    private ImageView itemEat;
-    private View dragView;
+    private ImageView creatureImg;
 
     private LinearLayout linearLayout;
     private CreatureObject creature;
 
-    CreatureHandler handler = new CreatureHandler(this);
-    Handler gamehandler = new Handler();
+    CreatureHandler creatureHandler = new CreatureHandler(this);
+    //Handler gamehandler = new Handler();
 
     private boolean visible = false;
 
@@ -64,16 +55,16 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         setBtnItems();
         setBtnMenu();
 
+        this.creature = creatureHandler.loadObject();
 
-        this.creature = handler.loadObject();
         setCreatureImg(creature);
         setItems();
         nameLabel.setText(creature.getName());
 
-//        Thread t = new Thread(this);
-//        t.run();
-        countdown();
+        //countdown();
+        GameEngine engine = new GameEngine(MonsterHomeActivity.this);
     }
+
 
     /**
      * Sets the visibility of the inventory
@@ -89,9 +80,20 @@ public class MonsterHomeActivity extends Activity implements Runnable{
                 }
                 visible = !visible;
             }
+       
         });
     }
+ ImageView itemEat = (ImageView) findViewById(R.id.eat);
+        itemEat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                creature.setHunger(creature.getHunger()+20);
+                String message = "Hunger: " + Integer.toString(creature.getHunger());
+                Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+
+            }
+        });
     /**
      * Sets the items
      */
@@ -176,8 +178,6 @@ public class MonsterHomeActivity extends Activity implements Runnable{
                         break;
                 }
                 return true;
-            }
-        });
     }
 
     /**
@@ -223,7 +223,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
      * Sets or reloads the image of the creature
      */
     public void setCreatureImg(CreatureObject creature){
-        ImageView creatureImg = (ImageView) findViewById(R.id.creatureImg);
+        creatureImg = (ImageView) findViewById(R.id.creatureImg);
 
         String fileName = creature.getSpecies() + creature.getAge();
         int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
@@ -234,11 +234,12 @@ public class MonsterHomeActivity extends Activity implements Runnable{
     //--------------Game Engine-----------------------
     /**
      * Counts down the creatures' attributes
-     */
+
     public void countdown(){
         if(creature.getGametime() == 0 && creature.getHunger() > 100){
 //            String message = "Hunger: " + Integer.toString(creature.getHunger());
 //            Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+            //handler.getCreature().setAge(creature.getAge()+1);
             creature.setAge(creature.getAge()+1);
             if(creature.getAge() < 5) {
                 creature.setGametime(100);
@@ -252,8 +253,7 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         if(!checkGameover()) {
             String message = "Hunger: " + Integer.toString(creature.getHunger());
             Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
-            handler.saveObject(creature);
-
+            creatureHandler.saveObject(creature);
             gamehandler.postDelayed(this, 30000);
         }
     }
@@ -265,16 +265,16 @@ public class MonsterHomeActivity extends Activity implements Runnable{
         }
         return false;
     }
-
-    private void gameOver() {
+     */
+    public void gameOver() {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         dialog.setContentView(R.layout.gameover);
         dialog.show();
     }
 
 
-    @Override
+/*    @Override
     public void run() {
         countdown();
-    }
+    }*/
 }

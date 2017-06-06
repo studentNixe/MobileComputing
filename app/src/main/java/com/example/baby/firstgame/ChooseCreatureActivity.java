@@ -14,9 +14,6 @@ import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.ViewSwitcher;
 
-import com.example.baby.firstgame.data.CreatureHandler;
-import com.example.baby.firstgame.data.CreatureObject;
-
 /**
  * Created by Pawan on 5/8/2017.
  */
@@ -24,6 +21,7 @@ import com.example.baby.firstgame.data.CreatureObject;
 public class ChooseCreatureActivity extends Activity implements GestureDetector.OnGestureListener
 {
     private ImageSwitcher creSwitcher;
+
     private static final String DEBUG_TAG = "Gestures";
     private GestureDetectorCompat mDetector;
 
@@ -41,22 +39,12 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
         Button btnSelect = (Button) findViewById(R.id.select);
         mDetector = new GestureDetectorCompat(this,this);
 
-        //------------- will be deleted ----------
-        CreatureHandler handler = new CreatureHandler(this);
-        CreatureObject newCreature = new CreatureObject("dragon","nicole");
-        handler.createObject(newCreature);
-        //----------------------------------------
-
         creSwitcher = (ImageSwitcher) findViewById(R.id.creatureSwitcher);
         creSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
                 ImageView imageView = new ImageView(getApplicationContext());
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                //     imageView.setLayoutParams(
-//                        new ImageSwitcher.LayoutParams(
-//                                ViewGroup.LayoutParams.MATCH_PARENT,
-//                                ViewGroup.LayoutParams.MATCH_PARENT));
                 return imageView;
             }
         });
@@ -82,11 +70,14 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
         btnSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MonsterHomeActivity.class));
+                Intent intent = new Intent(getApplicationContext(), NameCreatureActivity.class);
+                intent.putExtra("creatureSelect", iterate);
+                startActivity(intent);
             }
         });
     }
 
+    @Override
     public boolean onTouchEvent(MotionEvent event){
         this.mDetector.onTouchEvent(event);
      // Be sure to call the superclass implementation
@@ -122,20 +113,22 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
     }
 
     @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        Log.d(DEBUG_TAG, "onFling: " + e1.toString()+e2.toString());
-        float distance = e1.getX() - e2.getX();
-        if(distance < -200){
-            Log.d(DEBUG_TAG,"Fling was to the right.");
-            iterate = (iterate + 1) % creatures.length;
-            creSwitcher.setImageResource(creatures[iterate]);
-        }else if(distance > 200){
-            Log.d(DEBUG_TAG,"Fling was to the left.");
-            iterate = (iterate+1) % creatures.length;
-            creSwitcher.setImageResource(creatures[iterate]);
-        }else{
-            Log.d(DEBUG_TAG,"No left or right fling occured.");
+    public boolean onFling(MotionEvent event1, MotionEvent event2,
+                           float velocityX, float velocityY) {
+            Log.d(DEBUG_TAG, "onFling: " + event1.toString()+event2.toString());
+            float distance = event1.getX() - event2.getX();
+            if(distance < -200){
+                    Log.d(DEBUG_TAG,"Fling was to the right.");
+                    iterate = (iterate + 1) % creatures.length;
+                    creSwitcher.setImageResource(creatures[iterate]);
+                }else if(distance > 200){
+                    Log.d(DEBUG_TAG,"Fling was to the left.");
+                    iterate = (iterate+1) % creatures.length;
+                    creSwitcher.setImageResource(creatures[iterate]);
+                }else{
+                    Log.d(DEBUG_TAG,"No left or right fling occured.");
+                }
+            return true;
         }
-        return true;
     }
-}
+
