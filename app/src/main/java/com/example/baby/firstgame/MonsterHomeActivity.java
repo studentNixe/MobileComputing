@@ -91,8 +91,7 @@ public class MonsterHomeActivity extends Activity {
         itemEat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                creature.setHunger(creature.getHunger()+20);
+                creatureHandler.changeAttributesValues(creature, "hunger", (+20));
                 String message = "Hunger: " + Integer.toString(creature.getHunger());
                 Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
             }

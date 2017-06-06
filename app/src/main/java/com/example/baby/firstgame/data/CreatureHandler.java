@@ -85,6 +85,29 @@ public class CreatureHandler {
     }
 
     /**
+     * Creatures attribute values will be increased
+     * @param attribute of creature, which should be changed
+     * @param value for increase or decrease
+     */
+    public void changeAttributesValues(CreatureObject creature, String attribute, int value){
+        switch(attribute){
+            case "hunger":
+                creature.setHunger(creature.getHunger() + (value));
+                break;
+            case "clean":
+                creature.setClean(creature.getClean() + (value));
+                break;
+            case "gametime":
+                creature.setGametime(creature.getGametime() + (value));
+                break;
+            default:
+                Log.e("ERROR: ", "Creature values could not be set.");
+
+        }
+        saveObject(creature);
+    }
+
+    /**
      * Creature will be saved to internal storage
      * @param creature being saved
      */
