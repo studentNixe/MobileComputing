@@ -21,6 +21,10 @@ public class CreatureHandler {
         this.context = context;
     }
 
+    /**
+     * Saves a creature to the internal storage
+     * @param creature being saved
+     */
     public void createObject(CreatureObject creature) {
         //creature.getInventory().add(0,new SpongeObject("Schwamm","star_icon.png",1));
         Log.d("DEBUG: ","Creature name is "+creature.getName() +" . \n and Age is "+ creature.getAge() + " \n and Health is " +creature.getClean()+ "\n and Hunger is " +creature.getHunger()+" .");
@@ -35,17 +39,22 @@ public class CreatureHandler {
             Log.e("ERROR: ", "No Data could be saved.");
         }
     }
+
     public void removeItemfromInventory(CreatureObject creature, String itemName) {
         creature.getInventory().remove(0);
         Log.d("DEBUG: ","Item removed.");
         saveObject(creature);
     }
+
     public void addItemtoInventory(CreatureObject creature, String itemName, int index) {
         creature.getInventory().add(index, new SpongeObject("Sponge","Sponge.png",20));
         Log.d("DEBUG: ","Item added.");
         saveObject(creature);
     }
 
+    /**
+    *Loads the creature from internal storage and returns it
+    */
     public CreatureObject loadObject(){
         CreatureObject obj = null;
         try{
@@ -75,6 +84,10 @@ public class CreatureHandler {
         return obj;
     }
 
+    /**
+     * Creature will be saved to internal storage
+     * @param creature being saved
+     */
     public void saveObject(CreatureObject creature) {
         List<CreatureObject> entries = new ArrayList<CreatureObject>();
         entries.add(creature);

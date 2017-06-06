@@ -14,8 +14,6 @@ import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.ViewSwitcher;
 
-import com.example.baby.firstgame.handler.CreatureHandler;
-
 /**
  * Created by Pawan on 5/8/2017.
  */
