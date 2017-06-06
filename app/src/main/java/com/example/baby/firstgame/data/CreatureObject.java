@@ -27,7 +27,7 @@ public class CreatureObject implements java.io.Serializable{
         this.species = species;
         this.name = name;
         this.age = 1;
-        this.hunger = 0;
+        this.hunger = 100;
         this.clean = 100;
         this.gametime = 100;
         this.inventory = new ArrayList<ItemObject>();
