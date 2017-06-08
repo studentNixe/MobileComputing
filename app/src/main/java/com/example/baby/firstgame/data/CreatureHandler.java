@@ -82,6 +82,7 @@ public class CreatureHandler {
             }
         } catch (IOException e) {
             Log.e("ERROR: ", "Could not load data.");
+            return false;
         } catch (ClassNotFoundException e) {
             Log.e("ERROR: ", "Class was not found.");
         }

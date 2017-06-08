@@ -56,12 +56,13 @@ public class MonsterHomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.monster_home);
-
+        Log.d("DEBUG: ","Creating MonsterHome");
         btnItems = (Button) findViewById(R.id.inventory);
         btnMenu = (Button) findViewById(R.id.menu);
         linearLayout = (LinearLayout) findViewById(R.id.itemList);
         nameLabel = (TextView) findViewById(R.id.name);
         evolutionBar = (ProgressBar) findViewById(R.id.EvolutionBar);
+        Log.d("DEBUG: ","Creating MonsterHome");
 
         creatureHandler.loadObject();
 
