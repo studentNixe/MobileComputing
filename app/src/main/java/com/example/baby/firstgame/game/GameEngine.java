@@ -1,65 +1,58 @@
 package com.example.baby.firstgame.game;
 
-import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.baby.firstgame.MonsterHomeActivity;
 import com.example.baby.firstgame.data.CreatureHandler;
-import com.example.baby.firstgame.data.CreatureObject;
-import com.example.baby.firstgame.data.InternalStorage;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 
 
 public class GameEngine implements Runnable {
-    CreatureObject creature;
     CreatureHandler creatureHandler;
     MonsterHomeActivity activity;
 
     Handler gamehandler = new Handler();
 
 
-    public GameEngine(MonsterHomeActivity activity) {
+    public GameEngine(MonsterHomeActivity activity, CreatureHandler creatureHandler) {
         this.activity = activity;
-        this.creatureHandler = new CreatureHandler(activity);
-        this.creature = creatureHandler.loadObject();
-
-        countdown();
+        this.creatureHandler = creatureHandler;
+        if(creatureHandler.loadObject()){
+            countdown();
+        }else{
+            Log.e("ERROR: ", "Load Error.");
+        }
+        
     }
 
     /**
      * Counts down the creatures' attributes
      */
     public void countdown(){
-        if(creature.getGametime() == 0 && creature.getHunger() > 100){
-//            String message = "Hunger: " + Integer.toString(creature.getHunger());
-//            Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
-            //handler.getCreature().setAge(creature.getAge()+1);
-            creature.setAge(creature.getAge()+1);
-            if(creature.getAge() < 5) {
-                creature.setGametime(100);
-                activity.setCreatureImg(creature);
+        if(creatureHandler.getAttrInt("gametime") == 0 && creatureHandler.getAttrInt("hunger") > 100){
+            creatureHandler.setAttrInt("age", 1);
+            if(creatureHandler.getAttrInt("age") < creatureHandler.getAttrInt("maxAge")) {
+                creatureHandler.setAttrInt("gametime", 100);
+                activity.setCreatureImg();
             }
         }else {
-            creature.setHunger(creature.getHunger() - 5);
-            creature.setClean(creature.getClean() - 5);
-            creature.setGametime(creature.getGametime() - 20);
+            creatureHandler.setAttrInt("hunger", -5);
+            creatureHandler.setAttrInt("clean", -5);
+            creatureHandler.setAttrInt("gametime", -20);
         }
         if(!checkGameover()) {
-            creatureHandler.saveObject(creature);
-            String message = "Hunger: " + Integer.toString(creature.getHunger());
+            creatureHandler.saveObject();
+            String message = "Hunger: " + Integer.toString(creatureHandler.getAttrInt("hunger"));
             Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             gamehandler.postDelayed(this, 30000);
         }
     }
 
     private boolean checkGameover() {
-        if (creature.getHunger() == 0){
+        if (creatureHandler.getAttrInt("hunger") == 0){
             activity.gameOver();
             return true;
         }

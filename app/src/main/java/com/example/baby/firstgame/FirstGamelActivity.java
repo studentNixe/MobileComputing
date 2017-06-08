@@ -27,7 +27,7 @@ public class FirstGamelActivity extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.button){
-            if(creatureHandler.loadObject()==null){
+            if(creatureHandler.loadObject()){
                 startActivity(new Intent(this, ChooseCreatureActivity.class));
             }else{
                 startActivity(new Intent(this, MonsterHomeActivity.class));

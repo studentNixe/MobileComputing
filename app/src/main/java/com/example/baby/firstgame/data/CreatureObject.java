@@ -89,4 +89,8 @@ public class CreatureObject implements java.io.Serializable{
     public void setSpecies(String species) {
         this.species = species;
     }
+
+    public int getAgeMax() {
+        return ageMax;
+    }
 }
