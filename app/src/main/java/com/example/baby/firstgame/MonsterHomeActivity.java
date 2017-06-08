@@ -24,6 +24,9 @@ import com.example.baby.firstgame.data.CreatureHandler;
 import com.example.baby.firstgame.data.CreatureObject;
 import com.example.baby.firstgame.game.GameEngine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.example.baby.firstgame.R.id.help;
 import static com.example.baby.firstgame.R.id.profile;
 import static com.example.baby.firstgame.R.id.settings;
@@ -38,10 +41,9 @@ public class MonsterHomeActivity extends Activity {
     private Button btnMenu;
     private TextView nameLabel;
     private ImageView creatureImg;
-
-
     private ImageView itemEat;
     private View dragView;
+    private View dragView2;
 
     private LinearLayout linearLayout;
     private CreatureObject creature;
@@ -62,6 +64,7 @@ public class MonsterHomeActivity extends Activity {
         linearLayout = (LinearLayout) findViewById(R.id.itemList);
         nameLabel = (TextView) findViewById(R.id.name);
 
+
         setBtnItems();
         setBtnMenu();
 
@@ -79,11 +82,11 @@ public class MonsterHomeActivity extends Activity {
     /**
      * Sets the visibility of the inventory
      */
-    protected void setBtnItems(){
+    protected void setBtnItems() {
         btnItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (visible){
+                if (visible) {
                     linearLayout.setVisibility(View.INVISIBLE);
                 } else {
                     linearLayout.setVisibility(View.VISIBLE);
@@ -96,105 +99,197 @@ public class MonsterHomeActivity extends Activity {
     /**
      * Sets the items
      */
-    protected void setItems(){
-         itemEat = (ImageView) findViewById(R.id.eat);
-         itemEat.setTag("DraggableImage");
-         itemEat.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                              public boolean onTouch(View view, MotionEvent event) {
-                                        int action = MotionEventCompat.getActionMasked(event);
-                                       switch (action) {
-                                                case (MotionEvent.ACTION_DOWN):
-                                                        Log.d("Debug: ", "Action was DOWN");
-                                                        ClipData data = ClipData.newPlainText("", "");
-                                                   View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
-                                                                        view);
-                                                       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                                                view.startDragAndDrop(data, shadowBuilder, view, 0);
-                                                            } else {
-                                                                view.startDrag(data, shadowBuilder, view, 0);
-                                                            }
-                                                        view.setVisibility(View.INVISIBLE);
-                                                        return true;
-                                                case (MotionEvent.ACTION_MOVE):
-                                                        Log.d("Debug: ", "Action was MOVE");
-                                                       return true;
-                                                case (MotionEvent.ACTION_UP):
-                                                        Log.d("Debug: ", "Action was UP");
-                                                       return true;
-                                                case (MotionEvent.ACTION_CANCEL):
-                                                        Log.d("Debug: ", "Action was CANCEL");
-                                                        return true;
-                                                case (MotionEvent.ACTION_OUTSIDE):
-                                                       Log.d("Debug: ", "Movement occurred outside bounds " +
-                                                                        "of current screen element");
-                                                       return true;
-                                                default:
-                                                       return false;
-                                          }
-                                    }
-                            });
-                        dragView = findViewById(R.id.creatureImg);
-                       dragView.setOnDragListener(new View.OnDragListener() {
-             @Override
- public boolean onDrag(View v, DragEvent event) {
-                                        int action = event.getAction();
-                                        float posX = itemEat.getX();
-                                        float posY = itemEat.getY();
-                                        switch (event.getAction()) {
-                                                case DragEvent.ACTION_DRAG_STARTED:
-                                                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
-                                                       break;
-                                                case DragEvent.ACTION_DRAG_ENTERED:
-                                                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENTERED");
-                                                       break;
-                                                case DragEvent.ACTION_DRAG_EXITED:
-                                                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
-                                                       break;
-                                                case DragEvent.ACTION_DRAG_LOCATION:
-                                                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
-                                                                       + event.getX() + ", " + event.getY());
-                                                        break;
-                                               case DragEvent.ACTION_DROP:
-                                                        Log.d("Drag Info: ", "ACTION_DROP event");
-                                                 //drag onto location
-                                                                //imageDrag.setX(event.getX()-imageDrag.getHeight()/2);
-                                                                        //imageDrag.setY(event.getY()-imageDrag.getWidth()/2);
-                                                                                itemEat.setVisibility(v.VISIBLE);
-                                                        // reset position after drag
-                                                                itemEat.setX(posX);
-                                                        itemEat.setX(posY);
-                                                        //
-                                                                creature.setHunger(creature.getHunger()+20);
-                                                        break;
-                                                case DragEvent.ACTION_DRAG_ENDED:
-                                                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
-                                                        v.setVisibility(View.VISIBLE);
-                                                   default:
-                                                       break;
-                                           }
-                                       return true;
-                    }
-                });
+    protected void setItems() {
+        itemEat = (ImageView) findViewById(R.id.eat);
+        itemEat.setTag("DraggableImage");
+        itemEat.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                switch (action) {
+                    case (MotionEvent.ACTION_DOWN):
+                        Log.d("Debug: ", "Action was DOWN");
+                        ClipData data = ClipData.newPlainText("", "");
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                                view);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            view.startDragAndDrop(data, shadowBuilder, view, 0);
+                        } else {
+                            view.startDrag(data, shadowBuilder, view, 0);
+                        }
+                        view.setVisibility(View.INVISIBLE);
+                        return true;
+                    case (MotionEvent.ACTION_MOVE):
+                        Log.d("Debug: ", "Action was MOVE");
+                        return true;
+                    case (MotionEvent.ACTION_UP):
+                        Log.d("Debug: ", "Action was UP");
+                        return true;
+                    case (MotionEvent.ACTION_CANCEL):
+                        Log.d("Debug: ", "Action was CANCEL");
+                        return true;
+                    case (MotionEvent.ACTION_OUTSIDE):
+                        Log.d("Debug: ", "Movement occurred outside bounds " +
+                                "of current screen element");
+                        return true;
+                    default:
+                        return false;
+                }
             }
+        });
+ /**       dragView = findViewById(R.id.creatureImg);
+        dragView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                float posX = itemEat.getX();
+                float posY = itemEat.getY();
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENTERED");
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
+                        break;
+                    case DragEvent.ACTION_DRAG_LOCATION:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
+                                + event.getX() + ", " + event.getY());
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        Log.d("Drag Info: ", "ACTION_DROP event");
+                        //drag onto location
+                        //imageDrag.setX(event.getX()-imageDrag.getHeight()/2);
+                        //imageDrag.setY(event.getY()-imageDrag.getWidth()/2);
+                        itemEat.setVisibility(v.VISIBLE);
+                        // reset position after drag
+                        itemEat.setX(posX);
+                        itemEat.setX(posY);
+                        //
+                        creature.setHunger(creature.getHunger() + 20);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
+                        v.setVisibility(View.VISIBLE);
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+  */
+        //----------------------------------------------------------
+        dragView2 = (View) findViewById(R.id.backgroundLayout);
 
+        dragView2.setOnDragListener(new View.OnDragListener() {
+            // List of X and Y position for gesture detection
+            List<Float> dragMovementX = new ArrayList<Float>();
+            List<Float> dragMovementY = new ArrayList<Float>();
+            boolean leftTurn = false;
+            boolean rightTurn = false;
+            int counter=0;
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                int action = event.getAction();
+                float posX = itemEat.getX();
+                float posY = itemEat.getY();
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
+                        Log.e("DEBUG:", "itemEat is at Position:"+posX+" / "+posY);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENTERED");
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
+                        break;
+                    case DragEvent.ACTION_DRAG_LOCATION:
+                       // Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
+                       //         + event.getX() + ", " + event.getY());
+                        dragMovementX.add(event.getX());
+                        dragMovementY.add(event.getY());
+                        if(dragMovementX.size() >=10){
+                            //detect if the movement was right - left - right
+                            if(rightTurn){
+                                //Log.d("TEST:", "MOVE WAS TO THE RIGHT, TO THE LEFT AND NOW TO THE RIGHT AGAIN.");
+                                counter++;
+                                if(counter == 2){
+                                    Log.d("TEST:", "MOVE WAS TO THE RIGHT, TO THE LEFT AND NOW TO THE RIGHT AGAIN. !!!!!!!!!APPEARED TWICE!!!!!!!!");
+                                }
+                                rightTurn= false;
+                                leftTurn = false;
+                            }
+                            //detect if a right run follows a left turn
+                            if(leftTurn){
+                                if(dragMovementX.get(dragMovementX.size()-5) < dragMovementX.get(dragMovementX.size()-10)){
+                                    //if this position is smaller than the one from before
+                                    //Log.d("TEST:", "Move was to the left.");
+                                    if(dragMovementX.size() >=10){  // is the List long enough?
+                                        if(dragMovementX.get(dragMovementX.size()-1) > dragMovementX.get(dragMovementX.size()-5)){
+                                            //did it turn left before?
+                                            //Log.d("TEST:", "MOVE IS RIGHT NOW.");
+                                            rightTurn = true; //gesture left turn detected!
+                                        }
+                                    }
+                                }
+                            }
+                            //detect a right turn
+                            if(dragMovementX.get(dragMovementX.size()-5) > dragMovementX.get(dragMovementX.size()-10)){
+                                //if this position is larger than the one from before
+                                //Log.d("TEST:", "Move was to the right.");
+                                if(dragMovementX.size() >=10){  // is the List long enough?
+                                    if(dragMovementX.get(dragMovementX.size()-1) < dragMovementX.get(dragMovementX.size()-5)){
+                                        //did it turn left before?
+                                        //Log.d("TEST:", "MOVE IS LEFT NOW.");
+                                        leftTurn = true; //gesture left turn detected!
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        Log.d("Drag Info: ", "ACTION_DROP event");
+                        itemEat.setX(posX);
+                        itemEat.setY(posY);
+                        itemEat.setVisibility(v.VISIBLE);
+                        creature.setHunger(creature.getHunger()  +20);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
+                        //Log.d("Message:" , "X: "+itemEat.getX());
+                        //Log.d("Message:" ,"Y: "+itemEat.getY());
+                        leftTurn = false;
+                        rightTurn = false;
+                        counter=0;
+                        v.setVisibility(View.VISIBLE);
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+//----------------------------------------------------------
     /**
      * Creates the Menu and sets actions when clicking
      */
-    protected void setBtnMenu(){
+    protected void setBtnMenu() {
         btnMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 linearLayout.setVisibility(View.INVISIBLE);
                 visible = false;
-                PopupMenu popup = new PopupMenu(MonsterHomeActivity.this,v);
+                PopupMenu popup = new PopupMenu(MonsterHomeActivity.this, v);
                 popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         Dialog menuDialog = new Dialog(MonsterHomeActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 
-                        switch(item.getItemId()){
+                        switch (item.getItemId()) {
                             case profile:
                                 Toast.makeText(MonsterHomeActivity.this, "You clicked profile", Toast.LENGTH_SHORT).show();
                                 menuDialog.setContentView(R.layout.gameover);
@@ -220,49 +315,50 @@ public class MonsterHomeActivity extends Activity {
     /**
      * Sets or reloads the image of the creature
      */
-    public void setCreatureImg(CreatureObject creature){
+    public void setCreatureImg(CreatureObject creature) {
         creatureImg = (ImageView) findViewById(R.id.creatureImg);
 
         String fileName = creature.getSpecies() + creature.getAge();
-        int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
+        int id = getResources().getIdentifier(fileName, "drawable", getPackageName());
         creatureImg.setImageDrawable(getResources().getDrawable(id));
     }
 
 
     //--------------Game Engine-----------------------
+
     /**
      * Counts down the creatures' attributes
-
-    public void countdown(){
-        if(creature.getGametime() == 0 && creature.getHunger() > 100){
-//            String message = "Hunger: " + Integer.toString(creature.getHunger());
-//            Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
-            //handler.getCreature().setAge(creature.getAge()+1);
-            creature.setAge(creature.getAge()+1);
-            if(creature.getAge() < 5) {
-                creature.setGametime(100);
-                setCreatureImg(creature);
-            }
-        }else {
-            creature.setHunger(creature.getHunger() - 5);
-            creature.setClean(creature.getClean() - 5);
-            creature.setGametime(creature.getGametime() - 20);
-        }
-        if(!checkGameover()) {
-            String message = "Hunger: " + Integer.toString(creature.getHunger());
-            Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
-            creatureHandler.saveObject(creature);
-            gamehandler.postDelayed(this, 30000);
-        }
-    }
-
-    private boolean checkGameover() {
-        if (creature.getHunger() == 0){
-            gameOver();
-            return true;
-        }
-        return false;
-    }
+     * <p>
+     * public void countdown(){
+     * if(creature.getGametime() == 0 && creature.getHunger() > 100){
+     * //            String message = "Hunger: " + Integer.toString(creature.getHunger());
+     * //            Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+     * //handler.getCreature().setAge(creature.getAge()+1);
+     * creature.setAge(creature.getAge()+1);
+     * if(creature.getAge() < 5) {
+     * creature.setGametime(100);
+     * setCreatureImg(creature);
+     * }
+     * }else {
+     * creature.setHunger(creature.getHunger() - 5);
+     * creature.setClean(creature.getClean() - 5);
+     * creature.setGametime(creature.getGametime() - 20);
+     * }
+     * if(!checkGameover()) {
+     * String message = "Hunger: " + Integer.toString(creature.getHunger());
+     * Toast.makeText(MonsterHomeActivity.this, message, Toast.LENGTH_SHORT).show();
+     * creatureHandler.saveObject(creature);
+     * gamehandler.postDelayed(this, 30000);
+     * }
+     * }
+     * <p>
+     * private boolean checkGameover() {
+     * if (creature.getHunger() == 0){
+     * gameOver();
+     * return true;
+     * }
+     * return false;
+     * }
      */
     public void gameOver() {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);

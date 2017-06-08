@@ -38,7 +38,7 @@ import com.example.baby.firstgame.data.InternalStorage;
  */
 
 public class ObjectHandlerActivity extends Activity implements View.OnClickListener, GestureDetector.OnGestureListener,
-                                                                GestureDetector.OnDoubleTapListener{
+        GestureDetector.OnDoubleTapListener {
 
     public Button btnCreateAndSave, btnLoad;
     public EditText txtName;
@@ -52,7 +52,7 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.objects);
-        mDetector = new GestureDetectorCompat(this,this);
+        mDetector = new GestureDetectorCompat(this, this);
         mDetector.setOnDoubleTapListener(this);
 
         btnCreateAndSave = (Button) findViewById(R.id.btnCreateAndSave);
@@ -148,7 +148,8 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
         loadObject();
         */
     }
-    public boolean onTouchEvent(MotionEvent event){
+
+    public boolean onTouchEvent(MotionEvent event) {
         this.mDetector.onTouchEvent(event);
 // Be sure to call the superclass implementation
         return super.onTouchEvent(event);
@@ -156,21 +157,21 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
 
     @Override
     public boolean onDown(MotionEvent event) {
-        Log.d(DEBUG_TAG,"onDown: " + event.toString());
+        Log.d(DEBUG_TAG, "onDown: " + event.toString());
         return true;
     }
 
     @Override
     public boolean onFling(MotionEvent event1, MotionEvent event2,
                            float velocityX, float velocityY) {
-        Log.d(DEBUG_TAG, "onFling: " + event1.toString()+event2.toString());
+        Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
         float distance = event1.getX() - event2.getX();
-        if(distance < -200){
-            Log.d(DEBUG_TAG,"Fling was to the right.");
-        }else if(distance > 200){
-            Log.d(DEBUG_TAG,"Fling was to the left.");
-        }else{
-            Log.d(DEBUG_TAG,"No left or right fling occured.");
+        if (distance < -200) {
+            Log.d(DEBUG_TAG, "Fling was to the right.");
+        } else if (distance > 200) {
+            Log.d(DEBUG_TAG, "Fling was to the left.");
+        } else {
+            Log.d(DEBUG_TAG, "No left or right fling occured.");
         }
         return true;
     }
@@ -182,8 +183,8 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d(DEBUG_TAG, "onScroll: " + e1.toString()+e2.toString());
-        Log.d(DEBUG_TAG, "getXe1: "+ e1.getX() +" getXe2: "+ e2.getX());
+        Log.d(DEBUG_TAG, "onScroll: " + e1.toString() + e2.toString());
+        Log.d(DEBUG_TAG, "getXe1: " + e1.getX() + " getXe2: " + e2.getX());
         return true;
     }
 
@@ -191,21 +192,25 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
     public void onShowPress(MotionEvent event) {
         Log.d(DEBUG_TAG, "onShowPress: " + event.toString());
     }
+
     @Override
     public boolean onSingleTapUp(MotionEvent event) {
         Log.d(DEBUG_TAG, "onSingleTapUp: " + event.toString());
         return true;
     }
+
     @Override
     public boolean onDoubleTap(MotionEvent event) {
         Log.d(DEBUG_TAG, "onDoubleTap: " + event.toString());
         return true;
     }
+
     @Override
     public boolean onDoubleTapEvent(MotionEvent event) {
         Log.d(DEBUG_TAG, "onDoubleTapEvent: " + event.toString());
         return true;
     }
+
     @Override
     public boolean onSingleTapConfirmed(MotionEvent event) {
         Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
