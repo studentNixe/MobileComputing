@@ -43,6 +43,7 @@ public class GameEngine implements Runnable {
             creatureHandler.setAttrInt("clean", -5);
             creatureHandler.setAttrInt("gametime", -20);
         }
+
         if(!checkGameover()) {
             creatureHandler.saveObject();
             String message = "Hunger: " + Integer.toString(creatureHandler.getAttrInt("hunger"));
