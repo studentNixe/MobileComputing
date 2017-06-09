@@ -182,7 +182,6 @@ public class MonsterHomeActivity extends Activity {
   */
         //----------------------------------------------------------
         dragView2 = (View) findViewById(R.id.backgroundLayout);
-
         dragView2.setOnDragListener(new View.OnDragListener() {
             // List of X and Y position for gesture detection
             List<Float> dragMovementX = new ArrayList<Float>();
