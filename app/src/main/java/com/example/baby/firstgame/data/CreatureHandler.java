@@ -169,4 +169,19 @@ public class CreatureHandler {
             Log.e("ERROR: ", "No Data could be saved.");
         }
     }
+    /*
+        delete the Object from the local storage
+     */
+    public void deleteObject() {
+        context.deleteFile("CreatureObject.xml");
+        Log.d("DEBUG: ", "Deleted Object.");
+        //check if the creature was deleted
+        try {
+            List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(context, "CreatureObject.xml");
+        } catch (ClassNotFoundException e) {
+            Log.e("ERROR: ", "Data was successfully deleted.");
+        } catch (IOException e) {
+            Log.e("ERROR: ", "IOexception Happened.");
+        }
+    }
 }

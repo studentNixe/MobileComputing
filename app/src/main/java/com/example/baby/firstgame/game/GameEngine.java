@@ -44,8 +44,8 @@ public class GameEngine implements Runnable {
             creatureHandler.setAttrInt("gametime", -20);
         }
        if(!checkGameover()) {
-            creatureHandler.saveObject(creature);
-            String message = "Hunger: " + Integer.toString(creature.getHunger());
+            creatureHandler.saveObject();
+            String message = "Hunger: " + creatureHandler.getAttrInt("hunger");
             Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             gamehandler.postDelayed(this, 30000);
         }

@@ -62,41 +62,8 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
         txtName = (EditText) findViewById(R.id.txtName);
         imageDrag = (ImageView) findViewById(R.id.imageDrag);
         imageDrag.setTag("DraggableImage");
-        imageDrag.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                int action = MotionEventCompat.getActionMasked(event);
-                switch (action) {
-                    case (MotionEvent.ACTION_DOWN):
-                        Log.d("Debug: ", "Action was DOWN");
-                        ClipData data = ClipData.newPlainText("", "");
-                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
-                                view);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            view.startDragAndDrop(data, shadowBuilder, view, 0);
-                        } else {
-                            view.startDrag(data, shadowBuilder, view, 0);
-                        }
-                        view.setVisibility(View.INVISIBLE);
-                        return true;
-                    case (MotionEvent.ACTION_MOVE):
-                        Log.d("Debug: ", "Action was MOVE");
-                        return true;
-                    case (MotionEvent.ACTION_UP):
-                        Log.d("Debug: ", "Action was UP");
-                        return true;
-                    case (MotionEvent.ACTION_CANCEL):
-                        Log.d("Debug: ", "Action was CANCEL");
-                        return true;
-                    case (MotionEvent.ACTION_OUTSIDE):
-                        Log.d("Debug: ", "Movement occurred outside bounds " +
-                                "of current screen element");
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });
+        imageDrag.setOnTouchListener(createListener());
+
         dragView = findViewById(R.id.layoutMain);
         dragView.setOnDragListener(new View.OnDragListener() {
             @Override
@@ -139,6 +106,46 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
 
         });
     }
+
+    public View.OnTouchListener createListener(){
+        View.OnTouchListener listener1 = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                switch (action) {
+                    case (MotionEvent.ACTION_DOWN):
+                        Log.d("Debug: ", "Action was DOWN");
+                        ClipData data = ClipData.newPlainText("", "");
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                                view);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            view.startDragAndDrop(data, shadowBuilder, view, 0);
+                        } else {
+                            view.startDrag(data, shadowBuilder, view, 0);
+                        }
+                        view.setVisibility(View.INVISIBLE);
+                        return true;
+                    case (MotionEvent.ACTION_MOVE):
+                        Log.d("Debug: ", "Action was MOVE");
+                        return true;
+                    case (MotionEvent.ACTION_UP):
+                        Log.d("Debug: ", "Action was UP");
+                        return true;
+                    case (MotionEvent.ACTION_CANCEL):
+                        Log.d("Debug: ", "Action was CANCEL");
+                        return true;
+                    case (MotionEvent.ACTION_OUTSIDE):
+                        Log.d("Debug: ", "Movement occurred outside bounds " +
+                                "of current screen element");
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        };
+        return listener1;
+    }
+
 
     @Override
     public void onClick(View v) {
