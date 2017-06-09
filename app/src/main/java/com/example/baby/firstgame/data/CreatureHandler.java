@@ -16,6 +16,7 @@ import java.util.List;
 
 public class CreatureHandler {
     private Context context;
+    CreatureObject creature;
 
     public CreatureHandler(Context context) {
         this.context = context;
@@ -23,9 +24,11 @@ public class CreatureHandler {
 
     /**
      * Saves a creature to the internal storage
-     * @param creature being saved
+     * @param name being saved
+     * @param species being saved
      */
-    public void createObject(CreatureObject creature) {
+    public void createObject(String name, String species) {
+        this.creature = new CreatureObject(name, species);
         //creature.getInventory().add(0,new SpongeObject("Schwamm","star_icon.png",1));
         Log.d("DEBUG: ","Creature name is "+creature.getName() +" . \n and Age is "+ creature.getAge() + " \n and Health is " +creature.getClean()+ "\n and Hunger is " +creature.getHunger()+" .");
         // The list that should be saved to internal storage.
@@ -43,20 +46,20 @@ public class CreatureHandler {
     public void removeItemfromInventory(CreatureObject creature, String itemName) {
         creature.getInventory().remove(0);
         Log.d("DEBUG: ","Item removed.");
-        saveObject(creature);
+        saveObject();
     }
 
     public void addItemtoInventory(CreatureObject creature, String itemName, int index) {
         creature.getInventory().add(index, new SpongeObject("Sponge","Sponge.png",20));
         Log.d("DEBUG: ","Item added.");
-        saveObject(creature);
+        saveObject();
     }
 
     /**
     *Loads the creature from internal storage and returns it
     */
-    public CreatureObject loadObject(){
-        CreatureObject obj = null;
+    public boolean loadObject(){
+        this.creature = null;
         try{
             // Retrieve the list from internal storage
             List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(context, "CreatureObject.xml");
@@ -64,11 +67,12 @@ public class CreatureHandler {
             // Display the items from the list retrieved.
             for (CreatureObject creature : cachedEntries) {
                 if(creature.getName() != null){
-                    obj = creature;
+                    this.creature = creature;
                     Log.d("DEBUG: ", creature.getName());
+                    return true;
                 }else {
                     Log.d("DEBUG: " , "Name is null-");
-                    obj = null;
+                    this.creature = null;
                 }
             }
             try {
@@ -78,10 +82,11 @@ public class CreatureHandler {
             }
         } catch (IOException e) {
             Log.e("ERROR: ", "Could not load data.");
+            return false;
         } catch (ClassNotFoundException e) {
             Log.e("ERROR: ", "Class was not found.");
         }
-        return obj;
+        return false;
     }
 
     /**
@@ -89,7 +94,7 @@ public class CreatureHandler {
      * @param attribute of creature, which should be changed
      * @param value for increase or decrease
      */
-    public void changeAttributesValues(CreatureObject creature, String attribute, int value){
+    public void setAttrInt(String attribute, int value){
         switch(attribute){
             case "hunger":
                 creature.setHunger(creature.getHunger() + (value));
@@ -100,18 +105,60 @@ public class CreatureHandler {
             case "gametime":
                 creature.setGametime(creature.getGametime() + (value));
                 break;
+            case "age":
+                creature.setGametime(creature.getAge() + (value));
+                break;
             default:
                 Log.e("ERROR: ", "Creature values could not be set.");
 
         }
-        saveObject(creature);
+        saveObject();
+    }
+
+    /**
+     * Returns int value of a chosen attribute
+     * @param attribute of creature
+     */
+    public int getAttrInt(String attribute){
+        switch(attribute){
+            case "hunger":
+                return creature.getHunger();
+            case "clean":
+                return creature.getClean();
+            case "gametime":
+                return creature.getGametime();
+            case "age":
+                return creature.getAge();
+            case "maxAge":
+                return creature.getAgeMax();
+            default:
+                Log.e("ERROR: ", "Creature value could not be found.");
+
+        }
+        return -1;
+    }
+
+    /**
+     *  Returns String value of a chosen attribute
+     * @param attribute of creature
+     */
+    public String getAttrString(String attribute){
+        switch(attribute){
+            case "name":
+                return creature.getName();
+            case "species":
+                return creature.getSpecies();
+            default:
+                Log.e("ERROR: ", "Creature value could not be found.");
+
+        }
+        return null;
     }
 
     /**
      * Creature will be saved to internal storage
-     * @param creature being saved
      */
-    public void saveObject(CreatureObject creature) {
+    public void saveObject() {
         List<CreatureObject> entries = new ArrayList<CreatureObject>();
         entries.add(creature);
         // Save the list of entries to internal storage
