@@ -185,7 +185,6 @@ public class MonsterHomeActivity extends Activity {
   */
         //----------------------------------------------------------
         dragView2 = (View) findViewById(R.id.backgroundLayout);
-
         dragView2.setOnDragListener(new View.OnDragListener() {
             // List of X and Y position for gesture detection
             List<Float> dragMovementX = new ArrayList<Float>();
@@ -238,51 +237,7 @@ public class MonsterHomeActivity extends Activity {
                                             rightTurn = true; //gesture left turn detected!
                                         }
                                     }
-/* HEAD
-                            });
-                        dragView = findViewById(R.id.creatureImg);
-                       dragView.setOnDragListener(new View.OnDragListener() {
-             @Override
- public boolean onDrag(View v, DragEvent event) {
-                                        int action = event.getAction();
-                                        float posX = itemEat.getX();
-                                        float posY = itemEat.getY();
-                                        switch (event.getAction()) {
-                                                case DragEvent.ACTION_DRAG_STARTED:
-                                                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
-                                                       break;
-                                                case DragEvent.ACTION_DRAG_ENTERED:
-                                                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENTERED");
-                                                       break;
-                                                case DragEvent.ACTION_DRAG_EXITED:
-                                                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
-                                                       break;
-                                                case DragEvent.ACTION_DRAG_LOCATION:
-                                                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
-                                                                       + event.getX() + ", " + event.getY());
-                                                        break;
-                                               case DragEvent.ACTION_DROP:
-                                                        Log.d("Drag Info: ", "ACTION_DROP event");
-                                                 //drag onto location
-                                                                //imageDrag.setX(event.getX()-imageDrag.getHeight()/2);
-                                                                        //imageDrag.setY(event.getY()-imageDrag.getWidth()/2);
-                                                                                itemEat.setVisibility(v.VISIBLE);
-                                                        // reset position after drag
-                                                                itemEat.setX(posX);
-                                                        itemEat.setX(posY);
-                                                        //
-                                                                creatureHandler.setAttrInt("hunger",20);
-                                                        break;
-                                                case DragEvent.ACTION_DRAG_ENDED:
-                                                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
-                                                        v.setVisibility(View.VISIBLE);
-                                                   default:
-                                                       break;
-                                           }
-                                       return true;
-                    }
-                });
-*/
+
                                 }
                             }
                             //detect a right turn

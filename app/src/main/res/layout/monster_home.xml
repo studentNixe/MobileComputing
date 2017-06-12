@@ -86,7 +86,7 @@
         android:background="@drawable/inventory"
         android:orientation="vertical"
         android:theme="@style/Base.Widget.AppCompat.ActionButton"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/inventory"
         app:layout_constraintHorizontal_bias="0.972"
         app:layout_constraintLeft_toLeftOf="parent"
