@@ -20,11 +20,7 @@ public class GameEngine implements Runnable {
     public GameEngine(MonsterHomeActivity activity, CreatureHandler creatureHandler) {
         this.activity = activity;
         this.creatureHandler = creatureHandler;
-        if(creatureHandler.loadObject()){
-            countdown();
-        }else{
-            Log.e("ERROR: ", "Load Error.");
-        }
+        countdown();
 
     }
 
@@ -32,28 +28,33 @@ public class GameEngine implements Runnable {
      * Counts down the creatures' attributes
      */
     public void countdown(){
-        if(creatureHandler.getAttrInt("gametime") == 0 && creatureHandler.getAttrInt("hunger") > 100){
+        if(creatureHandler.getAttrInt("gametime") < 0 && creatureHandler.getAttrInt("hunger") > 100){
             creatureHandler.setAttrInt("age", 1);
             if(creatureHandler.getAttrInt("age") < creatureHandler.getAttrInt("maxAge")) {
-                creatureHandler.setAttrInt("gametime", 100);
                 activity.setCreatureImg();
+                activity.setEvolutionBar();
+//                String message = "Species : " + creatureHandler.getAttrString("species")
+//                        + "Age : " + Integer.toString(creatureHandler.getAttrInt("age"));
+//                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+                creatureHandler.setAttrInt("gametime", 100);
             }
         }else {
             creatureHandler.setAttrInt("hunger", -5);
             creatureHandler.setAttrInt("clean", -5);
-            creatureHandler.setAttrInt("gametime", -20);
+            creatureHandler.setAttrInt("gametime", -25);
         }
 
         if(!checkGameover()) {
             creatureHandler.saveObject();
-            String message = "Hunger: " + Integer.toString(creatureHandler.getAttrInt("hunger"));
-            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+//            String message = "Hunger : " + Integer.toString(creatureHandler.getAttrInt("hunger"))
+//                    + ", Gametime : " + Integer.toString(creatureHandler.getAttrInt("gametime"));
+//            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             gamehandler.postDelayed(this, 30000);
         }
     }
 
     private boolean checkGameover() {
-        if (creatureHandler.getAttrInt("hunger") == 0){
+        if (creatureHandler.getAttrInt("hunger") < 0){
             activity.gameOver();
             return true;
         }

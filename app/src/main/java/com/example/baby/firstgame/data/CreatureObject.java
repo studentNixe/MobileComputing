@@ -10,7 +10,7 @@ import java.util.List;
 public class CreatureObject implements java.io.Serializable{
     //class attributes
     private String[] speciesList = {"denise","pawan","nicole"};
-    private int ageMin = 0;
+//    private int ageMin = 0;
     private int ageMax = 4;
 
     //object attributes
