@@ -19,5 +19,10 @@
     <string name="profile">Profile</string>
     <string name="settings">Settings</string>
     <string name="help">Help - How to play Crystal Creatures</string>
+    <string name="getHunger">Hunger</string>
+    <string name="getAge">Age</string>
+    <string name="getClean">Clean</string>
+    <string name="getSpecies">Species</string>
+    <string name="textview">TextView</string>
     <item name="creationTime" type="id" />
 </resources>

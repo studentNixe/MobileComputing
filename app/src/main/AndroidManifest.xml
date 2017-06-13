@@ -23,6 +23,7 @@
         <activity android:name=".MonsterHomeActivity" />
         <activity android:name=".ChooseCreatureActivity"/>
         <activity android:name=".NameCreatureActivity"/>
+        <activity android:name=".CreatureProfileActivity"/>
     </application>
 
 </manifest>

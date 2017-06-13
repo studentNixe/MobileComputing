@@ -11,12 +11,12 @@ import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.view.MotionEventCompat;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,17 +28,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.baby.firstgame.data.CreatureHandler;
-import com.example.baby.firstgame.data.CreatureObject;
 import com.example.baby.firstgame.game.GameEngine;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.baby.firstgame.R.id.help;
 import static com.example.baby.firstgame.R.id.newGame;
-import static com.example.baby.firstgame.R.id.newGameame;
 import static com.example.baby.firstgame.R.id.profile;
-import static com.example.baby.firstgame.R.id.settings;
+
 
 
 /**
@@ -62,6 +59,7 @@ public class MonsterHomeActivity extends Activity {
 
     CreatureHandler creatureHandler = new CreatureHandler(this);
     GestureLibrary lib;
+    ScaleGestureDetector scaleGestureDetector;
 
     private boolean visible = false;
 
@@ -77,6 +75,7 @@ public class MonsterHomeActivity extends Activity {
         nameLabel = (TextView) findViewById(R.id.name);
         evolutionBar = (ProgressBar) findViewById(R.id.EvolutionBar);
         Log.d("DEBUG: ","Creating MonsterHome");
+        scaleGestureDetector = new ScaleGestureDetector(this, new MyOnScaleGestureListener());
 
         creatureHandler.loadObject();
 
@@ -295,7 +294,7 @@ public class MonsterHomeActivity extends Activity {
                         switch (item.getItemId()) {
                             case profile:
                                 Toast.makeText(MonsterHomeActivity.this, "You clicked profile", Toast.LENGTH_SHORT).show();
-                                menuDialog.setContentView(R.layout.gameover);
+                                startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
                                 break;
                             case newGame:
                                 Toast.makeText(MonsterHomeActivity.this, "You clicked settings", Toast.LENGTH_SHORT).show();
@@ -309,6 +308,32 @@ public class MonsterHomeActivity extends Activity {
                 popup.show();
             }
         });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        scaleGestureDetector.onTouchEvent(event);
+        return true;
+    }
+
+    public class MyOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
+        @Override
+        public boolean onScale(ScaleGestureDetector detector){
+            float pinchDetector = detector.getScaleFactor();
+            //pinch/zooming out movement
+            if(pinchDetector > 1){
+                startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector){
+            return true;
+        }
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector){}
+
     }
 
     /**
