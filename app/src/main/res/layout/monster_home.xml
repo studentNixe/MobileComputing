@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/backgroundLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/darker_gray"
@@ -18,12 +19,12 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.035"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/inventory"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/inventory"
@@ -46,14 +47,13 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="6dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/menu_btn"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintRight_toRightOf="parent"
-        tools:ignore="HardcodedText,RtlHardcoded"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintHorizontal_bias="1.0">
-    </Button>
+        tools:ignore="HardcodedText,RtlHardcoded"></Button>
 
     <ImageView
         android:id="@+id/creatureImg"
@@ -112,7 +112,7 @@
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            android:src="@drawable/star_icon"
+            android:src="@drawable/donut"
             tools:ignore="ContentDescription,VectorDrawableCompat"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
@@ -123,7 +123,7 @@
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            android:src="@drawable/ic_herz"
+            android:src="@drawable/sponge"
             tools:ignore="ContentDescription,VectorDrawableCompat"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
@@ -145,14 +145,14 @@
         android:id="@+id/name"
         android:layout_width="167dp"
         android:layout_height="32dp"
+        android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:layout_gravity="center_horizontal"
         android:textColor="@android:color/white"
-        android:textStyle="bold"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/creatureImg"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/itemList"

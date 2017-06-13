@@ -53,9 +53,9 @@ public class NameCreatureActivity extends Activity
             {
                 String name = edtname.getText().toString();
                 //creates creature here with the give name and species
-                CreatureObject creature = new CreatureObject(name, species);
-                CreatureHandler creatueCreated = new CreatureHandler(getApplicationContext());
-                creatueCreated.createObject(creature);
+
+                CreatureHandler creatureCreated = new CreatureHandler(getApplicationContext());
+                creatureCreated.createObject(name, species);
                 Intent intent = new Intent(getApplicationContext(), MonsterHomeActivity.class);
                 startActivity(intent);
             }

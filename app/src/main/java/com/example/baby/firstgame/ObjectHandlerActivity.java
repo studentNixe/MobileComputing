@@ -37,7 +37,8 @@ import com.example.baby.firstgame.data.InternalStorage;
  * Created by Denise on 07.05.2017.
  */
 
-public class ObjectHandlerActivity extends Activity implements View.OnClickListener{
+public class ObjectHandlerActivity extends Activity implements View.OnClickListener, GestureDetector.OnGestureListener,
+        GestureDetector.OnDoubleTapListener {
 
     public Button btnCreateAndSave, btnLoad;
     public EditText txtName;
@@ -51,6 +52,9 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.objects);
 
+        mDetector = new GestureDetectorCompat(this, this);
+        mDetector.setOnDoubleTapListener(this);
+		
         btnCreateAndSave = (Button) findViewById(R.id.btnCreateAndSave);
         btnCreateAndSave.setOnClickListener(this);
         btnLoad = (Button) findViewById(R.id.btnLoad);
@@ -58,41 +62,8 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
         txtName = (EditText) findViewById(R.id.txtName);
         imageDrag = (ImageView) findViewById(R.id.imageDrag);
         imageDrag.setTag("DraggableImage");
-        imageDrag.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                int action = MotionEventCompat.getActionMasked(event);
-                switch (action) {
-                    case (MotionEvent.ACTION_DOWN):
-                        Log.d("Debug: ", "Action was DOWN");
-                        ClipData data = ClipData.newPlainText("", "");
-                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
-                                view);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            view.startDragAndDrop(data, shadowBuilder, view, 0);
-                        } else {
-                            view.startDrag(data, shadowBuilder, view, 0);
-                        }
-                        view.setVisibility(View.INVISIBLE);
-                        return true;
-                    case (MotionEvent.ACTION_MOVE):
-                        Log.d("Debug: ", "Action was MOVE");
-                        return true;
-                    case (MotionEvent.ACTION_UP):
-                        Log.d("Debug: ", "Action was UP");
-                        return true;
-                    case (MotionEvent.ACTION_CANCEL):
-                        Log.d("Debug: ", "Action was CANCEL");
-                        return true;
-                    case (MotionEvent.ACTION_OUTSIDE):
-                        Log.d("Debug: ", "Movement occurred outside bounds " +
-                                "of current screen element");
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });
+        imageDrag.setOnTouchListener(createListener());
+
         dragView = findViewById(R.id.layoutMain);
         dragView.setOnDragListener(new View.OnDragListener() {
             @Override
@@ -136,6 +107,46 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
         });
     }
 
+    public View.OnTouchListener createListener(){
+        View.OnTouchListener listener1 = new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                switch (action) {
+                    case (MotionEvent.ACTION_DOWN):
+                        Log.d("Debug: ", "Action was DOWN");
+                        ClipData data = ClipData.newPlainText("", "");
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                                view);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            view.startDragAndDrop(data, shadowBuilder, view, 0);
+                        } else {
+                            view.startDrag(data, shadowBuilder, view, 0);
+                        }
+                        view.setVisibility(View.INVISIBLE);
+                        return true;
+                    case (MotionEvent.ACTION_MOVE):
+                        Log.d("Debug: ", "Action was MOVE");
+                        return true;
+                    case (MotionEvent.ACTION_UP):
+                        Log.d("Debug: ", "Action was UP");
+                        return true;
+                    case (MotionEvent.ACTION_CANCEL):
+                        Log.d("Debug: ", "Action was CANCEL");
+                        return true;
+                    case (MotionEvent.ACTION_OUTSIDE):
+                        Log.d("Debug: ", "Movement occurred outside bounds " +
+                                "of current screen element");
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        };
+        return listener1;
+    }
+
+
     @Override
     public void onClick(View v) {
       /*  if(v.getId() == R.id.btnCreateAndSave){
@@ -143,5 +154,74 @@ public class ObjectHandlerActivity extends Activity implements View.OnClickListe
         }else if(v.getId() == R.id.btnLoad){
         loadObject();
         */
+    }
+
+
+    public boolean onTouchEvent(MotionEvent event) {
+        this.mDetector.onTouchEvent(event);
+// Be sure to call the superclass implementation
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onDown: " + event.toString());
+        return true;
+    }
+
+    @Override
+    public boolean onFling(MotionEvent event1, MotionEvent event2,
+                           float velocityX, float velocityY) {
+        Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
+        float distance = event1.getX() - event2.getX();
+        if (distance < -200) {
+            Log.d(DEBUG_TAG, "Fling was to the right.");
+        } else if (distance > 200) {
+            Log.d(DEBUG_TAG, "Fling was to the left.");
+        } else {
+            Log.d(DEBUG_TAG, "No left or right fling occured.");
+        }
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onLongPress: " + event.toString());
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        Log.d(DEBUG_TAG, "onScroll: " + e1.toString() + e2.toString());
+        Log.d(DEBUG_TAG, "getXe1: " + e1.getX() + " getXe2: " + e2.getX());
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onShowPress: " + event.toString());
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onSingleTapUp: " + event.toString());
+        return true;
+    }
+
+    @Override
+    public boolean onDoubleTap(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onDoubleTap: " + event.toString());
+        return true;
+    }
+
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onDoubleTapEvent: " + event.toString());
+        return true;
+    }
+
+    @Override
+    public boolean onSingleTapConfirmed(MotionEvent event) {
+        Log.d(DEBUG_TAG, "onSingleTapConfirmed: " + event.toString());
+        return true;
     }
 }

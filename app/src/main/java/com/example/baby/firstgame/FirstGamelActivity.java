@@ -3,6 +3,7 @@ package com.example.baby.firstgame;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -27,9 +28,11 @@ public class FirstGamelActivity extends Activity implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.button){
-            if(creatureHandler.loadObject()==null){
+            if(!creatureHandler.loadObject()){
+                Log.d("DEBUG: ","Unsuccessful load");
                 startActivity(new Intent(this, ChooseCreatureActivity.class));
             }else{
+                Log.d("DEBUG: ","Successful load");
                 startActivity(new Intent(this, MonsterHomeActivity.class));
             }
         }else if(v.getId() == R.id.button2){
