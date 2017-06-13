@@ -3,6 +3,12 @@ package com.example.baby.firstgame;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
+import android.content.Intent;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.baby.firstgame.R.id.help;
+import static com.example.baby.firstgame.R.id.newGame;
+import static com.example.baby.firstgame.R.id.newGameame;
 import static com.example.baby.firstgame.R.id.profile;
 import static com.example.baby.firstgame.R.id.settings;
 
@@ -45,12 +53,15 @@ public class MonsterHomeActivity extends Activity {
     private ProgressBar evolutionBar;
 
     private ImageView itemEat;
+    private ImageView itemPlay;
+    private ImageView itemClean;
     private View dragView;
     private View dragView2;
 
     private LinearLayout linearLayout;
 
     CreatureHandler creatureHandler = new CreatureHandler(this);
+    GestureLibrary lib;
 
     private boolean visible = false;
 
@@ -104,6 +115,14 @@ public class MonsterHomeActivity extends Activity {
      */
     protected void setItems() {
         itemEat = (ImageView) findViewById(R.id.eat);
+        itemPlay = (ImageView) findViewById(R.id.play);
+        itemPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                play();
+            }
+        });
+        itemClean = (ImageView)  findViewById(R.id.clean);
         itemEat.setTag("DraggableImage");
         itemEat.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -140,50 +159,7 @@ public class MonsterHomeActivity extends Activity {
                 }
             }
         });
- /**       dragView = findViewById(R.id.creatureImg);
-        dragView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                int action = event.getAction();
-                float posX = itemEat.getX();
-                float posY = itemEat.getY();
-                switch (event.getAction()) {
-                    case DragEvent.ACTION_DRAG_STARTED:
-                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
-                        break;
-                    case DragEvent.ACTION_DRAG_ENTERED:
-                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENTERED");
-                        break;
-                    case DragEvent.ACTION_DRAG_EXITED:
-                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
-                        break;
-                    case DragEvent.ACTION_DRAG_LOCATION:
-                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
-                                + event.getX() + ", " + event.getY());
-                        break;
-                    case DragEvent.ACTION_DROP:
-                        Log.d("Drag Info: ", "ACTION_DROP event");
-                        //drag onto location
-                        //imageDrag.setX(event.getX()-imageDrag.getHeight()/2);
-                        //imageDrag.setY(event.getY()-imageDrag.getWidth()/2);
-                        itemEat.setVisibility(v.VISIBLE);
-                        // reset position after drag
-                        itemEat.setX(posX);
-                        itemEat.setX(posY);
-                        //
-                        creature.setHunger(creature.getHunger() + 20);
-                        break;
-                    case DragEvent.ACTION_DRAG_ENDED:
-                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
-                        v.setVisibility(View.VISIBLE);
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
-  */
-        //----------------------------------------------------------
+
         dragView2 = (View) findViewById(R.id.backgroundLayout);
         dragView2.setOnDragListener(new View.OnDragListener() {
             // List of X and Y position for gesture detection
@@ -279,6 +255,26 @@ public class MonsterHomeActivity extends Activity {
             }
         });
     }
+
+    private void play() {
+        lib = GestureLibraries.fromRawResource(this, R.raw.gestures);
+        if(!lib.load()) {
+            finish();
+            Log.e("MonsterHomeActivity", "Could not load gesture library.");
+        }
+        GestureOverlayView gesture = (GestureOverlayView) findViewById(R.id.gestureOverlay);
+        gesture.setVisibility(View.VISIBLE);
+        gesture.addOnGesturePerformedListener(new GestureOverlayView.OnGesturePerformedListener() {
+            @Override
+            public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
+                ArrayList<Prediction> predictionArrayList = lib.recognize(gesture);
+                for(Prediction prediction : predictionArrayList) {
+                    if (prediction.score > 1.0)
+                        nameLabel.setText(prediction.name);
+                }
+            }
+        });
+    }
 //----------------------------------------------------------
     /**
      * Creates the Menu and sets actions when clicking
@@ -301,12 +297,8 @@ public class MonsterHomeActivity extends Activity {
                                 Toast.makeText(MonsterHomeActivity.this, "You clicked profile", Toast.LENGTH_SHORT).show();
                                 menuDialog.setContentView(R.layout.gameover);
                                 break;
-                            case settings:
+                            case newGame:
                                 Toast.makeText(MonsterHomeActivity.this, "You clicked settings", Toast.LENGTH_SHORT).show();
-                                menuDialog.setContentView(R.layout.gameover);
-                                break;
-                            case help:
-                                Toast.makeText(MonsterHomeActivity.this, "You clicked help", Toast.LENGTH_SHORT).show();
                                 menuDialog.setContentView(R.layout.gameover);
                                 break;
                         }
@@ -333,6 +325,8 @@ public class MonsterHomeActivity extends Activity {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         dialog.setContentView(R.layout.gameover);
         dialog.show();
+        creatureHandler.deleteObject();
+        //startActivity(new Intent(this, FirstGamelActivity.class));
     }
 
     /**
