@@ -3,6 +3,7 @@ package com.example.baby.firstgame;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ClipData;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,7 +53,7 @@ public class MonsterHomeActivity extends Activity {
     private LinearLayout linearLayout;
 
     CreatureHandler creatureHandler = new CreatureHandler(this);
-
+    ScaleGestureDetector scaleGestureDetector;
     private boolean visible = false;
 
 
@@ -66,6 +68,7 @@ public class MonsterHomeActivity extends Activity {
         nameLabel = (TextView) findViewById(R.id.name);
         evolutionBar = (ProgressBar) findViewById(R.id.EvolutionBar);
         Log.d("DEBUG: ","Creating MonsterHome");
+        scaleGestureDetector = new ScaleGestureDetector(this, new MyOnScaleGestureListener());
 
         creatureHandler.loadObject();
 
@@ -295,7 +298,7 @@ public class MonsterHomeActivity extends Activity {
                         switch (item.getItemId()) {
                             case profile:
                                 Toast.makeText(MonsterHomeActivity.this, "You clicked profile", Toast.LENGTH_SHORT).show();
-                                menuDialog.setContentView(R.layout.gameover);
+                                startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
                                 break;
                             case settings:
                                 Toast.makeText(MonsterHomeActivity.this, "You clicked settings", Toast.LENGTH_SHORT).show();
@@ -313,6 +316,32 @@ public class MonsterHomeActivity extends Activity {
                 popup.show();
             }
         });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        scaleGestureDetector.onTouchEvent(event);
+        return true;
+    }
+
+    public class MyOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
+        @Override
+        public boolean onScale(ScaleGestureDetector detector){
+            float pinchDetector = detector.getScaleFactor();
+            //pinch/zooming out movement
+            if(pinchDetector > 1){
+                startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector){
+            return true;
+        }
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector){}
+
     }
 
     /**
