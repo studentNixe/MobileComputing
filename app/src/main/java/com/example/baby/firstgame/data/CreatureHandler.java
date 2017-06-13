@@ -106,10 +106,10 @@ public class CreatureHandler {
                 creature.setGametime(creature.getGametime() + (value));
                 break;
             case "age":
-                creature.setGametime(creature.getAge() + (value));
+                creature.setAge(creature.getAge() + (value));
                 break;
             default:
-                Log.e("ERROR: ", "Creature values could not be set.");
+                Log.e("ERROR: ", "Creature value could not be set.");
 
         }
         saveObject();
@@ -150,7 +150,6 @@ public class CreatureHandler {
                 return creature.getSpecies();
             default:
                 Log.e("ERROR: ", "Creature value could not be found.");
-
         }
         return null;
     }
@@ -169,6 +168,7 @@ public class CreatureHandler {
             Log.e("ERROR: ", "No Data could be saved.");
         }
     }
+
     /*
         delete the Object from the local storage
      */

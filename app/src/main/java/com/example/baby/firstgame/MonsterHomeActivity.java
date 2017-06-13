@@ -223,6 +223,7 @@ public class MonsterHomeActivity extends Activity {
                                 counter++;
                                 if(counter == 2){
                                     Log.d("TEST:", "MOVE WAS TO THE RIGHT, TO THE LEFT AND NOW TO THE RIGHT AGAIN. !!!!!!!!!APPEARED TWICE!!!!!!!!");
+                                    //cleaning and change counter
                                 }
                                 rightTurn= false;
                                 leftTurn = false;
@@ -262,6 +263,9 @@ public class MonsterHomeActivity extends Activity {
                         itemEat.setY(posY);
                         itemEat.setVisibility(v.VISIBLE);
                         creatureHandler.setAttrInt("hunger",20);
+/*                        String message = "After feeding h : " + Integer.toString(creatureHandler.getAttrInt("hunger"))
+                                + ", g : " + Integer.toString(creatureHandler.getAttrInt("gametime"));
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT ).show();*/
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
@@ -349,7 +353,6 @@ public class MonsterHomeActivity extends Activity {
      */
     public void setCreatureImg(){
         creatureImg = (ImageView) findViewById(R.id.creatureImg);
-
         String fileName = creatureHandler.getAttrString("species") + creatureHandler.getAttrInt("age");
         int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
         creatureImg.setImageDrawable(getResources().getDrawable(id));
