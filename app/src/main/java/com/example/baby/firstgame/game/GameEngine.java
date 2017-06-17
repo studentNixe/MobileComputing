@@ -28,7 +28,7 @@ public class GameEngine implements Runnable {
      * Counts down the creatures' attributes
      */
     public void countdown(){
-        if(creatureHandler.getAttrInt("gametime") < 0 && creatureHandler.getAttrInt("hunger") > 100){
+        if(creatureHandler.getAttrInt("gametime") < 0 && creatureHandler.getAttrInt("hunger") > 80 && creatureHandler.getAttrInt("clean") > 80){
             creatureHandler.setAttrInt("age", 1);
             if(creatureHandler.getAttrInt("age") < creatureHandler.getAttrInt("maxAge")) {
                 activity.setCreatureImg();
@@ -53,7 +53,7 @@ public class GameEngine implements Runnable {
     }
 
     private boolean checkGameover() {
-        if (creatureHandler.getAttrInt("hunger") < 0){
+        if (creatureHandler.getAttrInt("hunger") == 0 && creatureHandler.getAttrInt("clean") == 0){
             activity.gameOver();
             return true;
         }

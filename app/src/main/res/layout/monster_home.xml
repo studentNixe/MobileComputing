@@ -118,7 +118,7 @@
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            android:src="@drawable/ic_herz"
+            android:src="@drawable/ball"
             tools:ignore="ContentDescription,VectorDrawableCompat"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
@@ -140,7 +140,7 @@
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            android:src="@drawable/sponge"
+            android:src="@drawable/brush"
             tools:ignore="ContentDescription,VectorDrawableCompat"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />

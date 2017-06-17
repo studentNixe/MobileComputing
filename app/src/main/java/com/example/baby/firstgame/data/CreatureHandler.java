@@ -169,8 +169,8 @@ public class CreatureHandler {
         }
     }
 
-    /*
-        delete the Object from the local storage
+    /**
+        Delete the Object from the local storage
      */
     public void deleteObject() {
         context.deleteFile("CreatureObject.xml");

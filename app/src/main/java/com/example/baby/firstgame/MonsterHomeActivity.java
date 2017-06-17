@@ -195,6 +195,7 @@ public class MonsterHomeActivity extends Activity {
                                 counter++;
                                 if(counter == 2){
                                     Log.d("TEST:", "MOVE WAS TO THE RIGHT, TO THE LEFT AND NOW TO THE RIGHT AGAIN. !!!!!!!!!APPEARED TWICE!!!!!!!!");
+                                    creatureHandler.setAttrInt("clean",20);
                                     //cleaning and change counter
                                 }
                                 rightTurn= false;
@@ -234,7 +235,7 @@ public class MonsterHomeActivity extends Activity {
                         itemEat.setX(posX);
                         itemEat.setY(posY);
                         itemEat.setVisibility(v.VISIBLE);
-                        creatureHandler.setAttrInt("hunger",20);
+                        //creatureHandler.setAttrInt("hunger",20);
 /*                        String message = "After feeding h : " + Integer.toString(creatureHandler.getAttrInt("hunger"))
                                 + ", g : " + Integer.toString(creatureHandler.getAttrInt("gametime"));
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT ).show();*/
@@ -267,9 +268,14 @@ public class MonsterHomeActivity extends Activity {
             @Override
             public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
                 ArrayList<Prediction> predictionArrayList = lib.recognize(gesture);
+                Log.d("MonsterHomeActivity", "Size array" + predictionArrayList.size());
                 for(Prediction prediction : predictionArrayList) {
                     if (prediction.score > 1.0)
                         nameLabel.setText(prediction.name);
+                    Log.d("GESTURE", prediction.name);
+                    Log.d("GESTURE", prediction.score+"");
+                    // Maximum ermitteln, falls mehr als eine Prediction
+                    // Qualität bewerten (score > 1)
                 }
             }
         });
@@ -290,7 +296,6 @@ public class MonsterHomeActivity extends Activity {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         Dialog menuDialog = new Dialog(MonsterHomeActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-
                         switch (item.getItemId()) {
                             case profile:
                                 Toast.makeText(MonsterHomeActivity.this, "You clicked profile", Toast.LENGTH_SHORT).show();
