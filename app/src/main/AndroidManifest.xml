@@ -10,6 +10,8 @@
         android:supportsRtl="true"
         android:hardwareAccelerated="false"
         android:theme="@style/AppTheme">
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"></uses-permission>
         <activity android:name=".FirstGamelActivity">
             <intent-filter>

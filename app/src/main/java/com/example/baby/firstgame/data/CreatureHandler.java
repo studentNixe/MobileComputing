@@ -112,7 +112,7 @@ public class CreatureHandler {
                 break;
             default:
                 Log.e("ERROR: ", "Creature value could not be set.");
-
+                break;
         }
         saveObject();
     }
