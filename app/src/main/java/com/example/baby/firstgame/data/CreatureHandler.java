@@ -114,7 +114,6 @@ public class CreatureHandler {
                 Log.e("ERROR: ", "Creature value could not be set.");
                 break;
         }
-        saveObject();
     }
 
     /**
@@ -137,6 +136,7 @@ public class CreatureHandler {
                 return creature.getAgeMax();
             default:
                 Log.e("ERROR: ", "Creature value could not be found.");
+                break;
 
         }
         return -1;
@@ -154,6 +154,7 @@ public class CreatureHandler {
                 return creature.getSpecies();
             default:
                 Log.e("ERROR: ", "Creature value could not be found.");
+                break;
         }
         return null;
     }
