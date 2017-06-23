@@ -10,7 +10,6 @@ import android.widget.ImageSwitcher;
 import android.widget.ImageView;
 import android.widget.ViewSwitcher;
 
-import com.example.baby.firstgame.data.CreatureObject;
 import com.example.baby.firstgame.data.CreatureHandler;
 
 /**
@@ -20,8 +19,8 @@ import com.example.baby.firstgame.data.CreatureHandler;
 public class NameCreatureActivity extends Activity
 {
     private ImageSwitcher eggSwitcher;
-    Integer[] eggs = {R.drawable.denis_egg,
-            R.drawable.pawan_egg, R.drawable.nicole_eggs};
+    Integer[] eggs = {R.drawable.denise_egg,
+            R.drawable.pawan_egg, R.drawable.nicole_egg};
     private String[] speciesList = {"denise","pawan","nicole"};
     private EditText edtname;
 

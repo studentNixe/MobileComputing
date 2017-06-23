@@ -68,7 +68,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintRight_toRightOf="parent"
-        tools:ignore="HardcodedText,RtlHardcoded"></Button>
+        tools:ignore="HardcodedText,RtlHardcoded" />
 
     <ImageView
         android:id="@+id/creatureImg"
@@ -81,78 +81,70 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription=""
-        android:src="@drawable/nicole2"
+        app:srcCompat="@drawable/nicole2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.247"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.492"
-        tools:ignore="ContentDescription,VectorDrawableCompat" />
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:id="@+id/itemList"
         android:layout_width="81dp"
         android:layout_height="356dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="2dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/inventory"
         android:orientation="vertical"
         android:theme="@style/Base.Widget.AppCompat.ActionButton"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/inventory"
-        app:layout_constraintHorizontal_bias="0.972"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="RtlHardcoded"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="8dp">
+        app:layout_constraintVertical_bias="0.296"
+        tools:ignore="RtlHardcoded">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/play"
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            android:src="@drawable/ic_herz"
-            tools:ignore="ContentDescription,VectorDrawableCompat"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ball"
+            tools:ignore="ContentDescription"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/eat"
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            android:src="@drawable/donut"
-            tools:ignore="ContentDescription,VectorDrawableCompat"
+            android:visibility="visible"
+            app:srcCompat="@drawable/donut"
+            tools:ignore="ContentDescription"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/clean"
             android:layout_width="match_parent"
             android:layout_height="53dp"
             android:layout_weight="1"
             android:contentDescription=""
-            android:src="@drawable/sponge"
-            tools:ignore="ContentDescription,VectorDrawableCompat"
-            tools:layout_editor_absoluteX="287dp"
-            tools:layout_editor_absoluteY="25dp" />
-
-        <ImageView
-            android:id="@+id/pet"
-            android:layout_width="match_parent"
-            android:layout_height="53dp"
-            android:layout_weight="1"
-            android:contentDescription=""
-            android:src="@drawable/ic_herz"
-            tools:ignore="ContentDescription,VectorDrawableCompat"
+            android:visibility="visible"
+            app:srcCompat="@drawable/brush"
+            tools:ignore="ContentDescription"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
 

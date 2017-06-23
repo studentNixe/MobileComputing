@@ -10,8 +10,9 @@ import java.util.List;
 public class CreatureObject implements java.io.Serializable{
     //class attributes
     private String[] speciesList = {"denise","pawan","nicole"};
-//    private int ageMin = 0;
-    private int ageMax = 4;
+    private int ageMax = 3;
+    private int attrMin = 0;
+    private int attrMax = 100;
 
     //object attributes
     private String name;
@@ -19,6 +20,7 @@ public class CreatureObject implements java.io.Serializable{
     private int age;
     private int hunger;
     private int clean;
+    private int happiness;
     private int gametime;
     private List<ItemObject> inventory;
 
@@ -29,8 +31,9 @@ public class CreatureObject implements java.io.Serializable{
         this.age = 1;
         this.hunger = 100;
         this.clean = 100;
+        this.happiness = 100;
         this.gametime = 100;
-        this.inventory = new ArrayList<ItemObject>();
+        //this.inventory = new ArrayList<ItemObject>();
     }
 
     // getter and setter
@@ -47,7 +50,8 @@ public class CreatureObject implements java.io.Serializable{
     }
 
     public void setAge(int age) {
-        this.age = age;
+        if( age <= ageMax)
+            this.age = age;
     }
 
     public int getHunger() {
@@ -55,7 +59,9 @@ public class CreatureObject implements java.io.Serializable{
     }
 
     public void setHunger(int hunger) {
-        this.hunger = hunger;
+        if(checkInt(hunger, attrMin, attrMax)) {
+            this.hunger = hunger;
+        }
     }
 
     public int getClean() {
@@ -63,7 +69,19 @@ public class CreatureObject implements java.io.Serializable{
     }
 
     public void setClean(int clean) {
-        this.clean = clean;
+        if(checkInt(clean, attrMin, attrMax)) {
+            this.clean = clean;
+        }
+    }
+
+    public int getHappiness() {
+        return happiness;
+    }
+
+    public void setHappiness(int happiness) {
+        if(checkInt(happiness, attrMin, attrMax)) {
+            this.happiness = happiness;
+        }
     }
 
     public int getGametime() {
@@ -74,6 +92,7 @@ public class CreatureObject implements java.io.Serializable{
         this.gametime = gametime;
     }
 
+    /*
     public List<ItemObject> getInventory() {
         return inventory;
     }
@@ -81,6 +100,7 @@ public class CreatureObject implements java.io.Serializable{
     public void setInventory(List<ItemObject> inventory) {
         this.inventory = inventory;
     }
+    */
 
     public String getSpecies() {
         return species;
@@ -93,4 +113,20 @@ public class CreatureObject implements java.io.Serializable{
     public int getAgeMax() {
         return ageMax;
     }
+
+    /**
+     * Checks if the attributes value is in the correct range
+     * @param value to be checked
+     * @param minv minimum of range
+     * @param maxv maximum of range
+     * @return true, if it is in the range, else false
+     */
+    public boolean checkInt(int value, int minv, int maxv){
+        if (value >= minv && value <= maxv) {
+            return true;
+        }
+        return false;
+    }
 }
+
+
