@@ -11,14 +11,16 @@ import android.widget.TextView;
 
 import com.example.baby.firstgame.data.CreatureHandler;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by Pawan on 5/30/2017.
  */
 
 public class CreatureProfileActivity extends Activity {
 
-    private TextView txtname, txtSpecies, txthunger, txtage, txtclean;
-    private ProgressBar proHunger,proAge,proClean;
+    private TextView txtname, txtSpecies, txthunger, txtage, txtclean, txthappy;
+    private ProgressBar proHunger,proAge,proClean, proHappy;
     private ImageView creatureImg;
 
     CreatureHandler creature = new CreatureHandler(this);
@@ -31,6 +33,7 @@ public class CreatureProfileActivity extends Activity {
 
         creature.loadObject();
 
+        txthappy = (TextView)  findViewById(R.id.happy);
         txtname = (TextView) findViewById(R.id.name);
         txtSpecies = (TextView) findViewById(R.id.textView9);
         txthunger = (TextView) findViewById(R.id.hunger);
@@ -39,15 +42,20 @@ public class CreatureProfileActivity extends Activity {
         proHunger = (ProgressBar) findViewById(R.id.hungerBar);
         proAge = (ProgressBar) findViewById(R.id.ageBar);
         proClean = (ProgressBar) findViewById(R.id.cleanBar);
+        proHappy =(ProgressBar) findViewById(R.id.progressBar2);
 
         creatureImg = (ImageView) findViewById(R.id.creatureImg);
         scaleGestureDetector = new ScaleGestureDetector(this, new MyOnScaleGestureListener());
 
+        //this part of the code gets the attribute of the creature
+        //as well as the species and age of the creature
+        txthappy.setText(String.valueOf(creature.getAttrInt("happiness")));
         txtname.setText(creature.getAttrString("name"));
         txtSpecies.setText(creature.getAttrString("species"));
         txthunger.setText(String.valueOf(creature.getAttrInt("hunger")));
         txtage.setText(String.valueOf(creature.getAttrInt("age")));
         txtclean.setText(String.valueOf(creature.getAttrInt("clean")));
+        proHappy.setProgress(creature.getAttrInt("happiness"));
         proHunger.setProgress(creature.getAttrInt("hunger"));
         proAge.setProgress(creature.getAttrInt("age"));
         proClean.setProgress(creature.getAttrInt("clean"));
@@ -55,6 +63,7 @@ public class CreatureProfileActivity extends Activity {
         setCreatureImg();
     }
 
+    //sets the creature image depending on the creature selected
     public void setCreatureImg(){
         String fileName = creature.getAttrString("species") + creature.getAttrInt("age");
         int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
@@ -67,6 +76,9 @@ public class CreatureProfileActivity extends Activity {
         return true;
     }
 
+    //this is a method from scaleGestureDetector which detects the pinch action
+    //and decides if it is pinch in or pinch out
+    //in both case, it closes the activity and returns to monsterHomeActivity
     public class MyOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
         @Override
         public boolean onScale(ScaleGestureDetector detector){
@@ -75,6 +87,7 @@ public class CreatureProfileActivity extends Activity {
             if(pinchDetector < 1){
                 finish();
             }
+            else finish();
             return true;
         }
         @Override

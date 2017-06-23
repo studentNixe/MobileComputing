@@ -380,7 +380,6 @@ public class MonsterHomeActivity extends Activity {
         });
     }
 
-
 //----------------------------------------------------------
 
 
@@ -390,6 +389,8 @@ public class MonsterHomeActivity extends Activity {
         return true;
     }
 
+    //this is a method from scaleGestureDetector which detects the pinch action
+    //and decides if it is pinch in or pinch out, in both case it opens the profile activity
     public class MyOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
         @Override
         public boolean onScale(ScaleGestureDetector detector){
@@ -398,6 +399,8 @@ public class MonsterHomeActivity extends Activity {
             if(pinchDetector > 1){
                 startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
             }
+            else
+                startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
             return true;
         }
 
