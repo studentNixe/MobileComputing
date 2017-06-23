@@ -138,7 +138,6 @@ public class CreatureHandler {
             default:
                 Log.e("ERROR: ", "Creature value could not be found.");
                 break;
-
         }
         return -1;
     }

@@ -42,6 +42,7 @@ public class CreatureProfileActivity extends Activity {
         proHunger = (ProgressBar) findViewById(R.id.hungerBar);
         proAge = (ProgressBar) findViewById(R.id.ageBar);
         proClean = (ProgressBar) findViewById(R.id.cleanBar);
+        proHappy =(ProgressBar) findViewById(R.id.progressBar2);
 
         creatureImg = (ImageView) findViewById(R.id.creatureImg);
         scaleGestureDetector = new ScaleGestureDetector(this, new MyOnScaleGestureListener());
