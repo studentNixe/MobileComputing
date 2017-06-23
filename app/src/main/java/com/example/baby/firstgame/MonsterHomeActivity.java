@@ -267,6 +267,7 @@ public class MonsterHomeActivity extends Activity {
                         break;
                     case DragEvent.ACTION_DROP:
                         Log.d("Drag Info: ", "ACTION_DROP event");
+                        creatureHandler.saveObject();
                         vew.setX(posX);
                         vew.setY(posY);
                         vew.setVisibility(v.VISIBLE);
