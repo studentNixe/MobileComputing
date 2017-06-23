@@ -1,10 +1,12 @@
 package com.example.baby.firstgame;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -133,7 +135,7 @@ public class MonsterHomeActivity extends Activity {
                                 startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
                                 break;
                             case newGame:
-                                gameOver();
+                                alertNewGame();
                                 break;
                         }
                         menuDialog.show();
@@ -153,10 +155,10 @@ public class MonsterHomeActivity extends Activity {
         itemPlay.setTag("DraggableImage");
         itemPlay.setOnTouchListener(createItemTouchListener());
         itemEat = (ImageView) findViewById(R.id.eat);
-        itemEat.setTag("DraggableImage");
+        itemEat.setTag("DraggableDonut");
         itemEat.setOnTouchListener(createItemTouchListener());
         itemClean = (ImageView)  findViewById(R.id.clean);
-        itemClean.setTag("DraggableImage");
+        itemClean.setTag("DraggableBrush");
         itemClean.setOnTouchListener(createItemTouchListener());
     }
 
@@ -202,53 +204,6 @@ public class MonsterHomeActivity extends Activity {
         };
         return listener;
     }
-
-    /**
-     * This listener returns true if a zig-zag pattern is detected
-     * @return listener
-
-    public View.OnDragListener createSimpleGestureListener(){
-        final View.OnDragListener listener = new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                int action = event.getAction();
-                float posX = itemEat.getX();
-                float posY = itemEat.getY();
-                switch (event.getAction()) {
-                    case DragEvent.ACTION_DRAG_STARTED:
-                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
-                        Log.e("DEBUG:", "itemClean is at Position:" + posX + " / " + posY);
-                        break;
-                    case DragEvent.ACTION_DRAG_ENTERED:
-                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENTERED");
-                        Log.d("DD:", "The view is:"+v);
-                        break;
-                    case DragEvent.ACTION_DRAG_EXITED:
-                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
-                        break;
-                    case DragEvent.ACTION_DRAG_LOCATION:
-                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
-                                 + event.getX() + ", " + event.getY());
-                        break;
-                    case DragEvent.ACTION_DROP:
-                        Log.d("Drag Info: ", "ACTION_DROP event");
-
-                        creatureHandler.setAttrInt("eat", 5);
-                        String message = "Ate successfully : " + Integer.toString(creatureHandler.getAttrInt("eat"));
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT ).show();
-                        break;
-                    case DragEvent.ACTION_DRAG_ENDED:
-                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
-                        v.setVisibility(View.VISIBLE);
-                    default:
-                        break;
-                }
-                return true;
-            }
-
-        };
-        return listener;
-    }  */
 
     /**
      * This listener returns true if a zig-zag pattern is detected
@@ -299,11 +254,15 @@ public class MonsterHomeActivity extends Activity {
                             dragMovementY.add(event.getY());
                             detectZigzag();
                         }else if(vew == itemEat){
-                            //todo
+                            creatureHandler.setAttrInt("hunger", 5);
+                            String message = "Ate successfully : " + Integer.toString(creatureHandler.getAttrInt("hunger"));
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         }else if(vew == itemPlay){
-                            //todo
+                            creatureHandler.setAttrInt("happiness", 5);
+                            String message = "Ate successfully : " + Integer.toString(creatureHandler.getAttrInt("happiness"));
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         }else {
-                            //todo
+                            Log.d("Drag Info: ", "Item not recognized");
                         }
                         break;
                     case DragEvent.ACTION_DROP:
@@ -451,10 +410,6 @@ public class MonsterHomeActivity extends Activity {
     }
 
     /**
-     * AlertDialog
-     */
-
-    /**
      * Sets or reloads the image of the creature
      */
     public void setCreatureImg(){
@@ -463,6 +418,30 @@ public class MonsterHomeActivity extends Activity {
         int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
         creatureImg.setImageDrawable(getResources().getDrawable(id));
     }
+
+    /**
+     * AlertDialog
+     */
+    public void alertNewGame() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("New Game");
+        builder.setMessage("If you start a new game, your current game will be deleted. Are you sure?");
+        builder.setPositiveButton("Yes, delete it!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                gameOver();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     public void gameOver() {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         dialog.setContentView(R.layout.gameover);
