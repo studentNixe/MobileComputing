@@ -25,6 +25,7 @@ public class FirstGamelActivity extends Activity implements View.OnClickListener
         btn2.setOnClickListener(this);
     }
 
+    //this is the starting screen of the game which lets to create/load creature
     @Override
     public void onClick(View v) {
         if(v.getId() == R.id.button){

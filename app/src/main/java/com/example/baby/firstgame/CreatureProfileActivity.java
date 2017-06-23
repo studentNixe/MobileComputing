@@ -43,6 +43,8 @@ public class CreatureProfileActivity extends Activity {
         creatureImg = (ImageView) findViewById(R.id.creatureImg);
         scaleGestureDetector = new ScaleGestureDetector(this, new MyOnScaleGestureListener());
 
+        //this part of the code gets the attribute of the creature
+        //as well as the species and age of the creature
         txtname.setText(creature.getAttrString("name"));
         txtSpecies.setText(creature.getAttrString("species"));
         txthunger.setText(String.valueOf(creature.getAttrInt("hunger")));
@@ -55,6 +57,7 @@ public class CreatureProfileActivity extends Activity {
         setCreatureImg();
     }
 
+    //sets the creature image depending on the creature selected
     public void setCreatureImg(){
         String fileName = creature.getAttrString("species") + creature.getAttrInt("age");
         int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
@@ -67,6 +70,9 @@ public class CreatureProfileActivity extends Activity {
         return true;
     }
 
+    //this is a method from scaleGestureDetector which detects the pinch action
+    //and decides if it is pinch in or pinch out
+    //in both case, it closes the activity and returns to monsterHomeActivity
     public class MyOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
         @Override
         public boolean onScale(ScaleGestureDetector detector){
@@ -75,6 +81,7 @@ public class CreatureProfileActivity extends Activity {
             if(pinchDetector < 1){
                 finish();
             }
+            else finish();
             return true;
         }
         @Override

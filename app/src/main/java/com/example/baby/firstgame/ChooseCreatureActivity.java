@@ -24,6 +24,7 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
     private static final String DEBUG_TAG = "Gestures";
     private GestureDetectorCompat mDetector;
 
+    //an array of the drawable containing the creatue choosen
     Integer[] creatures = {R.drawable.denise1,
             R.drawable.pawan1, R.drawable.nicole2};
     int iterate = 0;
@@ -48,8 +49,9 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
             }
         });
 
+        //we start the creature image by start from the 0 and pressing next iterate to next image in loop
+        //pressing previous iterate to previous image in loop
         creSwitcher.setImageResource(creatures[0]);
-
         btnPre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,10 +109,13 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
     }
 
     @Override
-    public void onLongPress(MotionEvent e) {
+    public void  onLongPress(MotionEvent e) {
         Log.d(DEBUG_TAG, "onLongPress: " + e.toString());
     }
 
+    //this method gets as the parameter the side where fling started and side where the fling ended
+    //it also get the velocity of finger travel from side to side and from up, down
+    //the method decides if the fling was left or right by gettign the distant from X
     @Override
     public boolean onFling(MotionEvent event1, MotionEvent event2,
                            float velocityX, float velocityY) {

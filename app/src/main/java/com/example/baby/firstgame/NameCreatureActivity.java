@@ -46,13 +46,14 @@ public class NameCreatureActivity extends Activity
         final String species = speciesList[creatureEgg];
 
 
+        //this method creates creature object with the give name and species
+        //after the creature is created, this take to the MonsterHomeActivity
         btnenter.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 String name = edtname.getText().toString();
-                //creates creature here with the give name and species
 
                 CreatureHandler creatureCreated = new CreatureHandler(getApplicationContext());
                 creatureCreated.createObject(name, species);
