@@ -129,7 +129,7 @@ public class MonsterHomeActivity extends Activity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        Dialog menuDialog = new Dialog(MonsterHomeActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+                        //Dialog menuDialog = new Dialog(MonsterHomeActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
                         switch (item.getItemId()) {
                             case profile:
                                 startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
@@ -138,7 +138,7 @@ public class MonsterHomeActivity extends Activity {
                                 alertNewGame();
                                 break;
                         }
-                        menuDialog.show();
+                        //menuDialog.show();
                         return true;
                     }
                 });
@@ -255,11 +255,11 @@ public class MonsterHomeActivity extends Activity {
                             detectZigzag();
                         }else if(vew == itemEat){
                             creatureHandler.setAttrInt("hunger", 5);
-                            String message = "Ate successfully : " + Integer.toString(creatureHandler.getAttrInt("hunger"));
+                            String message = "Donut was delicious : " + Integer.toString(creatureHandler.getAttrInt("hunger"));
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         }else if(vew == itemPlay){
                             creatureHandler.setAttrInt("happiness", 5);
-                            String message = "Ate successfully : " + Integer.toString(creatureHandler.getAttrInt("happiness"));
+                            String message = "Enjoyed game: " + Integer.toString(creatureHandler.getAttrInt("happiness"));
                             Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         }else {
                             Log.d("Drag Info: ", "Item not recognized");
@@ -424,23 +424,24 @@ public class MonsterHomeActivity extends Activity {
      * AlertDialog
      */
     public void alertNewGame() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("New Game");
-        builder.setMessage("If you start a new game, your current game will be deleted. Are you sure?");
-        builder.setPositiveButton("Yes, delete it!", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MonsterHomeActivity.this);
+        builder.setTitle("New Game")
+            .setMessage("If you start a new game, your current game will be deleted. Are you sure?")
+            .setPositiveButton("Yes, delete it!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 gameOver();
             }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-        AlertDialog alert = builder.create();
-        alert.show();
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     public void gameOver() {
