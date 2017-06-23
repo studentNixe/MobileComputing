@@ -113,15 +113,87 @@ public class MonsterHomeActivity extends Activity {
      * Sets the items
      */
     protected void setItems() {
-        itemEat = (ImageView) findViewById(R.id.eat);
         itemPlay = (ImageView) findViewById(R.id.play);
-        itemPlay.setOnClickListener(new View.OnClickListener() {
+        itemEat = (ImageView) findViewById(R.id.eat);
+        itemClean = (ImageView)  findViewById(R.id.clean);
+        itemPlay.setTag("DraggableImage");
+        itemPlay.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                play();
+            public boolean onTouch(View view, MotionEvent event) {
+                int action = MotionEventCompat.getActionMasked(event);
+                switch (action) {
+                    case (MotionEvent.ACTION_DOWN):
+                        Log.d("Debug: ", "Action was DOWN");
+                        ClipData data = ClipData.newPlainText("", "");
+                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(
+                                view);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            view.startDragAndDrop(data, shadowBuilder, view, 0);
+                        } else {
+                            view.startDrag(data, shadowBuilder, view, 0);
+                        }
+                        view.setVisibility(View.INVISIBLE);
+                        return true;
+                    case (MotionEvent.ACTION_MOVE):
+                        Log.d("Debug: ", "Action was MOVE");
+                        return true;
+                    case (MotionEvent.ACTION_UP):
+                        Log.d("Debug: ", "Action was UP");
+                        return true;
+                    case (MotionEvent.ACTION_CANCEL):
+                        Log.d("Debug: ", "Action was CANCEL");
+                        return true;
+                    case (MotionEvent.ACTION_OUTSIDE):
+                        Log.d("Debug: ", "Movement occurred outside bounds " +
+                                "of current screen element");
+                        return true;
+                    default:
+                        return false;
+                }
             }
         });
-        itemClean = (ImageView)  findViewById(R.id.clean);
+        dragView = findViewById(R.id.backgroundLayout);
+        dragView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                play();
+                int action = event.getAction();
+                float posX = itemPlay.getX();
+                float posY = itemPlay.getY();
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
+                        break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENTERED");
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
+                        break;
+                    case DragEvent.ACTION_DRAG_LOCATION:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
+                                + event.getX() + ", " + event.getY());
+                        break;
+                    case DragEvent.ACTION_DROP:
+                        Log.d("Drag Info: ", "ACTION_DROP event");
+                        //drag onto location
+                        //imageDrag.setX(event.getX()-imageDrag.getHeight()/2);
+                        //imageDrag.setY(event.getY()-imageDrag.getWidth()/2);
+                        itemPlay.setVisibility(v.VISIBLE);
+                        // reset position after drag
+                        itemPlay.setX(posX);
+                        itemPlay.setX(posY);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
+                        v.setVisibility(View.VISIBLE);
+                    default:
+                        break;
+                }
+                return true;
+            }
+
+        });
         itemEat.setTag("DraggableImage");
         itemEat.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -270,10 +342,11 @@ public class MonsterHomeActivity extends Activity {
                 ArrayList<Prediction> predictionArrayList = lib.recognize(gesture);
                 Log.d("MonsterHomeActivity", "Size array" + predictionArrayList.size());
                 for(Prediction prediction : predictionArrayList) {
-                    if (prediction.score > 1.0)
-                        nameLabel.setText(prediction.name);
                     Log.d("GESTURE", prediction.name);
-                    Log.d("GESTURE", prediction.score+"");
+                    Log.d("GESTURE", prediction.score + "");
+                    if (prediction.score > 1.0) {
+                        nameLabel.setText(prediction.name);
+                    }
                     // Maximum ermitteln, falls mehr als eine Prediction
                     // Qualität bewerten (score > 1)
                 }
@@ -298,12 +371,10 @@ public class MonsterHomeActivity extends Activity {
                         Dialog menuDialog = new Dialog(MonsterHomeActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
                         switch (item.getItemId()) {
                             case profile:
-                                Toast.makeText(MonsterHomeActivity.this, "You clicked profile", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
                                 break;
                             case newGame:
-                                Toast.makeText(MonsterHomeActivity.this, "You clicked settings", Toast.LENGTH_SHORT).show();
-                                menuDialog.setContentView(R.layout.gameover);
+                                gameOver();
                                 break;
                         }
                         menuDialog.show();
@@ -356,14 +427,13 @@ public class MonsterHomeActivity extends Activity {
         dialog.setContentView(R.layout.gameover);
         dialog.show();
         creatureHandler.deleteObject();
-        //startActivity(new Intent(this, FirstGamelActivity.class));
+        startActivity(new Intent(this, FirstGamelActivity.class));
     }
 
     /**
      * Sets evolutionBar
      */
     public void setEvolutionBar(){
-        //evolutionBar.setVisibility(View.VISIBLE);
         evolutionBar.setMax(creatureHandler.getAttrInt("maxAge"));
         evolutionBar.setProgress(creatureHandler.getAttrInt("age"));
     }

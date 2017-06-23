@@ -10,7 +10,7 @@ import android.widget.Button;
 import com.example.baby.firstgame.data.CreatureHandler;
 
 public class FirstGamelActivity extends Activity implements View.OnClickListener{
-    public Button btn, btn2;
+    public Button btn;
     CreatureHandler creatureHandler = new CreatureHandler(this);
 
     @Override
@@ -19,10 +19,7 @@ public class FirstGamelActivity extends Activity implements View.OnClickListener
         setContentView(R.layout.main);
 
         btn = (Button) findViewById(R.id.button);
-        btn2 = (Button) findViewById(R.id.button2);
-
         btn.setOnClickListener(this);
-        btn2.setOnClickListener(this);
     }
 
     @Override
@@ -35,8 +32,6 @@ public class FirstGamelActivity extends Activity implements View.OnClickListener
                 Log.d("DEBUG: ","Successful load");
                 startActivity(new Intent(this, MonsterHomeActivity.class));
             }
-        }else if(v.getId() == R.id.button2){
-            startActivity(new Intent(this, ObjectHandlerActivity.class));
         }
     }
 

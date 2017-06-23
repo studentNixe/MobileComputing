@@ -33,21 +33,15 @@ public class GameEngine implements Runnable {
             if(creatureHandler.getAttrInt("age") < creatureHandler.getAttrInt("maxAge")) {
                 activity.setCreatureImg();
                 activity.setEvolutionBar();
-//                String message = "Species : " + creatureHandler.getAttrString("species")
-//                        + "Age : " + Integer.toString(creatureHandler.getAttrInt("age"));
-//                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
                 creatureHandler.setAttrInt("gametime", 100);
             }
         }else {
             creatureHandler.setAttrInt("hunger", -5);
             creatureHandler.setAttrInt("clean", -5);
-            creatureHandler.setAttrInt("gametime", -25);
+            creatureHandler.setAttrInt("gametime", -10);
         }
        if(!checkGameover()) {
             creatureHandler.saveObject();
-//            String message = "Hunger : " + Integer.toString(creatureHandler.getAttrInt("hunger"))
-//                    + ", Gametime : " + Integer.toString(creatureHandler.getAttrInt("gametime"));
-//            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             gamehandler.postDelayed(this, 30000);
         }
     }
