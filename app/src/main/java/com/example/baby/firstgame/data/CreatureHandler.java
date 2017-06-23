@@ -101,6 +101,9 @@ public class CreatureHandler {
             case "clean":
                 creature.setClean(creature.getClean() + (value));
                 break;
+            case "happiness":
+                creature.setHappiness(creature.getHappiness() + (value));
+                break;
             case "gametime":
                 creature.setGametime(creature.getGametime() + (value));
                 break;
@@ -124,6 +127,8 @@ public class CreatureHandler {
                 return creature.getHunger();
             case "clean":
                 return creature.getClean();
+            case "happiness":
+                return creature.getHappiness();
             case "gametime":
                 return creature.getGametime();
             case "age":

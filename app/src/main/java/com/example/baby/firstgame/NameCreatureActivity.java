@@ -19,7 +19,7 @@ import com.example.baby.firstgame.data.CreatureHandler;
 public class NameCreatureActivity extends Activity
 {
     private ImageSwitcher eggSwitcher;
-    Integer[] eggs = {R.drawable.denis_egg,
+    Integer[] eggs = {R.drawable.denise_egg,
             R.drawable.pawan_egg, R.drawable.nicole_egg};
     private String[] speciesList = {"denise","pawan","nicole"};
     private EditText edtname;
