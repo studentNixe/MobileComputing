@@ -18,11 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameActivity" />
-        <activity android:name=".ObjectHandlerActivity" />
         <activity android:name=".MonsterHomeActivity" />
         <activity android:name=".ChooseCreatureActivity"/>
         <activity android:name=".NameCreatureActivity"/>
+        <activity android:name=".CreatureProfileActivity"/>
     </application>
 
 </manifest>

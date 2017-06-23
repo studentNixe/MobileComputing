@@ -3,8 +3,21 @@ package com.example.baby.firstgame;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
+import android.content.ClipData;
+import android.content.Intent;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
+import android.os.Build;
+import android.support.v4.view.MotionEventCompat;
+import android.util.Log;
+import android.view.DragEvent;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,19 +29,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.baby.firstgame.data.CreatureHandler;
-import com.example.baby.firstgame.data.CreatureObject;
 import com.example.baby.firstgame.game.GameEngine;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.baby.firstgame.R.id.help;
+import static com.example.baby.firstgame.R.id.newGame;
 import static com.example.baby.firstgame.R.id.profile;
-import static com.example.baby.firstgame.R.id.settings;
-
 
 /**
- * Created by baby on 09.05.17.
+ * Created by nicole on 09.05.17.
  */
 
 public class MonsterHomeActivity extends Activity {
@@ -40,12 +50,15 @@ public class MonsterHomeActivity extends Activity {
     private ProgressBar evolutionBar;
 
     private ImageView itemEat;
-    private View dragView;
+    private ImageView itemPlay;
+    private ImageView itemClean;
     private View dragView2;
 
     private LinearLayout linearLayout;
 
     CreatureHandler creatureHandler = new CreatureHandler(this);
+    GestureLibrary lib;
+    ScaleGestureDetector scaleGestureDetector;
 
     private boolean visible = false;
 
@@ -59,8 +72,9 @@ public class MonsterHomeActivity extends Activity {
         btnMenu = (Button) findViewById(R.id.menu);
         linearLayout = (LinearLayout) findViewById(R.id.itemList);
         nameLabel = (TextView) findViewById(R.id.name);
+
         evolutionBar = (ProgressBar) findViewById(R.id.EvolutionBar);
-        Log.d("DEBUG: ","Creating MonsterHome");
+        scaleGestureDetector = new ScaleGestureDetector(this, new MyOnScaleGestureListener());
 
         creatureHandler.loadObject();
 
@@ -70,6 +84,11 @@ public class MonsterHomeActivity extends Activity {
         setEvolutionBar();
         setCreatureImg();
         setItems();
+
+        dragView2 = (View) findViewById(R.id.backgroundLayout);
+        dragView2.setOnDragListener(createZigzackGestureListener());
+
+        createDoubleTapListener(creatureImg);
 
         nameLabel.setText(creatureHandler.getAttrString("name"));
 
@@ -95,12 +114,58 @@ public class MonsterHomeActivity extends Activity {
     }
 
     /**
+     * Creates the Menu and sets actions when clicking
+     */
+    protected void setBtnMenu() {
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayout.setVisibility(View.INVISIBLE);
+                visible = false;
+                PopupMenu popup = new PopupMenu(MonsterHomeActivity.this, v);
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        Dialog menuDialog = new Dialog(MonsterHomeActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+                        switch (item.getItemId()) {
+                            case profile:
+                                startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
+                                break;
+                            case newGame:
+                                gameOver();
+                                break;
+                        }
+                        menuDialog.show();
+                        return true;
+                    }
+                });
+                popup.show();
+            }
+        });
+    }
+
+    /**
      * Sets the items
      */
     protected void setItems() {
+        itemPlay = (ImageView) findViewById(R.id.play);
+        itemPlay.setTag("DraggableImage");
+        itemPlay.setOnTouchListener(createItemTouchListener());
         itemEat = (ImageView) findViewById(R.id.eat);
         itemEat.setTag("DraggableImage");
-        itemEat.setOnTouchListener(new View.OnTouchListener() {
+        itemEat.setOnTouchListener(createItemTouchListener());
+        itemClean = (ImageView)  findViewById(R.id.clean);
+        itemClean.setTag("DraggableImage");
+        itemClean.setOnTouchListener(createItemTouchListener());
+    }
+
+    /**
+     * This listener creates the inventory menu
+     * @return listener
+     */
+    public View.OnTouchListener createItemTouchListener(){
+        View.OnTouchListener listener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 int action = MotionEventCompat.getActionMasked(event);
@@ -134,9 +199,16 @@ public class MonsterHomeActivity extends Activity {
                         return false;
                 }
             }
-        });
- /**       dragView = findViewById(R.id.creatureImg);
-        dragView.setOnDragListener(new View.OnDragListener() {
+        };
+        return listener;
+    }
+
+    /**
+     * This listener returns true if a zig-zag pattern is detected
+     * @return listener
+
+    public View.OnDragListener createSimpleGestureListener(){
+        final View.OnDragListener listener = new View.OnDragListener() {
             @Override
             public boolean onDrag(View v, DragEvent event) {
                 int action = event.getAction();
@@ -145,28 +217,25 @@ public class MonsterHomeActivity extends Activity {
                 switch (event.getAction()) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
+                        Log.e("DEBUG:", "itemClean is at Position:" + posX + " / " + posY);
                         break;
                     case DragEvent.ACTION_DRAG_ENTERED:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENTERED");
+                        Log.d("DD:", "The view is:"+v);
                         break;
                     case DragEvent.ACTION_DRAG_EXITED:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
                         break;
                     case DragEvent.ACTION_DRAG_LOCATION:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
-                                + event.getX() + ", " + event.getY());
+                                 + event.getX() + ", " + event.getY());
                         break;
                     case DragEvent.ACTION_DROP:
                         Log.d("Drag Info: ", "ACTION_DROP event");
-                        //drag onto location
-                        //imageDrag.setX(event.getX()-imageDrag.getHeight()/2);
-                        //imageDrag.setY(event.getY()-imageDrag.getWidth()/2);
-                        itemEat.setVisibility(v.VISIBLE);
-                        // reset position after drag
-                        itemEat.setX(posX);
-                        itemEat.setX(posY);
-                        //
-                        creature.setHunger(creature.getHunger() + 20);
+
+                        creatureHandler.setAttrInt("eat", 5);
+                        String message = "Ate successfully : " + Integer.toString(creatureHandler.getAttrInt("eat"));
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT ).show();
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
@@ -176,26 +245,45 @@ public class MonsterHomeActivity extends Activity {
                 }
                 return true;
             }
-        });
-  */
-        //----------------------------------------------------------
-        dragView2 = (View) findViewById(R.id.backgroundLayout);
-        dragView2.setOnDragListener(new View.OnDragListener() {
+
+        };
+        return listener;
+    }  */
+
+    /**
+     * This listener returns true if a zig-zag pattern is detected
+     * @return listener
+     */
+    public View.OnDragListener createZigzackGestureListener(){
+        final View.OnDragListener listener = new View.OnDragListener() {
             // List of X and Y position for gesture detection
             List<Float> dragMovementX = new ArrayList<Float>();
             List<Float> dragMovementY = new ArrayList<Float>();
             boolean leftTurn = false;
             boolean rightTurn = false;
-            int counter=0;
+            int counter = 0;
+            View vew;
+
             @Override
             public boolean onDrag(View v, DragEvent event) {
+                String e = event.getLocalState().toString();
+                if(e.contains("play")){
+                    vew= itemPlay;
+                }else if(e.contains("clean")){
+                    vew = itemClean;
+                }else if(e.contains("eat")){
+                    vew = itemEat;
+                }else{
+                    //Log.e("DEBUG", "No item dragged");
+                }
                 int action = event.getAction();
-                float posX = itemEat.getX();
-                float posY = itemEat.getY();
+                float posX = vew.getX();
+                float posY = vew.getY();
                 switch (event.getAction()) {
                     case DragEvent.ACTION_DRAG_STARTED:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_STARTED");
-                        Log.e("DEBUG:", "itemEat is at Position:"+posX+" / "+posY);
+                        Log.d("DEBUG:", "item is at Position:" + posX + " / " + posY);
+
                         break;
                     case DragEvent.ACTION_DRAG_ENTERED:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENTERED");
@@ -204,114 +292,167 @@ public class MonsterHomeActivity extends Activity {
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_EXITED");
                         break;
                     case DragEvent.ACTION_DRAG_LOCATION:
-                       // Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
-                       //         + event.getX() + ", " + event.getY());
-                        dragMovementX.add(event.getX());
-                        dragMovementY.add(event.getY());
-                        if(dragMovementX.size() >=10){
-                            //detect if the movement was right - left - right
-                            if(rightTurn){
-                                //Log.d("TEST:", "MOVE WAS TO THE RIGHT, TO THE LEFT AND NOW TO THE RIGHT AGAIN.");
-                                counter++;
-                                if(counter == 2){
-                                    Log.d("TEST:", "MOVE WAS TO THE RIGHT, TO THE LEFT AND NOW TO THE RIGHT AGAIN. !!!!!!!!!APPEARED TWICE!!!!!!!!");
-                                    //cleaning and change counter
-                                }
-                                rightTurn= false;
-                                leftTurn = false;
-                            }
-                            //detect if a right run follows a left turn
-                            if(leftTurn){
-                                if(dragMovementX.get(dragMovementX.size()-5) < dragMovementX.get(dragMovementX.size()-10)){
-                                    //if this position is smaller than the one from before
-                                    //Log.d("TEST:", "Move was to the left.");
-                                    if(dragMovementX.size() >=10){  // is the List long enough?
-                                        if(dragMovementX.get(dragMovementX.size()-1) > dragMovementX.get(dragMovementX.size()-5)){
-                                            //did it turn left before?
-                                            //Log.d("TEST:", "MOVE IS RIGHT NOW.");
-                                            rightTurn = true; //gesture left turn detected!
-                                        }
-                                    }
-                                }
-                            }
-                            //detect a right turn
-                            if(dragMovementX.get(dragMovementX.size()-5) > dragMovementX.get(dragMovementX.size()-10)){
-                                //if this position is larger than the one from before
-                                //Log.d("TEST:", "Move was to the right.");
-                                if(dragMovementX.size() >=10){  // is the List long enough?
-                                    if(dragMovementX.get(dragMovementX.size()-1) < dragMovementX.get(dragMovementX.size()-5)){
-                                        //did it turn left before?
-                                        //Log.d("TEST:", "MOVE IS LEFT NOW.");
-                                        leftTurn = true; //gesture left turn detected!
-                                    }
-                                }
-                            }
+                        if(vew == itemClean) {
+                            // Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_LOCATION: "
+                            //         + event.getX() + ", " + event.getY());
+                            dragMovementX.add(event.getX());
+                            dragMovementY.add(event.getY());
+                            detectZigzag();
+                        }else if(vew == itemEat){
+                            //todo
+                        }else if(vew == itemPlay){
+                            //todo
+                        }else {
+                            //todo
                         }
                         break;
                     case DragEvent.ACTION_DROP:
                         Log.d("Drag Info: ", "ACTION_DROP event");
-                        itemEat.setX(posX);
-                        itemEat.setY(posY);
-                        itemEat.setVisibility(v.VISIBLE);
-                        creatureHandler.setAttrInt("hunger",20);
-/*                        String message = "After feeding h : " + Integer.toString(creatureHandler.getAttrInt("hunger"))
-                                + ", g : " + Integer.toString(creatureHandler.getAttrInt("gametime"));
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT ).show();*/
+                        vew.setX(posX);
+                        vew.setY(posY);
+                        vew.setVisibility(v.VISIBLE);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
                         Log.d("Drag Info: ", "Action is DragEvent.ACTION_DRAG_ENDED");
-                        //Log.d("Message:" , "X: "+itemEat.getX());
-                        //Log.d("Message:" ,"Y: "+itemEat.getY());
                         leftTurn = false;
                         rightTurn = false;
-                        counter=0;
+                        counter = 0;
                         v.setVisibility(View.VISIBLE);
                     default:
                         break;
                 }
                 return true;
             }
-        });
-    }
-//----------------------------------------------------------
-    /**
-     * Creates the Menu and sets actions when clicking
-     */
-    protected void setBtnMenu() {
-        btnMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearLayout.setVisibility(View.INVISIBLE);
-                visible = false;
-                PopupMenu popup = new PopupMenu(MonsterHomeActivity.this, v);
-                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        Dialog menuDialog = new Dialog(MonsterHomeActivity.this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-
-                        switch (item.getItemId()) {
-                            case profile:
-                                Toast.makeText(MonsterHomeActivity.this, "You clicked profile", Toast.LENGTH_SHORT).show();
-                                menuDialog.setContentView(R.layout.gameover);
-                                break;
-                            case settings:
-                                Toast.makeText(MonsterHomeActivity.this, "You clicked settings", Toast.LENGTH_SHORT).show();
-                                menuDialog.setContentView(R.layout.gameover);
-                                break;
-                            case help:
-                                Toast.makeText(MonsterHomeActivity.this, "You clicked help", Toast.LENGTH_SHORT).show();
-                                menuDialog.setContentView(R.layout.gameover);
-                                break;
+            private void detectZigzag(){
+                if (dragMovementX.size() >= 10) {
+                    //detect if the movement was right - left - right
+                    if (rightTurn) {
+                        //Log.d("TEST:", "MOVE WAS TO THE RIGHT, TO THE LEFT AND NOW TO THE RIGHT AGAIN.");
+                        counter++;
+                        if (counter == 2) {
+                            Log.d("TEST:", "Zig-zag pattern found.");
+                            creatureHandler.setAttrInt("clean", 5);
+                            String message = "Cleaned successfully : " + Integer.toString(creatureHandler.getAttrInt("clean"));
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
                         }
-                        menuDialog.show();
-                        return true;
+                        rightTurn = false;
+                        leftTurn = false;
                     }
-                });
-                popup.show();
+                    //detect if a right run follows a left turn
+                    if (leftTurn) {
+                        if (dragMovementX.get(dragMovementX.size() - 5) < dragMovementX.get(dragMovementX.size() - 10)) {
+                            //if this position is smaller than the one from before
+                            //Log.d("TEST:", "Move was to the left.");
+                            if (dragMovementX.size() >= 10) {  // is the List long enough?
+                                if (dragMovementX.get(dragMovementX.size() - 1) > dragMovementX.get(dragMovementX.size() - 5)) {
+                                    //did it turn left before?
+                                    //Log.d("TEST:", "MOVE IS RIGHT NOW.");
+                                    rightTurn = true; //gesture left turn detected!
+                                }
+                            }
+                        }
+                    }
+                    //detect a right turn
+                    if (dragMovementX.get(dragMovementX.size() - 5) > dragMovementX.get(dragMovementX.size() - 10)) {
+                        //if this position is larger than the one from before
+                        //Log.d("TEST:", "Move was to the right.");
+                        if (dragMovementX.size() >= 10) {  // is the List long enough?
+                            if (dragMovementX.get(dragMovementX.size() - 1) < dragMovementX.get(dragMovementX.size() - 5)) {
+                                //did it turn left before?
+                                //Log.d("TEST:", "MOVE IS LEFT NOW.");
+                                leftTurn = true; //gesture left turn detected!
+                            }
+                        }
+                    }
+                }
+            }
+
+        };
+        return listener;
+    }
+
+    /**
+     * This listener reacts to doubletaps on the image
+     * @return listener
+     */
+    public void createDoubleTapListener(View view) {
+        final GestureDetector gd = new GestureDetector(view.getContext(), new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                Log.d("OnDoubleTapListener:", " onDoubleTap");
+                return true;
+            }
+
+        });
+        view.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d("OnDoubleTapListener:", " onDoubleTap");
+                return gd.onTouchEvent(event);
             }
         });
     }
+
+
+    private void play() {
+        lib = GestureLibraries.fromRawResource(this, R.raw.gestures);
+        if(!lib.load()) {
+            finish();
+            Log.e("MonsterHomeActivity", "Could not load gesture library.");
+        }
+        GestureOverlayView gesture = (GestureOverlayView) findViewById(R.id.gestureOverlay);
+        gesture.setVisibility(View.VISIBLE);
+        gesture.addOnGesturePerformedListener(new GestureOverlayView.OnGesturePerformedListener() {
+            @Override
+            public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
+                ArrayList<Prediction> predictionArrayList = lib.recognize(gesture);
+                Log.d("MonsterHomeActivity", "Size array" + predictionArrayList.size());
+                for(Prediction prediction : predictionArrayList) {
+                    Log.d("GESTURE", prediction.name);
+                    Log.d("GESTURE", prediction.score + "");
+                    if (prediction.score > 1.0) {
+                        nameLabel.setText(prediction.name);
+                    }
+                    // Maximum ermitteln, falls mehr als eine Prediction
+                    // Qualität bewerten (score > 1)
+                }
+            }
+        });
+    }
+
+
+//----------------------------------------------------------
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        scaleGestureDetector.onTouchEvent(event);
+        return true;
+    }
+
+    public class MyOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
+        @Override
+        public boolean onScale(ScaleGestureDetector detector){
+            float pinchDetector = detector.getScaleFactor();
+            //pinch/zooming out movement
+            if(pinchDetector > 1){
+                startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector){
+            return true;
+        }
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector){}
+
+    }
+
+    /**
+     * AlertDialog
+     */
 
     /**
      * Sets or reloads the image of the creature
@@ -326,12 +467,13 @@ public class MonsterHomeActivity extends Activity {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         dialog.setContentView(R.layout.gameover);
         dialog.show();
+        creatureHandler.deleteObject();
+        startActivity(new Intent(this, FirstGamelActivity.class));
     }
     /**
      * Sets evolutionBar
      */
     public void setEvolutionBar(){
-        //evolutionBar.setVisibility(View.VISIBLE);
         evolutionBar.setMax(creatureHandler.getAttrInt("maxAge"));
         evolutionBar.setProgress(creatureHandler.getAttrInt("age"));
     }

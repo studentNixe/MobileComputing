@@ -29,7 +29,6 @@ public class CreatureHandler {
      */
     public void createObject(String name, String species) {
         this.creature = new CreatureObject(name, species);
-        //creature.getInventory().add(0,new SpongeObject("Schwamm","star_icon.png",1));
         Log.d("DEBUG: ","Creature name is "+creature.getName() +" . \n and Age is "+ creature.getAge() + " \n and Health is " +creature.getClean()+ "\n and Hunger is " +creature.getHunger()+" .");
         // The list that should be saved to internal storage.
         List<CreatureObject> entries = new ArrayList<CreatureObject>();
@@ -42,7 +41,7 @@ public class CreatureHandler {
             Log.e("ERROR: ", "No Data could be saved.");
         }
     }
-
+/*
     public void removeItemfromInventory(CreatureObject creature, String itemName) {
         creature.getInventory().remove(0);
         Log.d("DEBUG: ","Item removed.");
@@ -54,7 +53,7 @@ public class CreatureHandler {
         Log.d("DEBUG: ","Item added.");
         saveObject();
     }
-
+*/
     /**
     *Loads the creature from internal storage and returns it
     */
@@ -102,6 +101,9 @@ public class CreatureHandler {
             case "clean":
                 creature.setClean(creature.getClean() + (value));
                 break;
+            case "happiness":
+                creature.setHappiness(creature.getHappiness() + (value));
+                break;
             case "gametime":
                 creature.setGametime(creature.getGametime() + (value));
                 break;
@@ -125,6 +127,8 @@ public class CreatureHandler {
                 return creature.getHunger();
             case "clean":
                 return creature.getClean();
+            case "happiness":
+                return creature.getHappiness();
             case "gametime":
                 return creature.getGametime();
             case "age":
@@ -169,8 +173,8 @@ public class CreatureHandler {
         }
     }
 
-    /*
-        delete the Object from the local storage
+    /**
+        Delete the Object from the local storage
      */
     public void deleteObject() {
         context.deleteFile("CreatureObject.xml");
