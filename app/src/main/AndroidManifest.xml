@@ -13,16 +13,22 @@
         android:hardwareAccelerated="false"
         android:largeHeap="true"
         <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"></uses-permission>
-        <activity android:name=".FirstGamelActivity">
+        <activity android:name=".FirstGamelActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MonsterHomeActivity" />
-        <activity android:name=".ChooseCreatureActivity"/>
-        <activity android:name=".NameCreatureActivity"/>
+        <activity android:name=".MonsterHomeActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".ChooseCreatureActivity"
+            android:noHistory="true"
+            android:launchMode="singleTask"/>
+        <activity android:name=".NameCreatureActivity"
+            android:noHistory="true"
+            android:launchMode="singleTask"/>
         <activity android:name=".CreatureProfileActivity"
             android:launchMode="singleTask"/>
     </application>

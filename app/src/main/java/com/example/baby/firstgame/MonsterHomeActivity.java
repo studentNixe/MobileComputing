@@ -471,6 +471,8 @@ public class MonsterHomeActivity extends Activity {
         dialog.show();
         creatureHandler.deleteObject();
         startActivity(new Intent(this, FirstGamelActivity.class));
+        dialog.dismiss();
+        this.finish();
     }
     /**
      * Sets evolutionBar
