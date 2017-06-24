@@ -120,7 +120,7 @@
             android:layout_weight="1"
             android:contentDescription=""
             android:visibility="visible"
-            app:srcCompat="@drawable/ball"
+            app:srcCompat="@drawable/crystal"
             tools:ignore="ContentDescription"
             tools:layout_editor_absoluteX="287dp"
             tools:layout_editor_absoluteY="25dp" />
