@@ -82,7 +82,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription=""
-        app:srcCompat="@drawable/nicole2"
+        app:srcCompat="@drawable/ghost"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.247"
         app:layout_constraintLeft_toLeftOf="parent"

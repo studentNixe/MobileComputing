@@ -443,13 +443,18 @@ public class MonsterHomeActivity extends Activity {
      * Sets or reloads the image of the creature
      */
     public void setCreatureImg(){
-        String fileName = creatureHandler.getAttrString("species") + creatureHandler.getAttrInt("age");
-        int id = getResources()     .getIdentifier(fileName,"drawable", getPackageName());
-        creatureImg.setImageDrawable(getResources().getDrawable(id));
+        try {
+            String fileName = creatureHandler.getAttrString("species") + creatureHandler.getAttrInt("age");
+            int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
+            creatureImg.setImageDrawable(getResources().getDrawable(id));
+        }catch (Exception e){
+            Log.e("MonsterHomeActivity","Image not found.");
+            creatureImg.setImageResource(R.drawable.ghost);
+        }
     }
 
     /**
-     * AlertDialog
+     * AlertDialog to warn the user to delete his creature
      */
     public void alertNewGame() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MonsterHomeActivity.this);
@@ -472,6 +477,9 @@ public class MonsterHomeActivity extends Activity {
         alertDialog.show();
     }
 
+    /**
+     * Closes this activity and deletes the creature
+     */
     public void gameOver() {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         dialog.setContentView(R.layout.gameover);
@@ -481,6 +489,7 @@ public class MonsterHomeActivity extends Activity {
         dialog.dismiss();
         this.finish();
     }
+
     /**
      * Sets evolutionBar
      */
