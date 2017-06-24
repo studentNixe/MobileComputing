@@ -25,6 +25,7 @@ public class CreatureProfileActivity extends Activity {
 
     CreatureHandler creature = new CreatureHandler(this);
     ScaleGestureDetector scaleGestureDetector;
+    private float pinchDetector = 1.f;
 
     @Override
     public void onCreate(Bundle savedInstaceState){
@@ -82,12 +83,9 @@ public class CreatureProfileActivity extends Activity {
     public class MyOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
         @Override
         public boolean onScale(ScaleGestureDetector detector){
-            float pinchDetector = detector.getScaleFactor();
+            pinchDetector *= detector.getScaleFactor();
             //pinch/zooming in movement
-            if(pinchDetector < 1){
-                finish();
-            }
-            else finish();
+            finish();
             return true;
         }
         @Override
