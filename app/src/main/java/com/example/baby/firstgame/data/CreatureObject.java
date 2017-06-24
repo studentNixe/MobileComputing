@@ -89,7 +89,9 @@ public class CreatureObject implements java.io.Serializable{
     }
 
     public void setGametime(int gametime) {
-        this.gametime = gametime;
+        if(checkInt(gametime,attrMin,attrMax)){
+            this.gametime = gametime;
+        }
     }
 
     /*

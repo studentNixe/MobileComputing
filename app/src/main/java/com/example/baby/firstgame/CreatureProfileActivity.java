@@ -59,6 +59,7 @@ public class CreatureProfileActivity extends Activity {
         proHappy.setProgress(creature.getAttrInt("happiness"));
         proHunger.setProgress(creature.getAttrInt("hunger"));
         proAge.setProgress(creature.getAttrInt("age"));
+        proAge.setMax(creature.getAttrInt("maxAge"));
         proClean.setProgress(creature.getAttrInt("clean"));
 
         setCreatureImg();

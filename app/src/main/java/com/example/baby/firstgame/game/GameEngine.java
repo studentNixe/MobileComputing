@@ -28,7 +28,8 @@ public class GameEngine implements Runnable {
      * Counts down the creatures' attributes
      */
     public void countdown(){
-        if(creatureHandler.getAttrInt("gametime") < 0 && creatureHandler.getAttrInt("hunger") >= 80
+        if(creatureHandler.getAttrInt("gametime") <= 0
+                && creatureHandler.getAttrInt("hunger") >= 80
                 && creatureHandler.getAttrInt("clean") >= 80
                 && creatureHandler.getAttrInt("happiness") >= 80) {
             creatureHandler.setAttrInt("age", 1);
