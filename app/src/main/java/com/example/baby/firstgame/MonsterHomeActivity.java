@@ -416,7 +416,7 @@ public class MonsterHomeActivity extends Activity {
     public void setCreatureImg(){
         creatureImg = (ImageView) findViewById(R.id.creatureImg);
         String fileName = creatureHandler.getAttrString("species") + creatureHandler.getAttrInt("age");
-        int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
+        int id = getResources()     .getIdentifier(fileName,"drawable", getPackageName());
         creatureImg.setImageDrawable(getResources().getDrawable(id));
     }
 
