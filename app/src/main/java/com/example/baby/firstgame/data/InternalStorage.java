@@ -1,6 +1,7 @@
 package com.example.baby.firstgame.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.List;
 
 /**
  * Saves or loads an object to the Internal storage of the device
@@ -47,5 +49,19 @@ public final class InternalStorage{
         fis.close();
         ois.close();
         return object;
+    }
+
+    /**
+     * deletes an object from the internal storage. reatuns FileNotFoundException if successfull.
+     * @param context
+     * @param key
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public static void deleteObject(Context context, String key) throws IOException, ClassNotFoundException{
+        context.deleteFile(key);
+        //check if the creature was deleted
+        List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(context, "CreatureObject.xml");
+
     }
 }
