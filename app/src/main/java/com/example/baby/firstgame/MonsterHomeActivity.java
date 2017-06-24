@@ -83,7 +83,7 @@ public class MonsterHomeActivity extends Activity {
         scaleGestureDetector = new ScaleGestureDetector(this, new MyPinchListner());
 
         creatureHandler.loadObject();
-        
+
         setBtnItems();
         setBtnMenu();
         setEvolutionBar();
