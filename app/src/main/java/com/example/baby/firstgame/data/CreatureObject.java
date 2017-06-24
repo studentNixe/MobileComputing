@@ -1,5 +1,7 @@
 package com.example.baby.firstgame.data;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +11,10 @@ import java.util.List;
 
 public class CreatureObject implements java.io.Serializable{
     //class attributes
-    private String[] speciesList = {"denise","pawan","nicole"};
-    private int ageMax = 3;
-    private int attrMin = 0;
-    private int attrMax = 100;
+    private static String[] speciesList = {"denise","pawan","nicole"};
+    private static int ageMax = 3;
+    private static int attrMin = 0;
+    private static int attrMax = 100;
 
     //object attributes
     private String name;
@@ -22,18 +24,16 @@ public class CreatureObject implements java.io.Serializable{
     private int clean;
     private int happiness;
     private int gametime;
-    private List<ItemObject> inventory;
 
     //constructor
     public CreatureObject(String name, String species){
-        this.species = species;
         this.name = name;
+        this.setSpecies(species);
         this.age = 1;
-        this.hunger = 100;
-        this.clean = 100;
-        this.happiness = 100;
-        this.gametime = 100;
-        //this.inventory = new ArrayList<ItemObject>();
+        this.hunger = attrMax;
+        this.clean = attrMax;
+        this.happiness = attrMax;
+        this.gametime = attrMax;
     }
 
     // getter and setter
@@ -89,27 +89,18 @@ public class CreatureObject implements java.io.Serializable{
     }
 
     public void setGametime(int gametime) {
-        if(checkInt(gametime,attrMin,attrMax)){
+        if(checkInt(gametime, attrMin, attrMax)){
             this.gametime = gametime;
         }
     }
-
-    /*
-    public List<ItemObject> getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(List<ItemObject> inventory) {
-        this.inventory = inventory;
-    }
-    */
 
     public String getSpecies() {
         return species;
     }
 
     public void setSpecies(String species) {
-        this.species = species;
+        if(inArrayCheck(species, speciesList))
+            this.species = species;
     }
 
     public int getAgeMax() {
@@ -128,6 +119,22 @@ public class CreatureObject implements java.io.Serializable{
             return true;
         }
         return false;
+    }
+
+    /**
+     * Checks whether a string is found in a string array
+     * @param text to be checked string
+     * @param list where the string is searched
+     * @return true if it was found, otherwise false
+     */
+    public static boolean inArrayCheck(String text, String[] list) {
+        boolean result = false;
+        for (String item : list) {
+            if (text.matches(item)) {
+                result = true;
+            }
+        }
+        return result;
     }
 }
 

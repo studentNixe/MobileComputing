@@ -4,8 +4,6 @@ package com.example.baby.firstgame.data;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.baby.firstgame.data.items.SpongeObject;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,19 +39,7 @@ public class CreatureHandler {
             Log.e("ERROR: ", "No Data could be saved.");
         }
     }
-/*
-    public void removeItemfromInventory(CreatureObject creature, String itemName) {
-        creature.getInventory().remove(0);
-        Log.d("DEBUG: ","Item removed.");
-        saveObject();
-    }
 
-    public void addItemtoInventory(CreatureObject creature, String itemName, int index) {
-        creature.getInventory().add(index, new SpongeObject("Sponge","Sponge.png",20));
-        Log.d("DEBUG: ","Item added.");
-        saveObject();
-    }
-*/
     /**
     *Loads the creature from internal storage and returns it
     */
