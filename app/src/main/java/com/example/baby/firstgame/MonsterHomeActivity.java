@@ -384,14 +384,14 @@ public class MonsterHomeActivity extends Activity {
                 ArrayList<Prediction> predictionArrayList = lib.recognize(gesture);
                 Log.d("MonsterHomeActivity", "Size array" + predictionArrayList.size());
                 for(Prediction prediction : predictionArrayList) {
-                    Log.d("GESTURE", prediction.name);
-                    Log.d("GESTURE", prediction.score + "");
                     if (prediction.score > 1.0) {
-                        if (prediction.name.matches("power")){
+                        Log.d("GESTURE", prediction.name);
+                        Log.d("GESTURE", prediction.score + "");
+                        if (prediction.name.matches("power") || prediction.name.matches("power2")){
                             creatureHandler.setAttrInt("happiness", 5);
                             String messagePower = "Crystal enchanted your creature: " + Integer.toString(creatureHandler.getAttrInt("happiness"));
                             Toast.makeText(getApplicationContext(), messagePower, Toast.LENGTH_LONG).show();
-                        }else if(prediction.name.matches("Xpower")){
+                        }else if(prediction.name.matches("Xpower") || prediction.name.matches("Xpower2")){
                             creatureHandler.setAttrInt("happiness", 10);
                             String messagePower = "Crystal enchanted your creature: " + Integer.toString(creatureHandler.getAttrInt("happiness"));
                             Toast.makeText(getApplicationContext(), messagePower, Toast.LENGTH_SHORT).show();
