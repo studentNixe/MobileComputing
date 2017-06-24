@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.example.baby.firstgame.data.CreatureHandler;
@@ -53,11 +54,15 @@ public class NameCreatureActivity extends Activity
             public void onClick(View v)
             {
                 String name = edtname.getText().toString();
-
-                CreatureHandler creatureCreated = new CreatureHandler(getApplicationContext());
-                creatureCreated.createObject(name, species);
-                Intent intent = new Intent(getApplicationContext(), MonsterHomeActivity.class);
-                startActivity(intent);
+                if(name.length() > 20){
+                    Toast.makeText(NameCreatureActivity.this, "Name too long.", Toast.LENGTH_SHORT).show();
+                }else {
+                    //creates creature here with the give name and species
+                    CreatureHandler creatureCreated = new CreatureHandler(getApplicationContext());
+                    creatureCreated.createObject(name, species);
+                    Intent intent = new Intent(getApplicationContext(), MonsterHomeActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
