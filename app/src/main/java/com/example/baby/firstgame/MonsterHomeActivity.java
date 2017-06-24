@@ -61,6 +61,7 @@ public class MonsterHomeActivity extends Activity {
     CreatureHandler creatureHandler = new CreatureHandler(this);
     GestureLibrary lib;
     ScaleGestureDetector scaleGestureDetector;
+    private float pinchDetector = 1.f;
 
     private boolean visible = false;
 
@@ -76,7 +77,7 @@ public class MonsterHomeActivity extends Activity {
         nameLabel = (TextView) findViewById(R.id.name);
 
         evolutionBar = (ProgressBar) findViewById(R.id.EvolutionBar);
-        scaleGestureDetector = new ScaleGestureDetector(this, new MyOnScaleGestureListener());
+        scaleGestureDetector = new ScaleGestureDetector(this, new MyPinchListner());
 
         creatureHandler.loadObject();
 
@@ -391,15 +392,11 @@ public class MonsterHomeActivity extends Activity {
 
     //this is a method from scaleGestureDetector which detects the pinch action
     //and decides if it is pinch in or pinch out, in both case it opens the profile activity
-    public class MyOnScaleGestureListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
+    public class MyPinchListner extends ScaleGestureDetector.SimpleOnScaleGestureListener{
         @Override
         public boolean onScale(ScaleGestureDetector detector){
-            float pinchDetector = detector.getScaleFactor();
+            pinchDetector *= detector.getScaleFactor();
             //pinch/zooming out movement
-            if(pinchDetector > 1){
-                startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
-            }
-            else
                 startActivity(new Intent(MonsterHomeActivity.this, CreatureProfileActivity.class));
             return true;
         }
