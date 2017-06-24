@@ -13,6 +13,7 @@
         android:layout_width="0dp"
         android:layout_height="495dp"
         android:visibility="invisible"
+        android:gestureColor="#e20709"
         app:layout_constraintRight_toLeftOf="@+id/itemList"
         android:layout_marginRight="0dp"
         android:layout_marginLeft="8dp"
