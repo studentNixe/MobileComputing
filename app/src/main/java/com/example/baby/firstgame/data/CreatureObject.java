@@ -22,7 +22,6 @@ public class CreatureObject implements java.io.Serializable{
     private int clean;
     private int happiness;
     private int gametime;
-    private List<ItemObject> inventory;
 
     //constructor
     public CreatureObject(String name, String species){
@@ -33,7 +32,6 @@ public class CreatureObject implements java.io.Serializable{
         this.clean = 100;
         this.happiness = 100;
         this.gametime = 100;
-        //this.inventory = new ArrayList<ItemObject>();
     }
 
     // getter and setter
@@ -91,16 +89,6 @@ public class CreatureObject implements java.io.Serializable{
     public void setGametime(int gametime) {
         this.gametime = gametime;
     }
-
-    /*
-    public List<ItemObject> getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(List<ItemObject> inventory) {
-        this.inventory = inventory;
-    }
-    */
 
     public String getSpecies() {
         return species;
