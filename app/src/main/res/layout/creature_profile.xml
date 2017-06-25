@@ -41,7 +41,6 @@
         android:layout_height="20dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:max="4"
         app:layout_constraintHorizontal_bias="0.242"
         app:layout_constraintLeft_toRightOf="@+id/textView5"
         app:layout_constraintRight_toRightOf="parent"

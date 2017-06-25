@@ -55,7 +55,7 @@ public class MonsterHomeActivity extends Activity {
     private ImageView itemPlay;
     private ImageView itemClean;
     private View dragView2;
-    private GestureOverlayView gesture;
+    private GestureOverlayView overlayView;
 
     private LinearLayout linearLayout;
 
@@ -77,17 +77,17 @@ public class MonsterHomeActivity extends Activity {
         btnMenu = (Button) findViewById(R.id.menu);
         linearLayout = (LinearLayout) findViewById(R.id.itemList);
         nameLabel = (TextView) findViewById(R.id.name);
-        gesture = (GestureOverlayView) findViewById(R.id.gestureOverlay);
-
+        overlayView = (GestureOverlayView) findViewById(R.id.gestureOverlay);
+        creatureImg = (ImageView) findViewById(R.id.creatureImg);
         evolutionBar = (ProgressBar) findViewById(R.id.EvolutionBar);
         scaleGestureDetector = new ScaleGestureDetector(this, new MyPinchListner());
 
         creatureHandler.loadObject();
 
-
         setBtnItems();
         setBtnMenu();
         setEvolutionBar();
+        evolutionBar.setMax(creatureHandler.getAttrInt("maxAge"));
         setCreatureImg();
         setItems();
 
@@ -114,7 +114,7 @@ public class MonsterHomeActivity extends Activity {
                     linearLayout.setVisibility(View.VISIBLE);
                 } else {
                     linearLayout.setVisibility(View.INVISIBLE);
-                    gesture.setVisibility(View.INVISIBLE);
+                    overlayView.setVisibility(View.INVISIBLE);
                     power = false;
                 }
 
@@ -130,6 +130,8 @@ public class MonsterHomeActivity extends Activity {
             @Override
             public void onClick(View v) {
                 linearLayout.setVisibility(View.INVISIBLE);
+                overlayView.setVisibility(View.INVISIBLE);
+                power = false;
                 visible = false;
                 PopupMenu popup = new PopupMenu(MonsterHomeActivity.this, v);
                 popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
@@ -153,7 +155,7 @@ public class MonsterHomeActivity extends Activity {
     }
 
     /**
-     * Sets the items
+     * Sets the items of the inventory
      */
     protected void setItems() {
         itemPlay = (ImageView) findViewById(R.id.play);
@@ -216,7 +218,7 @@ public class MonsterHomeActivity extends Activity {
      */
     public View.OnDragListener createZigzackGestureListener(){
         final View.OnDragListener listener = new View.OnDragListener() {
-            // List of X and Y position for gesture detection
+            // List of X and Y position for overlayView detection
             List<Float> dragMovementX = new ArrayList<Float>();
             List<Float> dragMovementY = new ArrayList<Float>();
             boolean leftTurn = false;
@@ -305,7 +307,7 @@ public class MonsterHomeActivity extends Activity {
                                 if (dragMovementX.get(dragMovementX.size() - 1) > dragMovementX.get(dragMovementX.size() - 5)) {
                                     //did it turn left before?
                                     //Log.d("TEST:", "MOVE IS RIGHT NOW.");
-                                    rightTurn = true; //gesture left turn detected!
+                                    rightTurn = true; //overlayView left turn detected!
                                 }
                             }
                         }
@@ -318,7 +320,7 @@ public class MonsterHomeActivity extends Activity {
                             if (dragMovementX.get(dragMovementX.size() - 1) < dragMovementX.get(dragMovementX.size() - 5)) {
                                 //did it turn left before?
                                 //Log.d("TEST:", "MOVE IS LEFT NOW.");
-                                leftTurn = true; //gesture left turn detected!
+                                leftTurn = true; //overlayView left turn detected!
                             }
                         }
                     }
@@ -329,7 +331,7 @@ public class MonsterHomeActivity extends Activity {
     }
 
     /**
-     * This listener creates the functions for the clickitems
+     * This listener creates the functions for the crystal click item
      * @return listener
      */
     private View.OnClickListener createItemClickListener() {
@@ -341,13 +343,48 @@ public class MonsterHomeActivity extends Activity {
                     play();
                     Toast.makeText(getApplicationContext(), "Crystal power turned on", Toast.LENGTH_SHORT).show();
                 }else{
-                    gesture.setVisibility(View.INVISIBLE);
+                    overlayView.setVisibility(View.INVISIBLE);
                     Toast.makeText(getApplicationContext(), "Crystal power turned off", Toast.LENGTH_SHORT).show();
                 }
             }
         };
         return listener;
     }
+
+    /**
+     * The gestures(from GestureBuilder)are loaded and when the
+     * gestures are detected, the creatures happiness changes
+     */
+    private void play() {
+        lib = GestureLibraries.fromRawResource(this, R.raw.happygestures);
+        if(!lib.load()) {
+            finish();
+            Log.e("MonsterHomeActivity", "Could not load gesture library.");
+        }
+        overlayView.setVisibility(View.VISIBLE);
+        overlayView.addOnGesturePerformedListener(new GestureOverlayView.OnGesturePerformedListener() {
+            @Override
+            public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
+                ArrayList<Prediction> predictionArrayList = lib.recognize(gesture);
+                for(Prediction prediction : predictionArrayList) {
+                    if (prediction.score > 1.0) {
+                        Log.d("GESTURE", prediction.name);
+                        Log.d("GESTURE", prediction.score + "");
+                        if (prediction.name.matches("power") || prediction.name.matches("power2")){
+                            creatureHandler.setAttrInt("happiness", 5);
+                            String messagePower = "Crystal enchanted your creature: " + Integer.toString(creatureHandler.getAttrInt("happiness"));
+                            Toast.makeText(getApplicationContext(), messagePower, Toast.LENGTH_LONG).show();
+                        }else if(prediction.name.matches("Xpower") || prediction.name.matches("Xpower2")){
+                            creatureHandler.setAttrInt("happiness", 10);
+                            String messagePower = "Crystal enchanted your creature: " + Integer.toString(creatureHandler.getAttrInt("happiness"));
+                            Toast.makeText(getApplicationContext(), messagePower, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     /**
      * This listener reacts to doubletaps on the image
      * @return listener
@@ -371,36 +408,7 @@ public class MonsterHomeActivity extends Activity {
     }
 
 
-    private void play() {
-        lib = GestureLibraries.fromRawResource(this, R.raw.happygestures);
-        if(!lib.load()) {
-            finish();
-            Log.e("MonsterHomeActivity", "Could not load gesture library.");
-        }
-        gesture.setVisibility(View.VISIBLE);
-        gesture.addOnGesturePerformedListener(new GestureOverlayView.OnGesturePerformedListener() {
-            @Override
-            public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
-                ArrayList<Prediction> predictionArrayList = lib.recognize(gesture);
-                Log.d("MonsterHomeActivity", "Size array" + predictionArrayList.size());
-                for(Prediction prediction : predictionArrayList) {
-                    Log.d("GESTURE", prediction.name);
-                    Log.d("GESTURE", prediction.score + "");
-                    if (prediction.score > 1.0) {
-                        if (prediction.name.matches("power")){
-                            creatureHandler.setAttrInt("happiness", 5);
-                            String messagePower = "Crystal enchanted your creature: " + Integer.toString(creatureHandler.getAttrInt("happiness"));
-                            Toast.makeText(getApplicationContext(), messagePower, Toast.LENGTH_LONG).show();
-                        }else if(prediction.name.matches("Xpower")){
-                            creatureHandler.setAttrInt("happiness", 10);
-                            String messagePower = "Crystal enchanted your creature: " + Integer.toString(creatureHandler.getAttrInt("happiness"));
-                            Toast.makeText(getApplicationContext(), messagePower, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            }
-        });
-    }
+
 
 //----------------------------------------------------------
 
@@ -435,14 +443,18 @@ public class MonsterHomeActivity extends Activity {
      * Sets or reloads the image of the creature
      */
     public void setCreatureImg(){
-        creatureImg = (ImageView) findViewById(R.id.creatureImg);
-        String fileName = creatureHandler.getAttrString("species") + creatureHandler.getAttrInt("age");
-        int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
-        creatureImg.setImageDrawable(getResources().getDrawable(id));
+        try {
+            String fileName = creatureHandler.getAttrString("species") + creatureHandler.getAttrInt("age");
+            int id = getResources().getIdentifier(fileName,"drawable", getPackageName());
+            creatureImg.setImageDrawable(getResources().getDrawable(id));
+        }catch (Exception e){
+            Log.e("MonsterHomeActivity","Image not found.");
+            creatureImg.setImageResource(R.drawable.ghost);
+        }
     }
 
     /**
-     * AlertDialog
+     * AlertDialog to warn the user to delete his creature
      */
     public void alertNewGame() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MonsterHomeActivity.this);
@@ -465,6 +477,9 @@ public class MonsterHomeActivity extends Activity {
         alertDialog.show();
     }
 
+    /**
+     * Closes this activity and deletes the creature
+     */
     public void gameOver() {
         Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
         dialog.setContentView(R.layout.gameover);
@@ -474,11 +489,11 @@ public class MonsterHomeActivity extends Activity {
         dialog.dismiss();
         this.finish();
     }
+
     /**
      * Sets evolutionBar
      */
     public void setEvolutionBar(){
-        evolutionBar.setMax(creatureHandler.getAttrInt("maxAge"));
         evolutionBar.setProgress(creatureHandler.getAttrInt("age"));
     }
 }
