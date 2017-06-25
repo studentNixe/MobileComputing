@@ -31,9 +31,14 @@ public class GameEngine implements Runnable {
      * checks if the game should continue
      * @see #checkGameover()
      */
+<<<<<<< HEAD
+    public void countdown(){
+        if(creatureHandler.getAttrInt("gametime") <= 0 && creatureHandler.getAttrInt("hunger") >= 80
+=======
     public void updateAttributes(){
         boolean evolve = creatureHandler.getAttrInt("gametime") == 0
                 && creatureHandler.getAttrInt("hunger") >= 80
+>>>>>>> 6a6b88a9b3875bf4a29dbd97b03923f0dedac6ce
                 && creatureHandler.getAttrInt("clean") >= 80
                 && creatureHandler.getAttrInt("happiness") >= 80
                 && (creatureHandler.getAttrInt("age") < creatureHandler.getAttrInt("maxAge"));

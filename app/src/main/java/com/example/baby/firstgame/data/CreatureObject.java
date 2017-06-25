@@ -92,6 +92,7 @@ public class CreatureObject implements java.io.Serializable{
         if(checkInt(gametime, attrMin, attrMax)){
             this.gametime = gametime;
         }
+
     }
 
     public String getSpecies() {
