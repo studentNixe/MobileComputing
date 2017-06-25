@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class CreatureHandler {
     private Context context;
-    CreatureObject creature;
+    private CreatureObject creature;
 
     public CreatureHandler(Context context) {
         this.context = context;
@@ -33,9 +33,9 @@ public class CreatureHandler {
         entries.add(creature);                              // Save the list of entries to internal storage
         try {
             InternalStorage.writeObject(context, "CreatureObject.xml", entries);
-            Log.d("DEBUG: ", "Creature was created successfully:" + creature.toString());
+            Log.d("DEBUG: ", "CreatureHandler - Creature was created successfully:" + creature.toString());
         } catch (IOException e) {
-            Log.e("ERROR: ", "No Data could be saved.");
+            Log.e("ERROR: ", "CreatureHandler - No Data could be saved.");
         }
     }
 
@@ -46,19 +46,20 @@ public class CreatureHandler {
      * @return true if creature was loaded successfully.
      */
     public boolean loadObject() {
+        this.creature = null;
         try {
             // Retrieve the list from internal storage
             List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(context, "CreatureObject.xml");
             for (CreatureObject creature : cachedEntries) {
-                    this.creature = creature;
-                    Log.d("DEBUG: ","Creature successfully loaded. The name is: " +creature.getName());
-                    return true;
+                this.creature = creature;
+                Log.d("DEBUG: ", "CreatureHandler - Creature successfully loaded. The name is: " + creature.getName());
+                return true; // returns the first creatureObject that is found.
             }
         } catch (IOException e) {
-            Log.d("DEBUG: ", "No Object found.");
+            Log.d("DEBUG: ", "CreatureHandler - No Object found.");
             return false;
         } catch (ClassNotFoundException e) {
-            Log.e("ERROR: ", "Class was not found, returned Exception.");
+            Log.e("ERROR: ", "CreatureHandler - Class was not found, returned Exception.");
             return false;
         }
         return false;
@@ -81,19 +82,21 @@ public class CreatureHandler {
             case "happiness":
                 creature.setHappiness(creature.getHappiness() + (value));
                 break;
-            case "gametime":
-                creature.setGametime(creature.getGametime() + (value));
+            case "gameTime":
+                creature.setGameTime(creature.getGameTime() + (value));
                 break;
             case "age":
                 creature.setAge(creature.getAge() + (value));
                 break;
             default:
-                Log.e("ERROR: ", "Creature value could not be set.");
+                Log.e("ERROR: ", "CreatureHandler - Creature value could not be set.");
                 break;
         }
     }
+
     /**
-     * Returns int value of a chosen attribute
+     * Returns int value of a chosen attribute. If the given attribute does not exists, -1 will be
+     * returned, forcing the game to go GameOver.
      *
      * @param attribute of creature
      */
@@ -105,14 +108,14 @@ public class CreatureHandler {
                 return creature.getClean();
             case "happiness":
                 return creature.getHappiness();
-            case "gametime":
-                return creature.getGametime();
+            case "gameTime":
+                return creature.getGameTime();
             case "age":
                 return creature.getAge();
             case "maxAge":
                 return creature.getAgeMax();
             default:
-                Log.e("ERROR: ", "Creature value could not be found.");
+                Log.e("ERROR: ", "CreatureHandler - Creature value could not be found.");
                 break;
         }
         return -1;
@@ -130,7 +133,7 @@ public class CreatureHandler {
             case "species":
                 return creature.getSpecies();
             default:
-                Log.e("ERROR: ", "Creature value could not be found.");
+                Log.e("ERROR: ", "CreatureHandler - Creature value could not be found.");
                 break;
         }
         return null;
@@ -143,24 +146,29 @@ public class CreatureHandler {
         List<CreatureObject> entries = new ArrayList<CreatureObject>();
         entries.add(creature);
         // Save the list of entries to internal storage
-        Log.d("DEBUG: ", "Saved new creature Object.");
+        Log.d("DEBUG: ", "CreatureHandler - Updated creature data.");
         try {
             InternalStorage.writeObject(context, "CreatureObject.xml", entries);
         } catch (IOException e) {
-            Log.e("ERROR: ", "No Data could be saved.");
+            Log.e("ERROR: ", "CreatureHandler - No Data could be saved.");
         }
     }
 
     /**
-     * Delete the Object from the local storage
+     * Delete the CreatureObject from the local storage and checks if it was deleted.
+     * If it was successfully deleted an exception will be fired and caught.
      */
     public void deleteObject() {
+        context.deleteFile("CreatureObject.xml");
+        this.creature = null;
+        Log.e("debug", "CreatureList: "+context.fileList());
         try {
-            InternalStorage.deleteObject(context, "CreatureObject.xml");
+            List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(context, "CreatureObject.xml");
+            Log.e("DEBUG:", "CreatureHandler - Creature was NOT deleted!.");
         } catch (IOException e) {
-            Log.e("ERROR: ", "IOException, could not delete File.");
+            Log.d("ERROR: ", "CreatureHandler - No file found. Data was successfully deleted");
         } catch (ClassNotFoundException e) {
-            Log.d("Debug: ", "Data was successfully deleted.");
+            Log.d("Debug: ", "CreatureHandler - No Class Found. Data was successfully deleted.");
         }
     }
 }

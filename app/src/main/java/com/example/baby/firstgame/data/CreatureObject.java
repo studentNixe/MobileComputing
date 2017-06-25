@@ -1,17 +1,14 @@
 package com.example.baby.firstgame.data;
 
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
+ * The creatureObject that is saving all progress and the Creatures attributes.
+ * <p>
  * Created by Denise on 07.05.2017.
  */
 
-public class CreatureObject implements java.io.Serializable{
+public class CreatureObject implements java.io.Serializable {
     //class attributes
-    private static String[] speciesList = {"denise","pawan","nicole"};
+    private static String[] speciesList = {"denise", "pawan", "nicole"};
     private static int ageMax = 3;
     private static int attrMin = 0;
     private static int attrMax = 100;
@@ -23,17 +20,17 @@ public class CreatureObject implements java.io.Serializable{
     private int hunger;
     private int clean;
     private int happiness;
-    private int gametime;
+    private int gameTime;
 
     //constructor
-    public CreatureObject(String name, String species){
+    public CreatureObject(String name, String species) {
         this.name = name;
         this.setSpecies(species);
         this.age = 1;
         this.hunger = attrMax;
         this.clean = attrMax;
         this.happiness = attrMax;
-        this.gametime = attrMax;
+        this.gameTime = attrMax;
     }
 
     // getter and setter
@@ -50,7 +47,7 @@ public class CreatureObject implements java.io.Serializable{
     }
 
     public void setAge(int age) {
-        if( age <= ageMax)
+        if (age <= ageMax)
             this.age = age;
     }
 
@@ -59,7 +56,7 @@ public class CreatureObject implements java.io.Serializable{
     }
 
     public void setHunger(int hunger) {
-        if(checkInt(hunger, attrMin, attrMax)) {
+        if (checkInt(hunger, attrMin, attrMax)) {
             this.hunger = hunger;
         }
     }
@@ -69,7 +66,7 @@ public class CreatureObject implements java.io.Serializable{
     }
 
     public void setClean(int clean) {
-        if(checkInt(clean, attrMin, attrMax)) {
+        if (checkInt(clean, attrMin, attrMax)) {
             this.clean = clean;
         }
     }
@@ -79,18 +76,18 @@ public class CreatureObject implements java.io.Serializable{
     }
 
     public void setHappiness(int happiness) {
-        if(checkInt(happiness, attrMin, attrMax)) {
+        if (checkInt(happiness, attrMin, attrMax)) {
             this.happiness = happiness;
         }
     }
 
-    public int getGametime() {
-        return gametime;
+    public int getGameTime() {
+        return gameTime;
     }
 
-    public void setGametime(int gametime) {
-        if(checkInt(gametime, attrMin, attrMax)){
-            this.gametime = gametime;
+    public void setGameTime(int gameTime) {
+        if (checkInt(gameTime, attrMin, attrMax)) {
+            this.gameTime = gameTime;
         }
 
     }
@@ -100,7 +97,7 @@ public class CreatureObject implements java.io.Serializable{
     }
 
     public void setSpecies(String species) {
-        if(inArrayCheck(species, speciesList))
+        if (inArrayCheck(species, speciesList))
             this.species = species;
     }
 
@@ -110,12 +107,13 @@ public class CreatureObject implements java.io.Serializable{
 
     /**
      * Checks if the attributes value is in the correct range
+     *
      * @param value to be checked
-     * @param minv minimum of range
-     * @param maxv maximum of range
+     * @param minv  minimum of range
+     * @param maxv  maximum of range
      * @return true, if it is in the range, else false
      */
-    public boolean checkInt(int value, int minv, int maxv){
+    public boolean checkInt(int value, int minv, int maxv) {
         if (value >= minv && value <= maxv) {
             return true;
         }
@@ -124,6 +122,7 @@ public class CreatureObject implements java.io.Serializable{
 
     /**
      * Checks whether a string is found in a string array
+     *
      * @param text to be checked string
      * @param list where the string is searched
      * @return true if it was found, otherwise false
@@ -138,5 +137,3 @@ public class CreatureObject implements java.io.Serializable{
         return result;
     }
 }
-
-

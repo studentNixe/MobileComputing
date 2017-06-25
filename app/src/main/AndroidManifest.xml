@@ -13,7 +13,8 @@
         android:largeHeap="true"
         android:theme="@style/AppTheme">
         <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"></uses-permission>
-        <activity android:name=".FirstGamelActivity"
+        <activity android:name=".FirstGameActivity"
+            android:screenOrientation="portrait"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,15 +23,19 @@
             </intent-filter>
         </activity>
         <activity android:name=".MonsterHomeActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ChooseCreatureActivity"
             android:noHistory="true"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
         <activity android:name=".NameCreatureActivity"
             android:noHistory="true"
-            android:launchMode="singleTask"/>
-        <activity android:name=".CreatureProfileActivity"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ProfileActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

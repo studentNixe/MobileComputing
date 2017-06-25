@@ -1,25 +1,26 @@
 package com.example.baby.firstgame.data;
 
 import android.content.Context;
-import android.util.Log;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.List;
 
 /**
  * Saves or loads an object to the Internal storage of the device
+ * Created by Denise on 07.05.2017.
+ * Credit to: https://androidresearch.wordpress.com/2013/04/07/caching-objects-in-android-internal-storage/
  */
-public final class InternalStorage{
+public final class InternalStorage {
 
-    private InternalStorage() {}
+    private InternalStorage() {
+    }
 
     /**
      * saves the given Object to the internal storage
+     *
      * @param context
      * @param key
      * @param object
@@ -35,6 +36,7 @@ public final class InternalStorage{
 
     /**
      * reads an object from the internal storage and returns it.
+     *
      * @param context
      * @param key
      * @return object
@@ -49,19 +51,5 @@ public final class InternalStorage{
         fis.close();
         ois.close();
         return object;
-    }
-
-    /**
-     * deletes an object from the internal storage. reatuns FileNotFoundException if successfull.
-     * @param context
-     * @param key
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    public static void deleteObject(Context context, String key) throws IOException, ClassNotFoundException{
-        context.deleteFile(key);
-        //check if the creature was deleted
-        List<CreatureObject> cachedEntries = (List<CreatureObject>) InternalStorage.readObject(context, "CreatureObject.xml");
-
     }
 }

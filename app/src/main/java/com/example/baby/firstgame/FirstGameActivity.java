@@ -9,12 +9,18 @@ import android.widget.Button;
 
 import com.example.baby.firstgame.data.CreatureHandler;
 
-public class FirstGamelActivity extends Activity implements View.OnClickListener{
-    public Button btn;
-    CreatureHandler creatureHandler = new CreatureHandler(this);
+/**
+ * The first Activity after starting the game.
+ * If the button is pressed, the Activity checks if a creature already exists or not and switches
+ * to MonsterHomeActivity or ChooseCreatureActivity.
+ */
+public class FirstGameActivity extends Activity implements View.OnClickListener {
+    private Button btn;
+    private CreatureHandler creatureHandler = new CreatureHandler(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("DEBUG", "FirstGameActivity - started.");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
@@ -22,15 +28,14 @@ public class FirstGamelActivity extends Activity implements View.OnClickListener
         btn.setOnClickListener(this);
     }
 
-    //this is the starting screen of the game which lets to create/load creature
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.button){
-            if(!creatureHandler.loadObject()){
-                Log.d("DEBUG: ","Unsuccessful load");
+        if (v.getId() == R.id.button) {
+            if (!creatureHandler.loadObject()) {
+                Log.d("DEBUG", "FirstGameActivity - Unsuccessful load");
                 startActivity(new Intent(this, ChooseCreatureActivity.class));
-            }else{
-                Log.d("DEBUG: ","Successful load");
+            } else {
+                Log.d("DEBUG", "FirstGameActivity - Successful load");
                 startActivity(new Intent(this, MonsterHomeActivity.class));
             }
         }

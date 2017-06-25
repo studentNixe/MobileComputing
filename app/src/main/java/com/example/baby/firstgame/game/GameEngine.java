@@ -1,18 +1,22 @@
 package com.example.baby.firstgame.game;
 
 import android.os.Handler;
+import android.util.Log;
 
 import com.example.baby.firstgame.MonsterHomeActivity;
 import com.example.baby.firstgame.data.CreatureHandler;
 
-
-
-
+/**
+ * The game engine is started when MonsterHomeActivity is started.
+ * run() decreases the stats over time and checks if the creature has dies (stats at zero)
+ * increases the age over time.
+ *
+ *  * Created by Nicole.
+ */
 public class GameEngine implements Runnable {
-    CreatureHandler creatureHandler;
-    MonsterHomeActivity activity;
-
-    Handler gamehandler = new Handler();
+    private CreatureHandler creatureHandler;
+    private MonsterHomeActivity activity;
+    private Handler gameHandler = new Handler();
 
     /**
      * Constructor
@@ -22,40 +26,34 @@ public class GameEngine implements Runnable {
     public GameEngine(MonsterHomeActivity activity, CreatureHandler creatureHandler) {
         this.activity = activity;
         this.creatureHandler = creatureHandler;
-        updateAttributes();
-
+        if(!checkGameOver()) {
+            updateAttributes();
+        }
     }
-
     /**
-     * Updates the creatures attributes and
-     * checks if the game should continue
-     * @see #checkGameover()
+     * Updates the creatures attributes and checks if the game should continue
+     * @see #checkGameOver()
      */
-<<<<<<< HEAD
-    public void countdown(){
-        if(creatureHandler.getAttrInt("gametime") <= 0 && creatureHandler.getAttrInt("hunger") >= 80
-=======
     public void updateAttributes(){
-        boolean evolve = creatureHandler.getAttrInt("gametime") == 0
+        boolean evolve = creatureHandler.getAttrInt("gameTime") == 0
                 && creatureHandler.getAttrInt("hunger") >= 80
->>>>>>> 6a6b88a9b3875bf4a29dbd97b03923f0dedac6ce
                 && creatureHandler.getAttrInt("clean") >= 80
                 && creatureHandler.getAttrInt("happiness") >= 80
                 && (creatureHandler.getAttrInt("age") < creatureHandler.getAttrInt("maxAge"));
         if(evolve) {
             creatureHandler.setAttrInt("age", 1);
-            creatureHandler.setAttrInt("gametime", 100);
+            creatureHandler.setAttrInt("gameTime", 100);
             activity.setCreatureImg();
             activity.setEvolutionBar();
         } else {
             creatureHandler.setAttrInt("hunger", -5);
             creatureHandler.setAttrInt("clean", -5);
             creatureHandler.setAttrInt("happiness", -5);
-            creatureHandler.setAttrInt("gametime", -10);
+            creatureHandler.setAttrInt("gameTime", -10);
         }
-       if(!checkGameover()) {
+       if(!checkGameOver()) {
             creatureHandler.saveObject();
-            gamehandler.postDelayed(this, 30000);
+            gameHandler.postDelayed(this, 30000);
         }
     }
 
@@ -63,11 +61,13 @@ public class GameEngine implements Runnable {
      * Checks if the creature already died
      * @return true the game is over, otherwise false
      */
-    private boolean checkGameover() {
+    private boolean checkGameOver() {
         boolean dead = creatureHandler.getAttrInt("hunger") == 0
-                && creatureHandler.getAttrInt("clean") == 0
-                && creatureHandler.getAttrInt("happiness") == 0;
+                    && creatureHandler.getAttrInt("clean") == 0
+                    && creatureHandler.getAttrInt("happiness") == 0;
+
         if (dead){
+            Log.e("DEBUG", "GameOver detected. App will restart.");
             activity.gameOver();
             return true;
         }
@@ -76,6 +76,8 @@ public class GameEngine implements Runnable {
 
     @Override
     public void run() {
-        updateAttributes();
+        if(!checkGameOver()) {
+            updateAttributes();
+        }
     }
 }

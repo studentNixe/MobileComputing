@@ -15,16 +15,22 @@ import android.widget.ImageView;
 import android.widget.ViewSwitcher;
 
 /**
+ * The Activity starts of no creature was found. Shows different creatures
+ * in an ImageSwitcher component. If the Button is pressed, the species is chosen
+ * and the NameCreatureActivity is called.
+ * Images/Creatures can be switched via Button or the Fling gesture,
+ * implemented by a GestureBuilder.
+ *
+ * Credit: https://developer.android.com/training/gestures/detector.html
+ *
  * Created by Pawan on 5/8/2017.
  */
-
 public class ChooseCreatureActivity extends Activity implements GestureDetector.OnGestureListener {
     private ImageSwitcher creSwitcher;
-
-    private static final String DEBUG_TAG = "Gestures";
+    private static final String DEBUG_TAG = "DEBUG";
     private GestureDetectorCompat mDetector;
 
-    //an array of the drawable containing the creatue choosen
+    //an array of the drawable containing the chosen creature
     Integer[] creatures = {R.drawable.denise1,
             R.drawable.pawan1, R.drawable.nicole2};
     int iterate = 0;
@@ -33,6 +39,7 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.choosecreature);
+        Log.d("DEBUG:", "ChooseCreatureActivity - started.");
 
         Button btnNext = (Button) findViewById(R.id.next);
         Button btnPre = (Button) findViewById(R.id.previous);
@@ -49,13 +56,13 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
             }
         });
 
-        //we start the creature image by start from the 0 and pressing next iterate to next image in loop
+        //we start the creature image by start from 0 and pressing next iterate to next image in loop
         //pressing previous iterate to previous image in loop
         creSwitcher.setImageResource(creatures[0]);
         btnPre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                iterate = (iterate + 1) % creatures.length;
+                iterate = (iterate + 2) % creatures.length;
                 creSwitcher.setImageResource(creatures[iterate]);
             }
         });
@@ -81,58 +88,61 @@ public class ChooseCreatureActivity extends Activity implements GestureDetector.
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         this.mDetector.onTouchEvent(event);
-        // Be sure to call the superclass implementation
         return super.onTouchEvent(event);
+    }
+
+    /**
+     * the method saves the starting and ending point of a Fling motion event.
+     * Aa fling occurs when the finger is dragged fast over the screen.
+     * by calculating the distance of the starting and end point, the direction is determined.
+     *
+     * @param event1
+     * @param event2
+     * @param velocityX
+     * @param velocityY
+     * @return
+     */
+    @Override
+    public boolean onFling(MotionEvent event1, MotionEvent event2,
+                           float velocityX, float velocityY) {
+        //Log.d(DEBUG_TAG, "ChooseCreatureActivity - onFling: " + event1.toString() + event2.toString());
+        float distance = event1.getX() - event2.getX();
+        if (distance < -200) {
+            Log.d(DEBUG_TAG, "ChooseCreatureActivity - Fling detected. Fling was to the right.");
+            iterate = (iterate + 1) % creatures.length;
+            creSwitcher.setImageResource(creatures[iterate]);
+        } else if (distance > 200) {
+            Log.d(DEBUG_TAG, "ChooseCreatureActivity - Fling detected. Fling was to the left.");
+            iterate = (iterate + 2) % creatures.length;
+            creSwitcher.setImageResource(creatures[iterate]);
+        } else {
+            Log.d(DEBUG_TAG, "ChooseCreatureActivity - No left or right fling occurred.");
+        }
+        return true;
+    }
+
+    // not important and without function, but needs to be implemented.
+    @Override
+    public void onLongPress(MotionEvent e) {
     }
 
     @Override
     public boolean onDown(MotionEvent e) {
-        Log.d(DEBUG_TAG, "onDown: " + e.toString());
         return false;
     }
 
     @Override
     public void onShowPress(MotionEvent e) {
-        Log.d(DEBUG_TAG, "onShowPress: " + e.toString());
     }
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        Log.d(DEBUG_TAG, "onSingleTapUp: " + e.toString());
         return false;
     }
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d(DEBUG_TAG, "onScroll: " + e1.toString() + e2.toString());
         return false;
-    }
-
-    @Override
-    public void  onLongPress(MotionEvent e) {
-        Log.d(DEBUG_TAG, "onLongPress: " + e.toString());
-    }
-
-    //this method gets as the parameter the side where fling started and side where the fling ended
-    //it also get the velocity of finger travel from side to side and from up, down
-    //the method decides if the fling was left or right by gettign the distant from X
-    @Override
-    public boolean onFling(MotionEvent event1, MotionEvent event2,
-                           float velocityX, float velocityY) {
-        Log.d(DEBUG_TAG, "onFling: " + event1.toString() + event2.toString());
-        float distance = event1.getX() - event2.getX();
-        if (distance < -200) {
-            Log.d(DEBUG_TAG, "Fling was to the right.");
-            iterate = (iterate + 1) % creatures.length;
-            creSwitcher.setImageResource(creatures[iterate]);
-        } else if (distance > 200) {
-            Log.d(DEBUG_TAG, "Fling was to the left.");
-            iterate = (iterate + 1) % creatures.length;
-            creSwitcher.setImageResource(creatures[iterate]);
-        } else {
-            Log.d(DEBUG_TAG, "No left or right fling occured.");
-        }
-        return true;
     }
 }
 
