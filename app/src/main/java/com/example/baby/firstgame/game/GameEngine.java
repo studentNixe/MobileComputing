@@ -62,10 +62,14 @@ public class GameEngine implements Runnable {
      * @return true the game is over, otherwise false
      */
     private boolean checkGameOver() {
-        boolean dead = creatureHandler.getAttrInt("hunger") == 0
+        boolean dead = false;
+        try {
+            dead = creatureHandler.getAttrInt("hunger") == 0
                     && creatureHandler.getAttrInt("clean") == 0
                     && creatureHandler.getAttrInt("happiness") == 0;
-
+        }catch(Exception e){
+            return true;
+        }
         if (dead){
             Log.e("DEBUG", "GameOver detected. App will restart.");
             activity.gameOver();
