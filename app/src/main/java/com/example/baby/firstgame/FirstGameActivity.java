@@ -16,13 +16,15 @@ import com.example.baby.firstgame.data.CreatureHandler;
  */
 public class FirstGameActivity extends Activity implements View.OnClickListener {
     private Button btn;
-    private CreatureHandler creatureHandler = new CreatureHandler(this);
+    private CreatureHandler creatureHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d("DEBUG", "FirstGameActivity - started.");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        creatureHandler = new CreatureHandler(this);
 
         btn = (Button) findViewById(R.id.button);
         btn.setOnClickListener(this);

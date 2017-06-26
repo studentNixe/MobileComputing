@@ -428,7 +428,7 @@ public class MonsterHomeActivity extends Activity {
         dialog.setContentView(R.layout.gameover);
         dialog.show();
         creatureHandler.deleteObject();
-        startActivity(new Intent(this, FirstGameActivity.class));
+        //startActivity(new Intent(this, FirstGameActivity.class));
         dialog.dismiss();
         this.finish();
     }
